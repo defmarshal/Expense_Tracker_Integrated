@@ -1574,48 +1574,63 @@
         }
 
         // REWRITTEN: renderSubCategories
-        function renderSubCategories() {
-            const list = document.getElementById('subCategoryList');
-            list.innerHTML = '';
+function renderSubCategories() {
+    const list = document.getElementById('subCategoryList');
+    list.innerHTML = '';
+    
+    // Check 1: If no categories exist, nothing will render
+    if (userCategories.length === 0) {
+         list.innerHTML = '<div class="empty-state">You must add categories first before adding sub categories.</div>';
+         return;
+    }
+    
+    let subCategoryCount = 0; // Counter to check if anything was drawn
+    
+    // Group sub-categories by parent
+    userCategories.forEach(cat => {
+        // Filter sub-categories by matching category_id
+        const subs = userSubCategories.filter(s => s.category_id === cat.id);
+        
+        if (subs.length > 0) {
+            subCategoryCount += subs.length; // Increment counter
             
-            // Group sub-categories by parent
-            userCategories.forEach(cat => {
-                const subs = userSubCategories.filter(s => s.category_id === cat.id);
+            const title = document.createElement('h3');
+            title.style.margin = '25px 0 15px';
+            title.style.color = '#666';
+            title.textContent = cat.name;
+            list.appendChild(title);
+
+            // Sort subs alphabetically for better UI
+            const sortedSubs = [...subs].sort((a, b) => a.name.localeCompare(b.name));
+
+            sortedSubs.forEach(sub => {
+                const item = document.createElement('div');
+                item.className = 'category-item';
                 
-                if (subs.length > 0) {
-                    const title = document.createElement('h3');
-                    title.style.margin = '25px 0 15px';
-                    title.style.color = '#666';
-                    title.textContent = cat.name;
-                    list.appendChild(title);
-
-                    subs.forEach(sub => {
-                        const item = document.createElement('div');
-                        item.className = 'category-item';
-                        
-                        const nameDiv = document.createElement('div');
-                        nameDiv.className = 'category-name';
-                        nameDiv.textContent = sub.name;
-                        
-                        const deleteBtn = document.createElement('button');
-                        deleteBtn.className = 'delete-btn';
-                        deleteBtn.textContent = 'Delete';
-                        deleteBtn.onclick = function() {
-                            // Use the new delete modal
-                            openDeleteModal('subCategory', sub.id, sub.name);
-                        };
-                        
-                        item.appendChild(nameDiv);
-                        item.appendChild(deleteBtn);
-                        list.appendChild(item);
-                    });
-                }
+                // ... (Creation of nameDiv and deleteBtn, etc. - Code is complex but should be correct) ...
+                
+                const nameDiv = document.createElement('div');
+                nameDiv.className = 'category-name';
+                nameDiv.textContent = sub.name;
+                
+                const deleteBtn = document.createElement('button');
+                deleteBtn.className = 'delete-btn';
+                deleteBtn.textContent = 'Delete';
+                deleteBtn.onclick = function() {
+                    openDeleteModal('subCategory', sub.id, sub.name);
+                };
+                
+                item.appendChild(nameDiv);
+                item.appendChild(deleteBtn);
+                list.appendChild(item);
             });
-
-            if (list.innerHTML === '') {
-                list.innerHTML = '<div class="empty-state">No sub categories yet. Add one above!</div>';
-            }
         }
+    });
+
+    if (subCategoryCount === 0) {
+        list.innerHTML = '<div class="empty-state">No sub categories yet. Add one above!</div>';
+    }
+}
 
         // REWRITTEN: addCategoryFromPage
         async function addCategoryFromPage() {
