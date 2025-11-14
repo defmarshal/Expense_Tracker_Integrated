@@ -519,6 +519,16 @@
         .export-btn.csv:hover {
             background: #138496;
         }
+
+        .category-header {
+            margin: 25px 0 15px 0;
+            padding: 10px;
+            background: #f0f3ff;
+            border-radius: 8px;
+            font-weight: bold;
+            color: #333;
+            border-bottom: 2px solid #e0e0e0;
+        }
     </style>
 </head>
 <body>
@@ -545,7 +555,7 @@
                     <button class="nav-tab active" onclick="showPage('expenses')">Expenses</button>
                     <button class="nav-tab" onclick="showPage('analytics')">Analytics</button>
                     <button class="nav-tab" onclick="showPage('categories')">Categories</button>
-                    <button class="nav-tab" onclick="showPage('subcategories')">Sub Categories</button>
+                    <button class="nav-tab" onclick="showPage('subCategories')">Sub Categories</button>
                     <button class="nav-tab" onclick="showPage('settings')">Settings</button>
                 </div>
 
@@ -707,7 +717,7 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <script>
-        // --- NEW SUPABASE SETUP ---
+        // --- SUPABASE SETUP ---
         const SUPABASE_URL = 'https://nugwhbjekgjbmcoxyjrw.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im51Z3doYmpla2dqYm1jb3h5anJ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMwNzMyMTcsImV4cCI6MjA3ODY0OTIxN30.7_lDs0qlc3DK-9HskPzQBRzq0zVR_EP3_1ht_s__vCc';
         
@@ -747,7 +757,7 @@
             }
         };
 
-        // --- NEW AUTH FLOW ---
+        // --- AUTH FLOW ---
         const authContainer = document.getElementById('auth-container');
         const appContainer = document.getElementById('app-container');
         const authEmail = document.getElementById('auth-email');
@@ -835,6 +845,7 @@
                 
             if (cats) {
                 userCategories = cats;
+                console.log("Loaded categories:", userCategories);
             }
             
             // 3. Fetch sub-categories
@@ -845,6 +856,9 @@
             
             if (subCats) {
                 userSubCategories = subCats;
+                console.log("Loaded sub-categories:", userSubCategories);
+            } else if (subCatsError) {
+                console.error("Error loading sub-categories:", subCatsError);
             }
             
             // 4. Fetch expenses
@@ -871,6 +885,7 @@
             console.log("App initialized.");
         }
 
+        // CSV Export Functionality
         function exportToCSV(range = 'all') {
             let filteredExpenses = [...expenses];
             let filename = 'expenses';
@@ -1114,11 +1129,10 @@
             
             const { type, id, name } = categoryToDelete;
 
-            let tableName, localArray, renderFunc;
+            let tableName, renderFunc;
 
             if (type === 'category') {
                 tableName = 'categories';
-                localArray = userCategories;
                 renderFunc = () => {
                     renderCategories();
                     updateCategoryDropdown();
@@ -1134,7 +1148,6 @@
 
             } else if (type === 'subCategory') {
                 tableName = 'sub_categories';
-                localArray = userSubCategories;
                 renderFunc = () => {
                     renderSubCategories();
                     updateCategoryDropdown();
@@ -1193,6 +1206,189 @@
             
             document.getElementById('category').value = data.name;
             closeCategoryModal();
+        }
+
+        // --- COMPLETELY REBUILT SUB-CATEGORY FUNCTIONS ---
+
+        // FIXED: updateParentCategorySelect
+        function updateParentCategorySelect() {
+            const select = document.getElementById('parentCategorySelect');
+            select.innerHTML = '<option value="">Choose a category</option>';
+            
+            const sortedCategories = [...userCategories].sort((a, b) => a.name.localeCompare(b.name));
+            
+            sortedCategories.forEach(cat => {
+                const option = document.createElement('option');
+                option.value = cat.id;
+                option.textContent = cat.name;
+                select.appendChild(option);
+            });
+        }
+
+        // FIXED: addSubCategory - SIMPLIFIED AND DEBUGGED
+        async function addSubCategory() {
+            const parentCatSelect = document.getElementById('parentCategorySelect');
+            const parentCatId = parentCatSelect.value;
+            const subCatInput = document.getElementById('newSubCategoryInput');
+            const newSubCatName = subCatInput.value.trim();
+
+            console.log("Adding sub-category:", { parentCatId, newSubCatName });
+
+            // Validation
+            if (!parentCatId) {
+                alert('Please select a category');
+                return;
+            }
+            
+            if (!newSubCatName) {
+                alert('Please enter a sub-category name');
+                return;
+            }
+
+            if (!currentUser) {
+                alert('Not logged in');
+                return;
+            }
+
+            // Check for duplicates
+            const existing = userSubCategories.find(s => 
+                s.category_id == parentCatId && 
+                s.name.toLowerCase() === newSubCatName.toLowerCase()
+            );
+            
+            if (existing) {
+                alert('This sub-category already exists for the selected category');
+                return;
+            }
+            
+            // Insert into database
+            const { data, error } = await supabase
+                .from('sub_categories')
+                .insert({ 
+                    user_id: currentUser.id, 
+                    name: newSubCatName,
+                    category_id: parentCatId 
+                })
+                .select()
+                .single();
+
+            if (error) {
+                console.error("Supabase error:", error);
+                alert('Error adding sub-category: ' + error.message);
+                return;
+            }
+            
+            // Update local state
+            userSubCategories.push(data);
+            console.log("Sub-category added successfully:", data);
+
+            // Update UI
+            updateCategoryDropdown();
+            renderSubCategories();
+            subCatInput.value = '';
+        }
+
+        // FIXED: renderSubCategories - SIMPLIFIED AND DEBUGGED
+        function renderSubCategories() {
+            const list = document.getElementById('subCategoryList');
+            if (!list) {
+                console.error("subCategoryList element not found");
+                return;
+            }
+            
+            console.log("Rendering sub-categories:", {
+                categories: userCategories,
+                subCategories: userSubCategories
+            });
+            
+            // Clear the list
+            list.innerHTML = '';
+            
+            // Case 1: No categories exist
+            if (userCategories.length === 0) {
+                list.innerHTML = `
+                    <div class="empty-state">
+                        <p>You need to create categories first!</p>
+                        <p>Go to the Categories tab to add some categories.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Case 2: Categories exist but no sub-categories
+            if (userSubCategories.length === 0) {
+                list.innerHTML = `
+                    <div class="empty-state">
+                        <p>No sub-categories yet.</p>
+                        <p>Select a category above and enter a sub-category name to get started.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Case 3: We have sub-categories to display
+            let hasDisplayedAny = false;
+            
+            // Group sub-categories by their parent category
+            const categoriesWithSubs = {};
+            
+            userSubCategories.forEach(subCat => {
+                if (!categoriesWithSubs[subCat.category_id]) {
+                    categoriesWithSubs[subCat.category_id] = [];
+                }
+                categoriesWithSubs[subCat.category_id].push(subCat);
+            });
+            
+            // Display each category that has sub-categories
+            userCategories.forEach(category => {
+                const subCatsForCategory = categoriesWithSubs[category.id];
+                
+                if (subCatsForCategory && subCatsForCategory.length > 0) {
+                    hasDisplayedAny = true;
+                    
+                    // Create category header
+                    const categoryHeader = document.createElement('div');
+                    categoryHeader.className = 'category-header';
+                    categoryHeader.textContent = category.name;
+                    list.appendChild(categoryHeader);
+                    
+                    // Sort sub-categories alphabetically
+                    const sortedSubCats = [...subCatsForCategory].sort((a, b) => 
+                        a.name.localeCompare(b.name)
+                    );
+                    
+                    // Create sub-category items
+                    sortedSubCats.forEach(subCat => {
+                        const item = document.createElement('div');
+                        item.className = 'category-item';
+                        
+                        const nameDiv = document.createElement('div');
+                        nameDiv.className = 'category-name';
+                        nameDiv.textContent = subCat.name;
+                        
+                        const deleteBtn = document.createElement('button');
+                        deleteBtn.className = 'delete-btn';
+                        deleteBtn.textContent = 'Delete';
+                        deleteBtn.onclick = () => {
+                            openDeleteModal('subCategory', subCat.id, subCat.name);
+                        };
+                        
+                        item.appendChild(nameDiv);
+                        item.appendChild(deleteBtn);
+                        list.appendChild(item);
+                    });
+                }
+            });
+            
+            // Fallback: if somehow no sub-categories were displayed
+            if (!hasDisplayedAny) {
+                list.innerHTML = `
+                    <div class="empty-state">
+                        <p>No sub-categories found.</p>
+                        <p>Try refreshing the page or check the browser console for errors.</p>
+                    </div>
+                `;
+            }
         }
 
         // --- UI/Page Rendering Functions ---
@@ -1441,125 +1637,6 @@
             }
         }
 
-        // FIXED: updateParentCategorySelect
-        function updateParentCategorySelect() {
-            const select = document.getElementById('parentCategorySelect');
-            select.innerHTML = '<option value="">Choose a category</option>';
-            
-            const sortedCategories = [...userCategories].sort((a, b) => a.name.localeCompare(b.name));
-            
-            sortedCategories.forEach(cat => {
-                const option = document.createElement('option');
-                option.value = cat.id;
-                option.textContent = cat.name;
-                select.appendChild(option);
-            });
-        }
-
-        // FIXED: addSubCategory
-        async function addSubCategory() {
-            const parentCatId = parseInt(document.getElementById('parentCategorySelect').value);
-            const subCatInput = document.getElementById('newSubCategoryInput');
-            const newSubCatName = subCatInput.value.trim();
-
-            if (!parentCatId || !newSubCatName || !currentUser) {
-                alert('Please select a category and enter a sub-category name');
-                return;
-            }
-
-            const parentCat = userCategories.find(c => c.id === parentCatId);
-            if (!parentCat) {
-                alert('Invalid parent category');
-                return;
-            }
-            
-            const existing = userSubCategories.find(s => s.category_id === parentCatId && s.name.toLowerCase() === newSubCatName.toLowerCase());
-            if (existing) {
-                alert('This sub-category already exists');
-                return;
-            }
-            
-            const { data, error } = await supabase
-                .from('sub_categories')
-                .insert({ 
-                    user_id: currentUser.id, 
-                    name: newSubCatName,
-                    category_id: parentCatId 
-                })
-                .select()
-                .single();
-
-            if (error) {
-                alert('Error adding sub-category: ' + error.message);
-                return;
-            }
-            
-            userSubCategories.push(data);
-
-            updateCategoryDropdown();
-            renderSubCategories();
-            subCatInput.value = '';
-        }
-
-        // COMPLETELY REWRITTEN: renderSubCategories
-        function renderSubCategories() {
-            const list = document.getElementById('subCategoryList');
-            list.innerHTML = '';
-            
-            console.log('userCategories:', userCategories);
-            console.log('userSubCategories:', userSubCategories);
-            
-            if (userCategories.length === 0) {
-                list.innerHTML = '<div class="empty-state">You must add categories first before adding sub categories.</div>';
-                return;
-            }
-            
-            let hasAnySubCategories = false;
-            
-            // Group sub-categories by their parent category
-            userCategories.forEach(category => {
-                const subCatsForCategory = userSubCategories.filter(sub => sub.category_id === category.id);
-                
-                if (subCatsForCategory.length > 0) {
-                    hasAnySubCategories = true;
-                    
-                    // Create category header
-                    const categoryHeader = document.createElement('h3');
-                    categoryHeader.style.margin = '25px 0 15px';
-                    categoryHeader.style.color = '#666';
-                    categoryHeader.style.borderBottom = '2px solid #e0e0e0';
-                    categoryHeader.style.paddingBottom = '10px';
-                    categoryHeader.textContent = category.name;
-                    list.appendChild(categoryHeader);
-                    
-                    // Create sub-category items
-                    subCatsForCategory.forEach(subCategory => {
-                        const item = document.createElement('div');
-                        item.className = 'category-item';
-                        
-                        const nameDiv = document.createElement('div');
-                        nameDiv.className = 'category-name';
-                        nameDiv.textContent = subCategory.name;
-                        
-                        const deleteBtn = document.createElement('button');
-                        deleteBtn.className = 'delete-btn';
-                        deleteBtn.textContent = 'Delete';
-                        deleteBtn.onclick = function() {
-                            openDeleteModal('subCategory', subCategory.id, subCategory.name);
-                        };
-                        
-                        item.appendChild(nameDiv);
-                        item.appendChild(deleteBtn);
-                        list.appendChild(item);
-                    });
-                }
-            });
-            
-            if (!hasAnySubCategories) {
-                list.innerHTML = '<div class="empty-state">No sub categories yet. Add one above!</div>';
-            }
-        }
-
         async function addCategoryFromPage() {
             const input = document.getElementById('newCategoryInput');
             const newCategoryName = input.value.trim();
@@ -1652,7 +1729,7 @@
                 select.appendChild(option);
 
                 const subs = userSubCategories
-                    .filter(s => s.category_id === cat.id)
+                    .filter(s => s.category_id == cat.id)
                     .sort((a, b) => a.name.localeCompare(b.name));
                 
                 subs.forEach(sub => {
