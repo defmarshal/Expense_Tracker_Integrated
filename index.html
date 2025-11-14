@@ -1495,39 +1495,45 @@
         }
 
         // REWRITTEN: updateParentCategorySelect (for sub-categories page)
+        // FIXED: updateParentCategorySelect function
         function updateParentCategorySelect() {
             const select = document.getElementById('parentCategorySelect');
             select.innerHTML = '<option value="">Choose a category</option>';
             
-            // Now reads from the new userCategories array
-            userCategories.forEach(cat => {
+            // Sort categories alphabetically
+            const sortedCategories = [...userCategories].sort((a, b) => a.name.localeCompare(b.name));
+            
+            sortedCategories.forEach(cat => {
                 const option = document.createElement('option');
-                option.value = cat.name; // Use name, but we'll find ID later
+                option.value = cat.id; // Use ID instead of name
                 option.textContent = cat.name;
+                option.setAttribute('data-name', cat.name); // Store name as data attribute
                 select.appendChild(option);
             });
         }
 
         // REWRITTEN: addSubCategory
+        // FIXED: addSubCategory function
         async function addSubCategory() {
-            const parentCatName = document.getElementById('parentCategorySelect').value;
+            const parentCatSelect = document.getElementById('parentCategorySelect');
+            const parentCatId = parseInt(parentCatSelect.value);
             const subCatInput = document.getElementById('newSubCategoryInput');
             const newSubCatName = subCatInput.value.trim();
 
-            if (!parentCatName || !newSubCatName || !currentUser) {
+            if (!parentCatId || !newSubCatName || !currentUser) {
                 alert('Please select a category and enter a sub-category name');
                 return;
             }
 
-            // Find the parent category object to get its ID
-            const parentCat = userCategories.find(c => c.name === parentCatName);
+            // Find the parent category object to get its name (for display)
+            const parentCat = userCategories.find(c => c.id === parentCatId);
             if (!parentCat) {
                 alert('Invalid parent category');
                 return;
             }
             
             // Check for duplicates
-            const existing = userSubCategories.find(s => s.category_id === parentCat.id && s.name.toLowerCase() === newSubCatName.toLowerCase());
+            const existing = userSubCategories.find(s => s.category_id === parentCatId && s.name.toLowerCase() === newSubCatName.toLowerCase());
             if (existing) {
                 alert('This sub-category already exists');
                 return;
@@ -1539,7 +1545,7 @@
                 .insert({ 
                     user_id: currentUser.id, 
                     name: newSubCatName,
-                    category_id: parentCat.id 
+                    category_id: parentCatId 
                 })
                 .select()
                 .single();
@@ -1574,17 +1580,18 @@
         }
 
         // REWRITTEN: renderSubCategories
+// FIXED: renderSubCategories function
 function renderSubCategories() {
     const list = document.getElementById('subCategoryList');
     list.innerHTML = '';
     
-    // Check 1: If no categories exist, nothing will render
+    // Check if no categories exist
     if (userCategories.length === 0) {
-         list.innerHTML = '<div class="empty-state">You must add categories first before adding sub categories.</div>';
-         return;
+        list.innerHTML = '<div class="empty-state">You must add categories first before adding sub categories.</div>';
+        return;
     }
     
-    let subCategoryCount = 0; // Counter to check if anything was drawn
+    let subCategoryCount = 0;
     
     // Group sub-categories by parent
     userCategories.forEach(cat => {
@@ -1592,7 +1599,7 @@ function renderSubCategories() {
         const subs = userSubCategories.filter(s => s.category_id === cat.id);
         
         if (subs.length > 0) {
-            subCategoryCount += subs.length; // Increment counter
+            subCategoryCount += subs.length;
             
             const title = document.createElement('h3');
             title.style.margin = '25px 0 15px';
@@ -1606,8 +1613,6 @@ function renderSubCategories() {
             sortedSubs.forEach(sub => {
                 const item = document.createElement('div');
                 item.className = 'category-item';
-                
-                // ... (Creation of nameDiv and deleteBtn, etc. - Code is complex but should be correct) ...
                 
                 const nameDiv = document.createElement('div');
                 nameDiv.className = 'category-name';
