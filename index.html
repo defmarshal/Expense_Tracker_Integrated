@@ -708,36 +708,27 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <script>
         // --- NEW SUPABASE SETUP ---
-        // ---------------------------------------------------------------
-        // TODO: PASTE YOUR SUPABASE URL AND ANON KEY HERE
-        // ---------------------------------------------------------------
         const SUPABASE_URL = 'https://nugwhbjekgjbmcoxyjrw.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im51Z3doYmpla2dqYm1jb3h5anJ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMwNzMyMTcsImV4cCI6MjA3ODY0OTIxN30.7_lDs0qlc3DK-9HskPzQBRzq0zVR_EP3_1ht_s__vCc';
-        // ---------------------------------------------------------------
         
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         let currentUser = null;
-        // --- END SUPABASE SETUP ---
 
         let expenses = [];
-        let userCategories = []; // Format: [{ id: 1, name: 'Food' }, ...]
-        let userSubCategories = []; // Format: [{ id: 1, name: 'Groceries', category_id: 1 }, ...]
-        let categoryToDelete = null; // Stores { type: 'category' | 'subCategory', id: 123, name: '...' }
+        let userCategories = [];
+        let userSubCategories = [];
+        let categoryToDelete = null;
         let categoryChart = null;
         let cumulativeChart = null;
         
-        // GitHub Gist configuration removed
-        
         const currentMonthYear = new Date().toISOString().substring(0, 7);
         let selectedMonthYear = currentMonthYear;
-        let startingDay = 26; // Default, will be loaded from DB
+        let startingDay = 26;
 
         // Set today's date as default
         const today = new Date().toISOString().split('T0')[0];
         document.getElementById('date').value = today;
 
-        // Old loading logic removed
-        
         // Format number input with thousand separator
         const amountInput = document.getElementById('amount');
         amountInput.addEventListener('input', function(e) {
@@ -787,17 +778,13 @@
             } else if (authData.user) {
                 authMessage.textContent = 'Success! Please check your email to confirm.';
                 
-                // New user is signed up, let's create their default data
                 const user = authData.user;
                 
-                // 1. Create their profile
                 await supabase.from('profiles').insert({ id: user.id, starting_day: 26 });
                 
-                // 2. Create their default categories
                 const defaultCategories = ['Food', 'Transport', 'Shopping', 'Bills', 'Entertainment', 'Other'];
                 const catsToInsert = defaultCategories.map(name => ({ user_id: user.id, name: name }));
                 await supabase.from('categories').insert(catsToInsert);
-
             } else {
                  authMessage.textContent = 'Success! Please check your email to confirm.';
             }
@@ -807,31 +794,22 @@
             await supabase.auth.signOut();
         };
 
-        // Main entry point for the app
         supabase.auth.onAuthStateChange(async (event, session) => {
             if (session && session.user) {
                 currentUser = session.user;
-                // User is logged in
                 authContainer.style.display = 'none';
                 appContainer.style.display = 'block';
-                
-                // Load all user data
                 await initializeAppData();
-                
             } else {
-                // User is logged out
                 currentUser = null;
                 authContainer.style.display = 'block';
                 appContainer.style.display = 'none';
-                
-                // Clear local data
                 expenses = [];
                 userCategories = [];
                 userSubCategories = [];
             }
         });
         
-        // This NEW function loads all data from Supabase on login
         async function initializeAppData() {
             if (!currentUser) return;
             
@@ -847,8 +825,6 @@
             if (profile) {
                 startingDay = profile.starting_day;
                 document.getElementById('startingDay').value = startingDay;
-            } else if (profileError) {
-                console.error("Error fetching profile:", profileError.message);
             }
 
             // 2. Fetch categories
@@ -859,8 +835,6 @@
                 
             if (cats) {
                 userCategories = cats;
-            } else {
-                console.error("Error fetching categories:", catsError.message);
             }
             
             // 3. Fetch sub-categories
@@ -871,8 +845,6 @@
             
             if (subCats) {
                 userSubCategories = subCats;
-            } else {
-                console.error("Error fetching sub-categories:", subCatsError.message);
             }
             
             // 4. Fetch expenses
@@ -882,30 +854,23 @@
                 .eq('user_id', currentUser.id);
             
             if (exps) {
-                // Map DB columns to our JS object keys
                 expenses = exps.map(e => ({
                     id: e.id,
                     name: e.name,
                     amount: e.amount,
                     category: e.category_name,
                     subCategory: e.sub_category_name,
-                    date: e.expense_date // Note the name change
+                    date: e.expense_date
                 }));
-            } else {
-                console.error("Error fetching expenses:", expsError.message);
             }
 
-            // 5. Now that all data is loaded, render the UI
             updateCategoryDropdown();
-            updateParentCategorySelect(); // Update this too
+            updateParentCategorySelect();
             renderMonthFilter();
             renderExpenses();
             console.log("App initialized.");
         }
-        // --- END AUTH FLOW ---
 
-
-        // CSV Export Functionality (Unchanged, works with local `expenses` array)
         function exportToCSV(range = 'all') {
             let filteredExpenses = [...expenses];
             let filename = 'expenses';
@@ -955,7 +920,7 @@
             alert(`CSV file exported successfully!\n\nFile: ${filename}-${new Date().toISOString().split('T')[0]}.csv\nRecords: ${filteredExpenses.length}`);
         }
 
-        // --- Date/Period/Chart Functions (Unchanged) ---
+        // --- Date/Period/Chart Functions ---
         function getPeriodForMonth(monthYear, startDay) {
             if (monthYear === 'all') {
                 const allDates = expenses.map(exp => new Date(exp.date)).filter(d => !isNaN(d));
@@ -975,6 +940,7 @@
             let endDate = new Date(year, month, startDay - 1);
             return { startDate, endDate };
         }
+
         function getPreviousMonthPeriods(monthYear, startDay, count = 3) {
             const periods = [];
             for (let i = 0; i < count; i++) {
@@ -986,6 +952,7 @@
             }
             return periods;
         }
+
         function generateDateRange(startDate, endDate) {
             const dates = [];
             const current = new Date(startDate);
@@ -995,6 +962,7 @@
             }
             return dates;
         }
+
         function getMonthNameForPeriod(startDate, endDate) {
             const startMonth = startDate.toLocaleDateString('en-US', { month: 'short' });
             const endMonth = endDate.toLocaleDateString('en-US', { month: 'short' });
@@ -1002,6 +970,7 @@
             if (startMonth === endMonth) return `${startMonth} ${year}`;
             else return `${startMonth} - ${endMonth} ${year}`;
         }
+
         function renderCumulativeChart() {
             const ctx = document.getElementById('cumulativeChart').getContext('2d');
             if (cumulativeChart) {
@@ -1085,15 +1054,10 @@
                 }
             });
         }
-        // --- END Date/Period/Chart Functions ---
         
-
-        // REWRITTEN: saveStartingDay
         async function saveStartingDay() {
             const newStartingDay = parseInt(document.getElementById('startingDay').value);
             if (newStartingDay >= 1 && newStartingDay <= 31 && currentUser) {
-                
-                // 1. Update Supabase
                 const { error } = await supabase
                     .from('profiles')
                     .update({ starting_day: newStartingDay })
@@ -1104,7 +1068,6 @@
                     return;
                 }
                 
-                // 2. Update local variable
                 startingDay = newStartingDay;
                 
                 if (document.getElementById('analyticsPage').classList.contains('active')) {
@@ -1123,7 +1086,7 @@
             return `${startStr} - ${endStr}`;
         }
 
-        // --- Modal Functions (Mostly Unchanged) ---
+        // --- Modal Functions ---
         function openCategoryModal() {
             document.getElementById('categoryModal').classList.add('active');
             document.getElementById('newCategoryName').value = '';
@@ -1146,7 +1109,6 @@
             document.getElementById('deleteModal').classList.add('active');
         }
 
-        // REWRITTEN: confirmDelete (Handles both categories and sub-categories)
         async function confirmDelete() {
             if (!categoryToDelete || !currentUser) return;
             
@@ -1163,7 +1125,6 @@
                     updateParentCategorySelect();
                 };
                 
-                // Also check if sub-categories depend on it
                 const dependents = userSubCategories.filter(s => s.category_id === id);
                 if (dependents.length > 0) {
                     alert(`Cannot delete "${name}". Please delete its ${dependents.length} sub-categories first.`);
@@ -1182,7 +1143,6 @@
                 return;
             }
 
-            // 1. Delete from Supabase
             const { error } = await supabase
                 .from(tableName)
                 .delete()
@@ -1193,19 +1153,16 @@
                 return;
             }
             
-            // 2. Update local array
             if (type === 'category') {
                 userCategories = userCategories.filter(c => c.id !== id);
             } else if (type === 'subCategory') {
                 userSubCategories = userSubCategories.filter(s => s.id !== id);
             }
 
-            // 3. Render
             renderFunc();
             closeDeleteModal();
         }
 
-        // REWRITTEN: saveNewCategory (from modal)
         async function saveNewCategory() {
             const newCategoryName = document.getElementById('newCategoryName').value.trim();
             if (!newCategoryName || !currentUser) {
@@ -1213,13 +1170,11 @@
                 return;
             }
 
-            // Check for duplicates
             if (userCategories.find(c => c.name.toLowerCase() === newCategoryName.toLowerCase())) {
                 alert('This category already exists');
                 return;
             }
 
-            // 1. Insert into Supabase
             const { data, error } = await supabase
                 .from('categories')
                 .insert({ user_id: currentUser.id, name: newCategoryName })
@@ -1231,19 +1186,14 @@
                 return;
             }
 
-            // 2. Add to local array
             userCategories.push(data);
             
-            // 3. Render
             updateCategoryDropdown();
-            updateParentCategorySelect(); // Update this too
+            updateParentCategorySelect();
             
-            // 4. Close modal and set value
             document.getElementById('category').value = data.name;
             closeCategoryModal();
         }
-
-        // Gist/LocalStorage functions (load, save, sync, etc.) are all REMOVED
 
         // --- UI/Page Rendering Functions ---
         
@@ -1265,7 +1215,7 @@
             sortedMonths.forEach(monthYear => {
                 const option = document.createElement('option');
                 option.value = monthYear;
-                const date = new Date(monthYear + '-01T12:00:00'); // Use midday to avoid timezone issues
+                const date = new Date(monthYear + '-01T12:00:00');
                 const monthName = date.toLocaleString('en-US', { month: 'short', year: 'numeric' });
                 option.textContent = monthName;
                 select.appendChild(option);
@@ -1306,12 +1256,9 @@
                 renderCategories();
             } else if (pageName === 'subcategories') {
                 renderSubCategories();
-            } else if (pageName === 'settings') {
-                // Sync status removed
             }
         }
 
-        // Analytics function (Unchanged, reads from local `expenses` array)
         function renderAnalytics() {
             const analyticsTitle = document.getElementById('analyticsTitle');
             const monthNames = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
@@ -1494,27 +1441,24 @@
             }
         }
 
-        // FIXED: updateParentCategorySelect (for sub-categories page)
+        // FIXED: updateParentCategorySelect
         function updateParentCategorySelect() {
             const select = document.getElementById('parentCategorySelect');
             select.innerHTML = '<option value="">Choose a category</option>';
             
-            // Sort categories alphabetically
             const sortedCategories = [...userCategories].sort((a, b) => a.name.localeCompare(b.name));
             
             sortedCategories.forEach(cat => {
                 const option = document.createElement('option');
-                option.value = cat.id; // Use ID instead of name
+                option.value = cat.id;
                 option.textContent = cat.name;
-                option.setAttribute('data-name', cat.name); // Store name as data attribute
                 select.appendChild(option);
             });
         }
 
         // FIXED: addSubCategory
         async function addSubCategory() {
-            const parentCatSelect = document.getElementById('parentCategorySelect');
-            const parentCatId = parseInt(parentCatSelect.value);
+            const parentCatId = parseInt(document.getElementById('parentCategorySelect').value);
             const subCatInput = document.getElementById('newSubCategoryInput');
             const newSubCatName = subCatInput.value.trim();
 
@@ -1523,21 +1467,18 @@
                 return;
             }
 
-            // Find the parent category object to get its name (for display)
             const parentCat = userCategories.find(c => c.id === parentCatId);
             if (!parentCat) {
                 alert('Invalid parent category');
                 return;
             }
             
-            // Check for duplicates
             const existing = userSubCategories.find(s => s.category_id === parentCatId && s.name.toLowerCase() === newSubCatName.toLowerCase());
             if (existing) {
                 alert('This sub-category already exists');
                 return;
             }
             
-            // 1. Insert into Supabase
             const { data, error } = await supabase
                 .from('sub_categories')
                 .insert({ 
@@ -1553,58 +1494,58 @@
                 return;
             }
             
-            // 2. Add to local array
             userSubCategories.push(data);
 
-            // 3. Render
             updateCategoryDropdown();
             renderSubCategories();
             subCatInput.value = '';
         }
 
-        // FIXED: renderSubCategories
+        // COMPLETELY REWRITTEN: renderSubCategories
         function renderSubCategories() {
             const list = document.getElementById('subCategoryList');
             list.innerHTML = '';
             
-            // Check if no categories exist
+            console.log('userCategories:', userCategories);
+            console.log('userSubCategories:', userSubCategories);
+            
             if (userCategories.length === 0) {
                 list.innerHTML = '<div class="empty-state">You must add categories first before adding sub categories.</div>';
                 return;
             }
             
-            let subCategoryCount = 0;
+            let hasAnySubCategories = false;
             
-            // Group sub-categories by parent
-            userCategories.forEach(cat => {
-                // Filter sub-categories by matching category_id
-                const subs = userSubCategories.filter(s => s.category_id === cat.id);
+            // Group sub-categories by their parent category
+            userCategories.forEach(category => {
+                const subCatsForCategory = userSubCategories.filter(sub => sub.category_id === category.id);
                 
-                if (subs.length > 0) {
-                    subCategoryCount += subs.length;
+                if (subCatsForCategory.length > 0) {
+                    hasAnySubCategories = true;
                     
-                    const title = document.createElement('h3');
-                    title.style.margin = '25px 0 15px';
-                    title.style.color = '#666';
-                    title.textContent = cat.name;
-                    list.appendChild(title);
-
-                    // Sort subs alphabetically for better UI
-                    const sortedSubs = [...subs].sort((a, b) => a.name.localeCompare(b.name));
-
-                    sortedSubs.forEach(sub => {
+                    // Create category header
+                    const categoryHeader = document.createElement('h3');
+                    categoryHeader.style.margin = '25px 0 15px';
+                    categoryHeader.style.color = '#666';
+                    categoryHeader.style.borderBottom = '2px solid #e0e0e0';
+                    categoryHeader.style.paddingBottom = '10px';
+                    categoryHeader.textContent = category.name;
+                    list.appendChild(categoryHeader);
+                    
+                    // Create sub-category items
+                    subCatsForCategory.forEach(subCategory => {
                         const item = document.createElement('div');
                         item.className = 'category-item';
                         
                         const nameDiv = document.createElement('div');
                         nameDiv.className = 'category-name';
-                        nameDiv.textContent = sub.name;
+                        nameDiv.textContent = subCategory.name;
                         
                         const deleteBtn = document.createElement('button');
                         deleteBtn.className = 'delete-btn';
                         deleteBtn.textContent = 'Delete';
                         deleteBtn.onclick = function() {
-                            openDeleteModal('subCategory', sub.id, sub.name);
+                            openDeleteModal('subCategory', subCategory.id, subCategory.name);
                         };
                         
                         item.appendChild(nameDiv);
@@ -1613,13 +1554,12 @@
                     });
                 }
             });
-
-            if (subCategoryCount === 0) {
+            
+            if (!hasAnySubCategories) {
                 list.innerHTML = '<div class="empty-state">No sub categories yet. Add one above!</div>';
             }
         }
 
-        // REWRITTEN: addCategoryFromPage
         async function addCategoryFromPage() {
             const input = document.getElementById('newCategoryInput');
             const newCategoryName = input.value.trim();
@@ -1629,13 +1569,11 @@
                 return;
             }
 
-            // Check for duplicates
             if (userCategories.find(c => c.name.toLowerCase() === newCategoryName.toLowerCase())) {
                 alert('This category already exists');
                 return;
             }
 
-            // 1. Insert into Supabase
             const { data, error } = await supabase
                 .from('categories')
                 .insert({ user_id: currentUser.id, name: newCategoryName })
@@ -1647,30 +1585,23 @@
                 return;
             }
 
-            // 2. Add to local array
             userCategories.push(data);
             
-            // 3. Render
             updateCategoryDropdown();
-            updateParentCategorySelect(); // Update this too
+            updateParentCategorySelect();
             renderCategories();
             input.value = '';
         }
 
-        // REWRITTEN: renderCategories
         function renderCategories() {
             const list = document.getElementById('categoryList');
             list.innerHTML = '';
-            
-            // Simplified: No more "default" vs "custom". All are from the DB.
-            // All categories can now be deleted (a change from original).
             
             if (userCategories.length === 0) {
                  list.innerHTML = '<div class="empty-state">No categories found. Add one above!</div>';
                  return;
             }
             
-            // Sort categories alphabetically
             const sortedCategories = [...userCategories].sort((a, b) => a.name.localeCompare(b.name));
 
             sortedCategories.forEach(cat => {
@@ -1685,7 +1616,6 @@
                 deleteBtn.className = 'delete-btn';
                 deleteBtn.textContent = 'Delete';
                 deleteBtn.onclick = function() {
-                    // Use the new delete modal
                     openDeleteModal('category', cat.id, cat.name);
                 };
                 
@@ -1708,15 +1638,11 @@
         document.getElementById('startingDay').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') saveStartingDay();
         });
-        // --- End Event Listeners ---
 
-
-        // REWRITTEN: updateCategoryDropdown
         function updateCategoryDropdown() {
             const select = document.getElementById('category');
-            select.innerHTML = ''; // Clear existing
+            select.innerHTML = '';
             
-            // Sort categories alphabetically
             const sortedCategories = [...userCategories].sort((a, b) => a.name.localeCompare(b.name));
 
             sortedCategories.forEach(cat => {
@@ -1725,7 +1651,6 @@
                 option.textContent = cat.name;
                 select.appendChild(option);
 
-                // Find and add sub-categories
                 const subs = userSubCategories
                     .filter(s => s.category_id === cat.id)
                     .sort((a, b) => a.name.localeCompare(b.name));
@@ -1745,7 +1670,6 @@
             select.appendChild(newOption);
         }
 
-        // REWRITTEN: addExpense
         async function addExpense() {
             const name = document.getElementById('name').value.trim();
             const amountStr = document.getElementById('amount').value.replace(/\./g, '');
@@ -1776,19 +1700,17 @@
                 expense_date: date
             };
 
-            // 1. Insert into Supabase
             const { data, error } = await supabase
                 .from('expenses')
                 .insert(newExpense)
                 .select()
-                .single(); // .select().single() returns the newly created row
+                .single();
 
             if (error) {
                 alert('Error adding expense: ' + error.message);
                 return;
             }
             
-            // 2. Add to local array
             const expense = {
                 id: data.id,
                 name: data.name,
@@ -1799,7 +1721,6 @@
             };
             expenses.push(expense);
             
-            // 3. Render
             renderMonthFilter();
             renderExpenses();
             
@@ -1808,9 +1729,7 @@
             document.getElementById('date').value = today;
         }
 
-        // REWRITTEN: deleteExpense
         async function deleteExpense(id) {
-            // 1. Delete from Supabase
             const { error } = await supabase
                 .from('expenses')
                 .delete()
@@ -1821,15 +1740,12 @@
                 return;
             }
 
-            // 2. Delete from local array
             expenses = expenses.filter(exp => exp.id !== id);
             
-            // 3. Render
             renderMonthFilter();
             renderExpenses();
         }
 
-        // Main render function (Mostly Unchanged, reads from local `expenses` array)
         function renderExpenses() {
             const list = document.getElementById('expensesList');
             const headerTitle = document.getElementById('headerTitle');
@@ -1849,7 +1765,6 @@
             headerTitle.textContent = `💰 ${titleText} Expenses`;
             const total = filteredExpenses.reduce((sum, exp) => sum + exp.amount, 0);
             document.getElementById('totalAmount').textContent = `Rp ${total.toLocaleString('id-ID')}`;
-
 
             if (filteredExpenses.length === 0) {
                 const month = selectedMonthYear !== 'all' ? `for ${titleText}` : 'at all';
