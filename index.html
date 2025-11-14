@@ -1494,8 +1494,7 @@
             }
         }
 
-        // REWRITTEN: updateParentCategorySelect (for sub-categories page)
-        // FIXED: updateParentCategorySelect function
+        // FIXED: updateParentCategorySelect (for sub-categories page)
         function updateParentCategorySelect() {
             const select = document.getElementById('parentCategorySelect');
             select.innerHTML = '<option value="">Choose a category</option>';
@@ -1512,8 +1511,7 @@
             });
         }
 
-        // REWRITTEN: addSubCategory
-        // FIXED: addSubCategory function
+        // FIXED: addSubCategory
         async function addSubCategory() {
             const parentCatSelect = document.getElementById('parentCategorySelect');
             const parentCatId = parseInt(parentCatSelect.value);
@@ -1564,78 +1562,62 @@
             subCatInput.value = '';
         }
 
-        // REWRITTEN: deleteSubCategory
-        // This is now handled by openDeleteModal() and confirmDelete()
-        // We'll keep this function signature just in case it's called from old code,
-        // but we'll map it to the new system.
-        function deleteSubCategory(parentCatName, subCatName) {
-            const parentCat = userCategories.find(c => c.name === parentCatName);
-            if (!parentCat) return;
+        // FIXED: renderSubCategories
+        function renderSubCategories() {
+            const list = document.getElementById('subCategoryList');
+            list.innerHTML = '';
             
-            const subCat = userSubCategories.find(s => s.category_id === parentCat.id && s.name === subCatName);
-            if (!subCat) return;
-
-            // Open the new modal
-            openDeleteModal('subCategory', subCat.id, subCat.name);
-        }
-
-        // REWRITTEN: renderSubCategories
-// FIXED: renderSubCategories function
-function renderSubCategories() {
-    const list = document.getElementById('subCategoryList');
-    list.innerHTML = '';
-    
-    // Check if no categories exist
-    if (userCategories.length === 0) {
-        list.innerHTML = '<div class="empty-state">You must add categories first before adding sub categories.</div>';
-        return;
-    }
-    
-    let subCategoryCount = 0;
-    
-    // Group sub-categories by parent
-    userCategories.forEach(cat => {
-        // Filter sub-categories by matching category_id
-        const subs = userSubCategories.filter(s => s.category_id === cat.id);
-        
-        if (subs.length > 0) {
-            subCategoryCount += subs.length;
+            // Check if no categories exist
+            if (userCategories.length === 0) {
+                list.innerHTML = '<div class="empty-state">You must add categories first before adding sub categories.</div>';
+                return;
+            }
             
-            const title = document.createElement('h3');
-            title.style.margin = '25px 0 15px';
-            title.style.color = '#666';
-            title.textContent = cat.name;
-            list.appendChild(title);
+            let subCategoryCount = 0;
+            
+            // Group sub-categories by parent
+            userCategories.forEach(cat => {
+                // Filter sub-categories by matching category_id
+                const subs = userSubCategories.filter(s => s.category_id === cat.id);
+                
+                if (subs.length > 0) {
+                    subCategoryCount += subs.length;
+                    
+                    const title = document.createElement('h3');
+                    title.style.margin = '25px 0 15px';
+                    title.style.color = '#666';
+                    title.textContent = cat.name;
+                    list.appendChild(title);
 
-            // Sort subs alphabetically for better UI
-            const sortedSubs = [...subs].sort((a, b) => a.name.localeCompare(b.name));
+                    // Sort subs alphabetically for better UI
+                    const sortedSubs = [...subs].sort((a, b) => a.name.localeCompare(b.name));
 
-            sortedSubs.forEach(sub => {
-                const item = document.createElement('div');
-                item.className = 'category-item';
-                
-                const nameDiv = document.createElement('div');
-                nameDiv.className = 'category-name';
-                nameDiv.textContent = sub.name;
-                
-                const deleteBtn = document.createElement('button');
-                deleteBtn.className = 'delete-btn';
-                deleteBtn.textContent = 'Delete';
-                deleteBtn.onclick = function() {
-                    openDeleteModal('subCategory', sub.id, sub.name);
-                };
-                
-                item.appendChild(nameDiv);
-                item.appendChild(deleteBtn);
-                list.appendChild(item);
+                    sortedSubs.forEach(sub => {
+                        const item = document.createElement('div');
+                        item.className = 'category-item';
+                        
+                        const nameDiv = document.createElement('div');
+                        nameDiv.className = 'category-name';
+                        nameDiv.textContent = sub.name;
+                        
+                        const deleteBtn = document.createElement('button');
+                        deleteBtn.className = 'delete-btn';
+                        deleteBtn.textContent = 'Delete';
+                        deleteBtn.onclick = function() {
+                            openDeleteModal('subCategory', sub.id, sub.name);
+                        };
+                        
+                        item.appendChild(nameDiv);
+                        item.appendChild(deleteBtn);
+                        list.appendChild(item);
+                    });
+                }
             });
-        }
-    });
 
-    if (subCategoryCount === 0) {
-        list.innerHTML = '<div class="empty-state">No sub categories yet. Add one above!</div>';
-    }
-}
+            if (subCategoryCount === 0) {
+                list.innerHTML = '<div class="empty-state">No sub categories yet. Add one above!</div>';
+            }
+        }
 
         // REWRITTEN: addCategoryFromPage
         async function addCategoryFromPage() {
