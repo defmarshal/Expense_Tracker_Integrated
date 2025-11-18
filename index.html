@@ -36,6 +36,8 @@
             line-height: 1.6;
             min-height: 100vh;
             overflow-x: hidden;
+            /* ADDED: Prevents long words from breaking layout */
+            overflow-wrap: break-word;
         }
 
         /* Header Styles */
@@ -886,8 +888,12 @@
         .balance-item:last-child {
             border-bottom: none;
         }
+        
+        /* * =========================================
+         * MODIFIED & NEW RESPONSIVE STYLES
+         * =========================================
+        */
 
-        /* Responsive Styles */
         @media (max-width: 768px) {
             .hero h1 {
                 font-size: 2.5rem;
@@ -938,11 +944,139 @@
                 align-items: flex-start;
                 gap: 1rem;
             }
+
+            /* --- NEW: Mobile Optimizations --- */
+
+            /* Reduce section padding on tablets */
+            .features, .benefits, .cta {
+                padding: 4rem 2rem;
+            }
+
+            .stat-value {
+                font-size: 1.8rem;
+            }
+
+            /* Stack list items vertically */
+            .expense-item, .wallet-item, .income-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            .category-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            /* Ensure the bottom row (amount + buttons) spans full width */
+            .expense-item > div:last-child, 
+            .income-item > div:last-child, 
+            .wallet-item > div:last-child {
+                width: 100%;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+            
+            .category-item > div:last-child {
+                width: 100%;
+            }
+
+            /* Improve touch target size */
+            .edit-btn, .delete-btn {
+                padding: 10px;
+                font-size: 1.1rem; /* Make icon slightly larger */
+            }
+
+            .add-subcategory-btn {
+                padding: 8px 12px;
+            }
+
+            /* Prevent input zoom on iOS */
+            input, select {
+                font-size: 16px;
+            }
+        }
+
+        /* --- NEW: Added breakpoint for small phones --- */
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 1rem;
+            }
+
+            /* Icon-only buttons in header */
+            .auth-section .btn span {
+                display: none;
+            }
+
+            .auth-section .btn {
+                padding: 10px 12px;
+                gap: 0;
+            }
+            
+            .auth-section {
+                gap: 8px;
+            }
+
+            .logo {
+                font-size: 1.3rem;
+            }
+            .logo i {
+                font-size: 1.5rem;
+            }
+
+            /* Further reduce fonts */
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            .hero p {
+                font-size: 1.1rem;
+            }
+            .section-title {
+                font-size: 1.8rem;
+            }
+            .section-subtitle {
+                font-size: 1rem;
+            }
+            
+            /* Further reduce padding */
+            .features, .benefits, .cta {
+                padding: 4rem 1.5rem;
+            }
+            .form-card,
+            .expense-list, .wallet-list, .category-list, .income-list {
+                padding: 1.5rem;
+            }
+            
+            .modal-body {
+                padding: 1.5rem;
+            }
+            .modal-header {
+                padding: 1.5rem;
+            }
+            .modal-title {
+                font-size: 1.5rem;
+            }
+
+            .dashboard-title {
+                font-size: 1.5rem;
+            }
+
+            /* Make category/source tags smaller */
+            .expense-category, .income-source {
+                display: block;
+                margin-top: 4px;
+                text-align: right;
+            }
+
+            .expense-amount, .income-amount {
+                text-align: right;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
     <header>
         <div class="logo">
             <i class="fas fa-chart-pie"></i>
@@ -951,20 +1085,19 @@
         <div class="auth-section">
             <button id="loginBtn" class="btn btn-outline">
                 <i class="fas fa-sign-in-alt"></i>
-                Sign In
+                <span>Sign In</span>
             </button>
             <button id="signupBtn" class="btn btn-primary">
                 <i class="fas fa-user-plus"></i>
-                Get Started
+                <span>Get Started</span>
             </button>
             <button id="logoutBtn" class="btn btn-outline hidden">
                 <i class="fas fa-sign-out-alt"></i>
-                Sign Out
+                <span>Sign Out</span>
             </button>
         </div>
     </header>
 
-    <!-- Landing Page Content -->
     <div id="landingPage" class="landing-page">
         <section class="hero">
             <div class="hero-content">
@@ -981,7 +1114,6 @@
                     </button>
                 </div>
                 <div class="hero-image">
-                    <!-- This would be an actual screenshot of the dashboard -->
                     <div style="background: var(--gradient); height: 400px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem;">
                         FinTrack Dashboard Preview
                     </div>
@@ -1163,7 +1295,6 @@
         </footer>
     </div>
 
-    <!-- Dashboard Container -->
     <div id="dashboardContainer" class="dashboard-container">
         <div class="container">
             <div class="dashboard-header">
@@ -1201,7 +1332,6 @@
                 <div class="tab" data-tab="categories">Categories</div>
             </div>
 
-            <!-- Expenses Tab -->
             <div id="expensesTab" class="tab-content active">
                 <div class="form-card">
                     <h2 class="form-title">Add New Expense</h2>
@@ -1261,7 +1391,6 @@
                 </div>
             </div>
             
-            <!-- Income Tab -->
             <div id="incomeTab" class="tab-content">
                 <div class="form-card">
                     <h2 class="form-title">Add New Income</h2>
@@ -1319,7 +1448,6 @@
                 </div>
             </div>
             
-            <!-- Wallets Tab -->
             <div id="walletsTab" class="tab-content">
                 <div class="form-card">
                     <h2 class="form-title">Add New Wallet</h2>
@@ -1352,7 +1480,6 @@
                 </div>
             </div>
             
-            <!-- Categories Tab -->
             <div id="categoriesTab" class="tab-content">
                 <div class="form-card">
                     <div class="form-title">Add New Category</div>
@@ -1401,7 +1528,6 @@
         </div>
     </div>
 
-    <!-- Add Subcategory Modal -->
     <div class="modal-overlay" id="subcategoryModal">
         <div class="modal">
             <div class="modal-header">
@@ -1426,7 +1552,6 @@
         </div>
     </div>
 
-    <!-- Delete Confirmation Modal -->
     <div class="modal-overlay" id="deleteModal">
         <div class="modal">
             <div class="modal-header" style="background: var(--danger);">
@@ -1450,7 +1575,6 @@
         </div>
     </div>
 
-    <!-- Insufficient Balance Modal -->
     <div class="modal-overlay insufficient-balance-modal" id="insufficientBalanceModal">
         <div class="modal">
             <div class="modal-header">
@@ -1494,7 +1618,6 @@
         </div>
     </div>
 
-    <!-- Signup Modal -->
     <div class="modal-overlay" id="signupModal">
         <div class="modal">
             <div class="modal-header">
@@ -1532,7 +1655,6 @@
         </div>
     </div>
 
-    <!-- Login Modal -->
     <div class="modal-overlay" id="loginModal">
         <div class="modal">
             <div class="modal-header">
@@ -1563,7 +1685,6 @@
         </div>
     </div>
 
-    <!-- Alert Container -->
     <div id="alertContainer" style="position: fixed; top: 100px; right: 20px; z-index: 3000; max-width: 400px;"></div>
 
     <script>
@@ -1887,23 +2008,37 @@
             }
             
             try {
-                const { data, error } = await supabase.auth.signUp({ email, password });
+                const { data, error } = await supabase.auth.signUp({ 
+                    email, 
+                    password,
+                    options: {
+                        emailRedirectTo: window.location.origin
+                    }
+                });
                 
                 if (error) {
                     showAlert(error.message, 'error');
                 } else {
-                    showAlert('Account created successfully! Please check your email for verification.', 'success');
-                    signupModal.classList.remove('active');
-                    signupForm.reset();
-                    passwordStrength.className = 'strength-bar';
-                    
-                    setTimeout(() => showDashboard(email), 2000);
+                    if (data.user && data.session) {
+                        // User is immediately confirmed (might be due to Supabase settings)
+                        showAlert('Account created successfully! Welcome to FinTrack.', 'success');
+                        signupModal.classList.remove('active');
+                        signupForm.reset();
+                        passwordStrength.className = 'strength-bar';
+                        showDashboard(email);
+                    } else {
+                        // Email confirmation required
+                        showAlert('Account created successfully! Please check your email for verification link.', 'success');
+                        signupModal.classList.remove('active');
+                        signupForm.reset();
+                        passwordStrength.className = 'strength-bar';
+                        // Don't show dashboard until email is confirmed
+                    }
                 }
             } catch (error) {
                 console.error('Signup error:', error);
-                showAlert('Demo mode: Signed up successfully!', 'success');
-                signupModal.classList.remove('active');
-                showDashboard(email);
+                // Don't automatically fall back to demo mode on error
+                showAlert('Error creating account. Please try again.', 'error');
             }
         }
         
@@ -1922,13 +2057,11 @@
                 const { data, error } = await supabase.auth.signInWithPassword({ email, password });
                 
                 if (error) {
-                    showAlert(error.message, 'error');
-                    console.error('Login error:', error);
-                    setTimeout(() => {
-                        showAlert('Demo mode: Logged in successfully!', 'success');
-                        loginModal.classList.remove('active');
-                        showDashboard(email);
-                    }, 1000);
+                    if (error.message.includes('Email not confirmed')) {
+                        showAlert('Please check your email and confirm your account before signing in.', 'error');
+                    } else {
+                        showAlert(error.message, 'error');
+                    }
                 } else {
                     showAlert('Login successful!', 'success');
                     loginModal.classList.remove('active');
@@ -1936,9 +2069,7 @@
                 }
             } catch (error) {
                 console.error('Login error:', error);
-                showAlert('Demo mode: Logged in successfully!', 'success');
-                loginModal.classList.remove('active');
-                showDashboard(email);
+                showAlert('Error signing in. Please try again.', 'error');
             }
         }
         
@@ -1958,8 +2089,24 @@
         async function checkAuthState() {
             try {
                 const { data: { user } } = await supabase.auth.getUser();
-                if (user) showDashboard(user.email);
-                else hideDashboard();
+                if (user) {
+                    // Check if email is confirmed
+                    const { data: profile } = await supabase
+                        .from('profiles')
+                        .select('email_confirmed')
+                        .eq('id', user.id)
+                        .single();
+                        
+                    if (user.email_confirmed_at || (profile && profile.email_confirmed)) {
+                        showDashboard(user.email);
+                    } else {
+                        showAlert('Please confirm your email address before accessing the dashboard.', 'warning');
+                        // You might want to sign them out here, or show a confirmation reminder
+                        await supabase.auth.signOut();
+                    }
+                } else {
+                    hideDashboard();
+                }
             } catch (error) {
                 console.error('Auth state check error:', error);
                 hideDashboard();
