@@ -146,9 +146,6 @@
             font-size: 0.85rem;
         }
 
-
-        
-
         /* Landing Page Styles */
         .landing-page {
             display: none;
@@ -937,6 +934,55 @@
             border-bottom: none;
         }
         
+        /* New styles for historical expenses */
+        .month-filter {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+        }
+        
+        .month-filter label {
+            margin-bottom: 0;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .month-filter select {
+            flex: 1;
+            max-width: 200px;
+        }
+        
+        .expense-summary {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow);
+            text-align: center;
+        }
+        
+        .expense-summary h3 {
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+        
+        .expense-summary-amount {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--danger);
+        }
+        
+        .no-expenses-message {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: var(--gray);
+            font-style: italic;
+        }
         /* * =========================================
          * MODIFIED & NEW RESPONSIVE STYLES
          * =========================================
@@ -1056,6 +1102,17 @@
             
             .nav-link {
                 padding: 8px;
+            }
+            
+            /* Month filter responsive */
+            .month-filter {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 1rem;
+            }
+            
+            .month-filter select {
+                max-width: none;
             }            
         }
 
@@ -1371,7 +1428,6 @@
             </div>
         </footer>
     </div>
-
     <div id="dashboardContainer" class="dashboard-container">
         <div class="container">
             <!-- Add this back button -->
@@ -1410,13 +1466,16 @@
                 </div>
             </div>
 
+            <!-- UPDATED: Added historical expenses tab -->
             <div class="dashboard-tabs">
-                <div class="tab active" data-tab="expenses">Expenses</div>
+                <div class="tab active" data-tab="expenses">This Month</div>
+                <div class="tab" data-tab="historical">All Expenses</div>
                 <div class="tab" data-tab="income">Income</div>
                 <div class="tab" data-tab="wallets">Wallets</div>
                 <div class="tab" data-tab="categories">Categories</div>
             </div>
 
+            <!-- UPDATED: This Month Expenses Tab -->
             <div id="expensesTab" class="tab-content active">
                 <div class="form-card">
                     <h2 class="form-title">Add New Expense</h2>
@@ -1465,11 +1524,41 @@
                 </div>
                 
                 <div class="expense-list">
-                    <h2 class="form-title">Recent Expenses</h2>
+                    <h2 class="form-title">This Month's Expenses</h2>
                     <div id="expensesList">
                         <div class="expense-item">
                             <div class="expense-details">
-                                <div>No expenses yet. Add your first expense!</div>
+                                <div>No expenses this month yet. Add your first expense!</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- NEW: Historical Expenses Tab -->
+            <div id="historicalTab" class="tab-content">
+                <div class="month-filter">
+                    <label for="monthSelect">Filter by Month:</label>
+                    <select id="monthSelect">
+                        <!-- Options will be populated by JavaScript -->
+                    </select>
+                    <label for="yearSelect">Year:</label>
+                    <select id="yearSelect">
+                        <!-- Options will be populated by JavaScript -->
+                    </select>
+                </div>
+                
+                <div class="expense-summary">
+                    <h3>Total Expenses for <span id="selectedMonthYear">Current Month</span></h3>
+                    <div class="expense-summary-amount" id="monthlyExpenseTotal">Rp 0</div>
+                </div>
+                
+                <div class="expense-list">
+                    <h2 class="form-title">Expenses for <span id="currentFilterDisplay">Current Month</span></h2>
+                    <div id="historicalExpensesList">
+                        <div class="expense-item">
+                            <div class="expense-details">
+                                <div>Select a month to view expenses</div>
                             </div>
                         </div>
                     </div>
@@ -1771,7 +1860,6 @@
     </div>
 
     <div id="alertContainer" style="position: fixed; top: 100px; right: 20px; z-index: 3000; max-width: 400px;"></div>
-
     <script>
         // Supabase Configuration
         const SUPABASE_URL = 'https://slgzgaojmgzjhtuaptod.supabase.co';
@@ -1844,6 +1932,14 @@
         const addFundsBtn = document.getElementById('addFundsBtn');
         const cancelExpenseBtn = document.getElementById('cancelExpenseBtn');
 
+        // NEW: Historical expenses elements
+        const monthSelect = document.getElementById('monthSelect');
+        const yearSelect = document.getElementById('yearSelect');
+        const historicalExpensesList = document.getElementById('historicalExpensesList');
+        const monthlyExpenseTotal = document.getElementById('monthlyExpenseTotal');
+        const selectedMonthYear = document.getElementById('selectedMonthYear');
+        const currentFilterDisplay = document.getElementById('currentFilterDisplay');
+
         // Data storage
         let expenses = [];
         let incomes = [];
@@ -1853,6 +1949,7 @@
         let pendingExpense = null;
         let itemToDelete = null;
         let deleteType = null;
+        let isProgrammaticChange = false;
 
         // Currency formatting functions
         function formatCurrency(value) {
@@ -2015,6 +2112,19 @@
             });
         }
 
+        // NEW: Event listeners for month/year filters - with prevention of initial recursion
+        monthSelect.addEventListener('change', function() {
+            if (!isProgrammaticChange) {
+                updateHistoricalExpensesView();
+            }
+        });
+
+        yearSelect.addEventListener('change', function() {
+            if (!isProgrammaticChange) {
+                updateHistoricalExpensesView();
+            }
+        });
+
         // Tab switching setup
         function setupTabs() {
             tabs.forEach(tab => {
@@ -2031,8 +2141,16 @@
                         if (content.id === `${tabId}Tab`) {
                             content.classList.add('active');
                             
-                            // If switching to expenses tab, ensure category dropdowns are updated
+                            // If switching to expenses tab, update current month view
                             if (tabId === 'expenses') {
+                                updateCurrentMonthExpenses();
+                            }
+                            // If switching to historical tab, update historical view
+                            else if (tabId === 'historical') {
+                                updateHistoricalExpensesView();
+                            }
+                            // If switching to expenses tab, ensure category dropdowns are updated
+                            else if (tabId === 'expenses') {
                                 console.log('Switched to expenses tab, updating category dropdowns...');
                                 updateCategoryDropdowns();
                             }
@@ -2073,7 +2191,6 @@
             document.getElementById('parentCategoryId').value = parentId;
             subcategoryModal.classList.add('active');
         }
-
         // Authentication Functions
         async function handleSignup(e) {
             e.preventDefault();
@@ -2225,6 +2342,205 @@
             signupBtn.classList.remove('hidden');
             logoutBtn.classList.add('hidden');
         }
+
+        // NEW: Expense view functions
+        async function loadExpenses() {
+            expenses = await loadExpensesFromSupabase();
+            
+            // Update both current month and historical views
+            updateCurrentMonthExpenses();
+            updateHistoricalExpensesView();
+            
+            // Also update the month/year dropdowns
+            updateMonthYearFilters();
+        }
+
+        // NEW: Function to update current month expenses view
+        function updateCurrentMonthExpenses() {
+            const expensesList = document.getElementById('expensesList');
+            
+            // Get current month and year
+            const now = new Date();
+            const currentMonth = now.getMonth();
+            const currentYear = now.getFullYear();
+            
+            // Filter expenses for current wallet and current month
+            let displayExpenses = expenses;
+            if (currentWalletId) {
+                displayExpenses = expenses.filter(expense => expense.walletId === currentWalletId);
+            }
+            
+            // Filter for current month
+            displayExpenses = displayExpenses.filter(expense => {
+                const expenseDate = new Date(expense.date);
+                return expenseDate.getMonth() === currentMonth && 
+                       expenseDate.getFullYear() === currentYear;
+            });
+            
+            if (displayExpenses.length === 0) {
+                expensesList.innerHTML = `
+                    <div class="expense-item">
+                        <div class="expense-details">
+                            <div>No expenses this month yet. Add your first expense!</div>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+            
+            renderExpenseList(displayExpenses, expensesList);
+        }
+
+        // NEW: Function to update historical expenses view
+        function updateHistoricalExpensesView() {
+            const selectedMonth = monthSelect.value;
+            const selectedYear = yearSelect.value;
+            
+            // If no selection, set defaults but don't recursively call
+            if (!selectedMonth || !selectedYear) {
+                // Set to current month/year by default but don't trigger recursive call
+                const now = new Date();
+                monthSelect.value = now.getMonth().toString();
+                yearSelect.value = now.getFullYear().toString();
+                
+                // Update the display with the new values without recursion
+                const monthNames = ["January", "February", "March", "April", "May", "June",
+                    "July", "August", "September", "October", "November", "December"];
+                selectedMonthYear.textContent = `${monthNames[now.getMonth()]} ${now.getFullYear()}`;
+                currentFilterDisplay.textContent = `${monthNames[now.getMonth()]} ${now.getFullYear()}`;
+                
+                // Show empty state
+                historicalExpensesList.innerHTML = `
+                    <div class="no-expenses-message">
+                        No expenses found for ${monthNames[now.getMonth()]} ${now.getFullYear()}
+                    </div>
+                `;
+                monthlyExpenseTotal.textContent = formatDisplayCurrency(0);
+                return;
+            }
+            
+            // Filter expenses for current wallet and selected month/year
+            let displayExpenses = expenses;
+            if (currentWalletId) {
+                displayExpenses = expenses.filter(expense => expense.walletId === currentWalletId);
+            }
+            
+            // Filter for selected month/year
+            displayExpenses = displayExpenses.filter(expense => {
+                const expenseDate = new Date(expense.date);
+                return expenseDate.getMonth() === parseInt(selectedMonth) && 
+                    expenseDate.getFullYear() === parseInt(selectedYear);
+            });
+            
+            // Update the display text
+            const monthNames = ["January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"];
+            selectedMonthYear.textContent = `${monthNames[selectedMonth]} ${selectedYear}`;
+            currentFilterDisplay.textContent = `${monthNames[selectedMonth]} ${selectedYear}`;
+            
+            // Calculate and display total for the month
+            const monthlyTotal = displayExpenses.reduce((sum, expense) => sum + expense.amount, 0);
+            monthlyExpenseTotal.textContent = formatDisplayCurrency(monthlyTotal);
+            
+            if (displayExpenses.length === 0) {
+                historicalExpensesList.innerHTML = `
+                    <div class="no-expenses-message">
+                        No expenses found for ${monthNames[selectedMonth]} ${selectedYear}
+                    </div>
+                `;
+                return;
+            }
+            
+            renderExpenseList(displayExpenses, historicalExpensesList);
+        }
+
+        // NEW: Function to render expense list (reusable)
+        function renderExpenseList(expensesArray, containerElement) {
+            containerElement.innerHTML = '';
+            const sortedExpenses = [...expensesArray].sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            sortedExpenses.forEach(expense => {
+                const expenseDate = new Date(expense.date).toLocaleDateString();
+                const wallet = wallets.find(w => w.id === expense.walletId);
+                
+                let categoryText = expense.category;
+                if (expense.subcategory) {
+                    categoryText += ` > ${expense.subcategory}`;
+                }
+                
+                const expenseItem = document.createElement('div');
+                expenseItem.className = 'expense-item';
+                expenseItem.innerHTML = `
+                    <div class="expense-details">
+                        <div>${expense.description}</div>
+                        <div style="font-size: 0.9rem; color: var(--gray);">
+                            ${expenseDate} • ${wallet ? wallet.name : 'Unknown Wallet'}
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <div class="expense-amount">
+                            ${formatDisplayCurrency(expense.amount)}
+                            <span class="expense-category">${categoryText}</span>
+                        </div>
+                        <div class="action-buttons">
+                            <button class="edit-btn" onclick="editExpense('${expense.id}')">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="delete-btn" onclick="confirmDelete('expense', '${expense.id}', '${expense.description}')">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                containerElement.appendChild(expenseItem);
+            });
+        }
+
+        // NEW: Function to update month/year filter dropdowns
+        // Also update the updateMonthYearFilters function to use the flag:
+        function updateMonthYearFilters() {
+            isProgrammaticChange = true; // Set flag to prevent event recursion
+            
+            // Clear existing options
+            monthSelect.innerHTML = '';
+            yearSelect.innerHTML = '';
+            
+            // Get unique years from expenses
+            const years = [...new Set(expenses.map(expense => new Date(expense.date).getFullYear()))];
+            years.sort((a, b) => b - a); // Sort descending (newest first)
+            
+            // If no expenses, add current year
+            if (years.length === 0) {
+                years.push(new Date().getFullYear());
+            }
+            
+            // Add year options
+            years.forEach(year => {
+                const option = document.createElement('option');
+                option.value = year;
+                option.textContent = year;
+                yearSelect.appendChild(option);
+            });
+            
+            // Add month options
+            const monthNames = ["January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"];
+            
+            monthNames.forEach((month, index) => {
+                const option = document.createElement('option');
+                option.value = index;
+                option.textContent = month;
+                monthSelect.appendChild(option);
+            });
+            
+            // Set to current month/year by default
+            const now = new Date();
+            monthSelect.value = now.getMonth().toString();
+            yearSelect.value = now.getFullYear().toString();
+            
+            isProgrammaticChange = false; // Reset flag
+        }
+        // ... (Supabase data functions remain the same as in the original file) ...
 
         // Supabase Data Functions
         async function saveExpense(expense) {
@@ -2686,80 +3002,7 @@
             }
         }
 
-        // Expense Functions - UPDATED
-        async function handleAddExpense(e) {
-            e.preventDefault();
-            
-            const id = document.getElementById('expenseId').value;
-            const description = document.getElementById('expenseDescription').value;
-            const amount = parseCurrency(document.getElementById('expenseAmount').value);
-            const date = document.getElementById('expenseDate').value;
-            const category = document.getElementById('expenseCategory').value;
-            const subcategory = document.getElementById('expenseSubcategory').value;
-            
-            // Use the current wallet instead of selecting from form
-            const walletId = currentWalletId;
-            
-            if (!walletId) {
-                showAlert('Please select a wallet from the top-right selector first', 'error');
-                return;
-            }
-            
-            if (amount <= 0) {
-                showAlert('Please enter a valid amount', 'error');
-                return;
-            }
-            
-            // Find the current wallet
-            const currentWallet = wallets.find(w => w.id === walletId);
-            if (!currentWallet) {
-                showAlert('Selected wallet not found', 'error');
-                return;
-            }
-            
-            // VALIDATION: Check if wallet has sufficient balance (only for new expenses)
-            if (!id) {
-                const walletBalance = calculateWalletBalance(walletId);
-                if (walletBalance < amount) {
-                    // Store the pending expense for potential future use
-                    pendingExpense = { description, amount, date, category, subcategory, walletId };
-                    
-                    // Show insufficient balance modal with details
-                    expenseAmountDetail.textContent = formatDisplayCurrency(amount);
-                    walletBalanceDetail.textContent = formatDisplayCurrency(walletBalance);
-                    remainingBalanceDetail.textContent = formatDisplayCurrency(walletBalance - amount);
-                    
-                    insufficientBalanceModal.classList.add('active');
-                    return;
-                }
-            }
-            
-            const expense = { id, description, amount, date, category, subcategory, walletId };
-            console.log('Saving expense:', expense);
-            
-            const savedExpense = await saveExpense(expense);
-            
-            if (id) {
-                // Update existing expense
-                const index = expenses.findIndex(e => e.id === id);
-                if (index !== -1) {
-                    expenses[index] = savedExpense;
-                }
-                showAlert('Expense updated successfully!', 'success');
-            } else {
-                // Add new expense
-                expenses.push(savedExpense);
-                showAlert('Expense added successfully!', 'success');
-            }
-            
-            resetExpenseForm();
-            await loadExpenses(); // Wait for expenses to reload
-            updateStats(); // Force stats update
-            
-            console.log('After adding expense - Expenses:', expenses);
-        }
 
-        // Income Functions
         async function handleAddIncome(e) {
             e.preventDefault();
             
@@ -3017,94 +3260,8 @@
             
             // Scroll to form
             document.getElementById('categoryForm').scrollIntoView({ behavior: 'smooth' });
-        }
+        }        
 
-        // Delete confirmation
-        function confirmDelete(type, id, name) {
-            itemToDelete = id;
-            deleteType = type;
-            
-            let message = `Are you sure you want to delete ${name}?`;
-            if (type === 'wallet') {
-                message += " This will also delete all expenses and income associated with this wallet.";
-            } else if (type === 'category') {
-                message += " This will remove this category from all expenses.";
-            }
-            
-            deleteMessage.textContent = message;
-            deleteModal.classList.add('active');
-        }
-
-        // Handle delete confirmation
-        confirmDeleteBtn.addEventListener('click', async () => {
-            if (!itemToDelete || !deleteType) return;
-            
-            try {
-                let success = false;
-                
-                switch (deleteType) {
-                    case 'expense':
-                        success = await deleteExpense(itemToDelete);
-                        if (success) {
-                            expenses = expenses.filter(e => e.id !== itemToDelete);
-                            showAlert('Expense deleted successfully!', 'success');
-                        }
-                        break;
-                    case 'income':
-                        success = await deleteIncome(itemToDelete);
-                        if (success) {
-                            incomes = incomes.filter(i => i.id !== itemToDelete);
-                            showAlert('Income deleted successfully!', 'success');
-                        }
-                        break;
-                    case 'wallet':
-                        success = await deleteWallet(itemToDelete);
-                        if (success) {
-                            wallets = wallets.filter(w => w.id !== itemToDelete);
-                            expenses = expenses.filter(e => e.walletId !== itemToDelete);
-                            incomes = incomes.filter(i => i.walletId !== itemToDelete);
-                            
-                            // If we deleted the current wallet, select another one
-                            if (currentWalletId === itemToDelete) {
-                                currentWalletId = wallets.length > 0 ? wallets[0].id : null;
-                                updateGlobalWalletSelector();
-                            }
-                            showAlert('Wallet deleted successfully!', 'success');
-                        }
-                        break;
-                    case 'category':
-                        success = await deleteCategory(itemToDelete);
-                        if (success) {
-                            categories = categories.filter(c => c.id !== itemToDelete);
-                            // Also remove this category from expenses
-                            expenses.forEach(expense => {
-                                if (expense.category === itemToDelete) {
-                                    expense.category = '';
-                                }
-                            });
-                            showAlert('Category deleted successfully!', 'success');
-                        }
-                        break;
-                }
-                
-                if (success) {
-                    await loadExpenses();
-                    await loadIncomes();
-                    await loadWallets();
-                    await loadCategories();
-                    updateStats();
-                }
-            } catch (error) {
-                console.error('Error deleting item:', error);
-                showAlert('Error deleting item: ' + error.message, 'error');
-            }
-            
-            deleteModal.classList.remove('active');
-            itemToDelete = null;
-            deleteType = null;
-        });
-
-        // Reset form functions
         function resetExpenseForm() {
             document.getElementById('expenseId').value = '';
             expenseForm.reset();
@@ -3137,76 +3294,6 @@
             categoryCancelBtn.classList.add('hidden');
         }
 
-        // Function to refresh all category UI
-        async function refreshAllCategoryUI() {
-            console.log('Refreshing all category UI...');
-            await loadCategories(); // This will call updateCategoryDropdowns
-            updateStats();
-        }
-
-        // Data loading functions
-        async function loadExpenses() {
-            expenses = await loadExpensesFromSupabase();
-            const expensesList = document.getElementById('expensesList');
-            
-            // Filter expenses for current wallet if one is selected
-            let displayExpenses = expenses;
-            if (currentWalletId) {
-                displayExpenses = expenses.filter(expense => expense.walletId === currentWalletId);
-            }
-            
-            if (displayExpenses.length === 0) {
-                expensesList.innerHTML = `
-                    <div class="expense-item">
-                        <div class="expense-details">
-                            <div>No expenses yet. Add your first expense!</div>
-                        </div>
-                    </div>
-                `;
-                return;
-            }
-            
-            expensesList.innerHTML = '';
-            const sortedExpenses = [...displayExpenses].sort((a, b) => new Date(b.date) - new Date(a.date));
-            
-            sortedExpenses.forEach(expense => {
-                const expenseDate = new Date(expense.date).toLocaleDateString();
-                const wallet = wallets.find(w => w.id === expense.walletId);
-                
-                let categoryText = expense.category;
-                if (expense.subcategory) {
-                    categoryText += ` > ${expense.subcategory}`;
-                }
-                
-                const expenseItem = document.createElement('div');
-                expenseItem.className = 'expense-item';
-                expenseItem.innerHTML = `
-                    <div class="expense-details">
-                        <div>${expense.description}</div>
-                        <div style="font-size: 0.9rem; color: var(--gray);">
-                            ${expenseDate} • ${wallet ? wallet.name : 'Unknown Wallet'}
-                        </div>
-                    </div>
-                    <div style="display: flex; align-items: center; gap: 10px;">
-                        <div class="expense-amount">
-                            ${formatDisplayCurrency(expense.amount)}
-                            <span class="expense-category">${categoryText}</span>
-                        </div>
-                        <div class="action-buttons">
-                            <button class="edit-btn" onclick="editExpense('${expense.id}')">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                            <button class="delete-btn" onclick="confirmDelete('expense', '${expense.id}', '${expense.description}')">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </div>
-                    </div>
-                `;
-                expensesList.appendChild(expenseItem);
-            });
-        }
-
-        // Load incomes
         async function loadIncomes() {
             incomes = await loadIncomesFromSupabase();
             const incomesList = document.getElementById('incomesList');
@@ -3460,7 +3547,8 @@
                 console.error('Error in loadCategories:', error);
                 showAlert('Error loading categories: ' + error.message, 'error');
             }
-        }
+        }        
+
         
         function loadParentCategories() {
             parentCategory.innerHTML = '<option value="">Select a parent category</option>';
@@ -3587,6 +3675,13 @@
             }
         }
 
+        // Function to update global wallet selector
+        function updateGlobalWalletSelector() {
+            if (globalWalletSelect && currentWalletId) {
+                globalWalletSelect.value = currentWalletId;
+            }
+        }
+
         // Function to test category dropdowns (for debugging)
         function testCategoryDropdowns() {
             console.log('=== Testing Category Dropdowns ===');
@@ -3625,7 +3720,153 @@
                 console.log('Current Wallet Incomes:', walletIncomes);
                 console.log('Current Wallet Balance:', calculateWalletBalance(currentWalletId));
             }
+        }        
+
+        // UPDATED: After adding/updating/deleting expenses, refresh both views
+        async function handleAddExpense(e) {
+            e.preventDefault();
+            
+            const id = document.getElementById('expenseId').value;
+            const description = document.getElementById('expenseDescription').value;
+            const amount = parseCurrency(document.getElementById('expenseAmount').value);
+            const date = document.getElementById('expenseDate').value;
+            const category = document.getElementById('expenseCategory').value;
+            const subcategory = document.getElementById('expenseSubcategory').value;
+            
+            // Use the current wallet instead of selecting from form
+            const walletId = currentWalletId;
+            
+            if (!walletId) {
+                showAlert('Please select a wallet from the top-right selector first', 'error');
+                return;
+            }
+            
+            if (amount <= 0) {
+                showAlert('Please enter a valid amount', 'error');
+                return;
+            }
+            
+            // Find the current wallet
+            const currentWallet = wallets.find(w => w.id === walletId);
+            if (!currentWallet) {
+                showAlert('Selected wallet not found', 'error');
+                return;
+            }
+            
+            // VALIDATION: Check if wallet has sufficient balance (only for new expenses)
+            if (!id) {
+                const walletBalance = calculateWalletBalance(walletId);
+                if (walletBalance < amount) {
+                    // Store the pending expense for potential future use
+                    pendingExpense = { description, amount, date, category, subcategory, walletId };
+                    
+                    // Show insufficient balance modal with details
+                    expenseAmountDetail.textContent = formatDisplayCurrency(amount);
+                    walletBalanceDetail.textContent = formatDisplayCurrency(walletBalance);
+                    remainingBalanceDetail.textContent = formatDisplayCurrency(walletBalance - amount);
+                    
+                    insufficientBalanceModal.classList.add('active');
+                    return;
+                }
+            }
+            
+            const expense = { id, description, amount, date, category, subcategory, walletId };
+            console.log('Saving expense:', expense);
+            
+            const savedExpense = await saveExpense(expense);
+            
+            if (id) {
+                // Update existing expense
+                const index = expenses.findIndex(e => e.id === id);
+                if (index !== -1) {
+                    expenses[index] = savedExpense;
+                }
+                showAlert('Expense updated successfully!', 'success');
+            } else {
+                // Add new expense
+                expenses.push(savedExpense);
+                showAlert('Expense added successfully!', 'success');
+            }
+            
+            resetExpenseForm();
+            await loadExpenses(); // This will update both current month and historical views
+            updateStats();
+            
+            console.log('After adding expense - Expenses:', expenses);
         }
+
+        // Make sure to update both views after deleting expenses too
+        confirmDeleteBtn.addEventListener('click', async () => {
+            if (!itemToDelete || !deleteType) return;
+            
+            try {
+                let success = false;
+                
+                switch (deleteType) {
+                    case 'expense':
+                        success = await deleteExpense(itemToDelete);
+                        if (success) {
+                            expenses = expenses.filter(e => e.id !== itemToDelete);
+                            showAlert('Expense deleted successfully!', 'success');
+                        }
+                        break;
+                    case 'income':
+                        success = await deleteIncome(itemToDelete);
+                        if (success) {
+                            incomes = incomes.filter(i => i.id !== itemToDelete);
+                            showAlert('Income deleted successfully!', 'success');
+                        }
+                        break;
+                    case 'wallet':
+                        success = await deleteWallet(itemToDelete);
+                        if (success) {
+                            wallets = wallets.filter(w => w.id !== itemToDelete);
+                            expenses = expenses.filter(e => e.walletId !== itemToDelete);
+                            incomes = incomes.filter(i => i.walletId !== itemToDelete);
+                            
+                            // If we deleted the current wallet, select another one
+                            if (currentWalletId === itemToDelete) {
+                                currentWalletId = wallets.length > 0 ? wallets[0].id : null;
+                                updateGlobalWalletSelector();
+                            }
+                            showAlert('Wallet deleted successfully!', 'success');
+                        }
+                        break;
+                    case 'category':
+                        success = await deleteCategory(itemToDelete);
+                        if (success) {
+                            categories = categories.filter(c => c.id !== itemToDelete);
+                            // Also remove this category from expenses
+                            expenses.forEach(expense => {
+                                if (expense.category === itemToDelete) {
+                                    expense.category = '';
+                                }
+                            });
+                            showAlert('Category deleted successfully!', 'success');
+                        }
+                        break;
+                }
+                
+                if (success) {
+                    // Refresh both expense views
+                    await loadExpenses(); // This updates both current month and historical views
+                    await loadIncomes();
+                    await loadWallets();
+                    await loadCategories();
+                    updateStats();
+                }
+            } catch (error) {
+                console.error('Error deleting item:', error);
+                showAlert('Error deleting item: ' + error.message, 'error');
+            }
+            
+            deleteModal.classList.remove('active');
+            itemToDelete = null;
+            deleteType = null;
+        });
+
+        // ... (rest of the existing functions: loadIncomes, loadWallets, loadCategories, 
+        // updateStats, edit functions, reset functions, etc. remain the same) ...
 
         function showAlert(message, type) {
             const alert = document.createElement('div');
@@ -3652,6 +3893,10 @@
                 checkAuthState();
             }
         });
+
+        // Note: All the existing Supabase data functions (saveExpense, saveIncome, saveWallet, 
+        // saveCategory, delete functions, loadFromSupabase functions) remain exactly the same
+        // as in the original file. They are not included here to avoid redundancy.
     </script>
 </body>
-</html>
+</html>                                
