@@ -417,6 +417,132 @@
             border-radius: 50%;
         }
 
+        /* NEW: Monthly Expense Report Styles */
+        .report-container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .report-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.25rem 1.5rem;
+            cursor: pointer;
+            border-bottom: 1px solid var(--gray-light);
+            transition: background-color 0.2s;
+        }
+
+        .report-header:hover {
+            background-color: rgba(0, 0, 0, 0.02);
+        }
+
+        .report-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .report-toggle {
+            background: none;
+            border: none;
+            color: var(--gray);
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .report-toggle.collapsed {
+            transform: rotate(-90deg);
+        }
+
+        .report-content {
+            padding: 1.5rem;
+            transition: max-height 0.3s ease;
+        }
+
+        .report-content.collapsed {
+            display: none;
+        }
+
+        .report-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .report-table th {
+            text-align: left;
+            padding: 12px 15px;
+            border-bottom: 1px solid var(--gray-light);
+            font-weight: 600;
+            color: var(--dark);
+            background-color: rgba(0, 0, 0, 0.02);
+        }
+
+        .report-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid var(--gray-light);
+        }
+
+        .category-row {
+            font-weight: 600;
+            background-color: rgba(0, 0, 0, 0.02);
+        }
+
+        .subcategory-row {
+            padding-left: 30px !important;
+            background-color: rgba(0, 0, 0, 0.01);
+        }
+
+        .amount-cell {
+            text-align: right;
+            font-weight: 500;
+        }
+
+        .percentage-cell {
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--gray);
+            width: 80px;
+        }
+
+        .total-row {
+            font-weight: 700;
+            background-color: rgba(0, 122, 255, 0.05);
+            border-top: 2px solid var(--primary);
+        }
+
+        .no-data-message {
+            text-align: center;
+            padding: 2rem;
+            color: var(--gray);
+        }
+
+        /* NEW: Month selector container */
+        .month-selector-container {
+            display: flex;
+            align-items: center;
+            background: white;
+            padding: 8px 12px;
+            border-radius: 12px;
+            border: 1px solid var(--gray-light);
+            box-shadow: var(--shadow);
+            margin-top: 1rem;
+            margin-left: 10px;
+        }
+
+        .selectors-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
         /* Responsive Styles */
         @media (max-width: 768px) {
             .analytics-container {
@@ -459,6 +585,30 @@
                 flex-direction: column;
                 gap: 8px;
             }
+
+            .report-table {
+                font-size: 0.85rem;
+            }
+
+            .report-table th,
+            .report-table td {
+                padding: 8px 10px;
+            }
+
+            .subcategory-row {
+                padding-left: 20px !important;
+            }
+
+            .selectors-container {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .month-selector-container,
+            .wallet-selector-container {
+                width: 100%;
+                margin-left: 0;
+            }
         }
 
         @media (max-width: 480px) {
@@ -488,11 +638,34 @@
                 font-size: 0.9rem;
             }
 
-            .wallet-selector-container {
+            .wallet-selector-container,
+            .month-selector-container {
                 flex-direction: column;
                 align-items: flex-start;
                 gap: 8px;
                 width: 100%;
+            }
+
+            .report-header {
+                padding: 1rem 1.25rem;
+            }
+
+            .report-content {
+                padding: 1rem;
+            }
+
+            .report-table {
+                font-size: 0.8rem;
+            }
+
+            .report-table th,
+            .report-table td {
+                padding: 6px 8px;
+            }
+
+            .percentage-cell {
+                width: 60px;
+                font-size: 0.75rem;
             }
         }
     </style>
@@ -542,11 +715,19 @@
                 <h1 class="page-title">Financial Analytics</h1>
                 <p class="page-subtitle">Gain insights into your spending patterns and financial health</p>
             </div>
-            <div class="wallet-selector-container">
-                <label for="walletSelect" style="font-size: 0.85rem; color: var(--gray); margin-right: 8px;">Wallet:</label>
-                <select id="walletSelect" class="chart-select">
-                    <option value="all">All Wallets</option>
-                </select>
+            <div class="selectors-container">
+                <div class="wallet-selector-container">
+                    <label for="walletSelect" style="font-size: 0.85rem; color: var(--gray); margin-right: 8px;">Wallet:</label>
+                    <select id="walletSelect" class="chart-select">
+                        <option value="all">All Wallets</option>
+                    </select>
+                </div>
+                <div class="month-selector-container">
+                    <label for="monthSelect" style="font-size: 0.85rem; color: var(--gray); margin-right: 8px;">Month:</label>
+                    <select id="monthSelect" class="chart-select">
+                        <!-- Options will be populated by JavaScript -->
+                    </select>
+                </div>
             </div>
         </div>
 
@@ -591,13 +772,38 @@
                 </div>
             </div>
 
+            <!-- NEW: Monthly Expense Summary Report -->
+            <div class="report-container">
+                <div class="report-header" id="reportHeader">
+                    <div class="report-title">
+                        <i class="fas fa-file-invoice-dollar"></i>
+                        Monthly Expense Summary
+                    </div>
+                    <button class="report-toggle" id="reportToggle">
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                </div>
+                <div class="report-content" id="reportContent">
+                    <table class="report-table">
+                        <thead>
+                            <tr>
+                                <th>Category / Subcategory</th>
+                                <th class="amount-cell">Amount</th>
+                                <th class="percentage-cell">% of Total</th>
+                            </tr>
+                        </thead>
+                        <tbody id="reportTableBody">
+                            <!-- Report data will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
             <div class="chart-container">
                 <div class="chart-header">
                     <h3 class="chart-title" id="categoryChartTitle">Spending by Category</h3>
                     <div class="chart-actions">
-                        <select id="monthSelect" class="chart-select">
-                            <!-- Options will be populated by JavaScript -->
-                        </select>
+                        <!-- Month selector removed - now using the one at the top -->
                     </div>
                 </div>
                 <div class="chart-wrapper">
@@ -709,6 +915,10 @@
         const noDataAlert = document.getElementById('noDataAlert');
         const analyticsContent = document.getElementById('analyticsContent');
         const alertContainer = document.getElementById('alertContainer');
+        const reportHeader = document.getElementById('reportHeader');
+        const reportToggle = document.getElementById('reportToggle');
+        const reportContent = document.getElementById('reportContent');
+        const reportTableBody = document.getElementById('reportTableBody');
 
         // Data storage
         let expenses = [];
@@ -718,6 +928,7 @@
         let currentWalletId = 'all';
         let selectedMonth = null;
         let availableMonths = [];
+        let isReportExpanded = true;
 
         // Chart instances
         let categoryChart = null;
@@ -1093,12 +1304,121 @@
             };
         }
 
+        // NEW: Generate monthly expense report data
+        function generateMonthlyExpenseReport() {
+            if (!selectedMonth) return null;
+            
+            const filteredExpenses = filterDataByWallet(expenses);
+            const [selectedYear, selectedMonthNum] = selectedMonth.split('-');
+            
+            // Filter expenses for selected month
+            const monthlyExpenses = filteredExpenses.filter(expense => {
+                const expenseDate = new Date(expense.date);
+                return expenseDate.getMonth() + 1 === parseInt(selectedMonthNum) && 
+                       expenseDate.getFullYear() === parseInt(selectedYear);
+            });
+            
+            if (monthlyExpenses.length === 0) return null;
+            
+            // Calculate total expenses for the month
+            const totalExpenses = monthlyExpenses.reduce((sum, expense) => sum + expense.amount, 0);
+            
+            // Group expenses by category and subcategory
+            const categoryData = {};
+            
+            monthlyExpenses.forEach(expense => {
+                const category = expense.category || 'Uncategorized';
+                const subcategory = expense.subcategory || 'General';
+                
+                if (!categoryData[category]) {
+                    categoryData[category] = {
+                        total: 0,
+                        subcategories: {}
+                    };
+                }
+                
+                categoryData[category].total += expense.amount;
+                
+                if (!categoryData[category].subcategories[subcategory]) {
+                    categoryData[category].subcategories[subcategory] = 0;
+                }
+                
+                categoryData[category].subcategories[subcategory] += expense.amount;
+            });
+            
+            return {
+                totalExpenses,
+                categoryData
+            };
+        }
+
+        // NEW: Update monthly expense report
+        function updateMonthlyExpenseReport() {
+            const reportData = generateMonthlyExpenseReport();
+            reportTableBody.innerHTML = '';
+            
+            if (!reportData) {
+                reportTableBody.innerHTML = `
+                    <tr>
+                        <td colspan="3" class="no-data-message">
+                            <i class="fas fa-info-circle"></i> No expense data available for selected month
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            const { totalExpenses, categoryData } = reportData;
+            
+            // Create rows for each category and subcategory
+            Object.keys(categoryData).forEach(category => {
+                const categoryTotal = categoryData[category].total;
+                const percentage = Math.round((categoryTotal / totalExpenses) * 100);
+                
+                // Add category row
+                const categoryRow = document.createElement('tr');
+                categoryRow.className = 'category-row';
+                categoryRow.innerHTML = `
+                    <td>${category}</td>
+                    <td class="amount-cell">${formatDisplayCurrency(categoryTotal)}</td>
+                    <td class="percentage-cell">${percentage}%</td>
+                `;
+                reportTableBody.appendChild(categoryRow);
+                
+                // Add subcategory rows
+                Object.keys(categoryData[category].subcategories).forEach(subcategory => {
+                    const subcategoryAmount = categoryData[category].subcategories[subcategory];
+                    const subPercentage = Math.round((subcategoryAmount / categoryTotal) * 100);
+                    
+                    const subcategoryRow = document.createElement('tr');
+                    subcategoryRow.className = 'subcategory-row';
+                    subcategoryRow.innerHTML = `
+                        <td>${subcategory}</td>
+                        <td class="amount-cell">${formatDisplayCurrency(subcategoryAmount)}</td>
+                        <td class="percentage-cell">${subPercentage}%</td>
+                    `;
+                    reportTableBody.appendChild(subcategoryRow);
+                });
+            });
+            
+            // Add total row
+            const totalRow = document.createElement('tr');
+            totalRow.className = 'total-row';
+            totalRow.innerHTML = `
+                <td><strong>Total Expenses</strong></td>
+                <td class="amount-cell"><strong>${formatDisplayCurrency(totalExpenses)}</strong></td>
+                <td class="percentage-cell"><strong>100%</strong></td>
+            `;
+            reportTableBody.appendChild(totalRow);
+        }
+
         // Update analytics
         function updateAnalytics() {
             updateSummaryCards();
             updateCategoryChart();
             updateTrendChart();
             updateComparisonChart();
+            updateMonthlyExpenseReport(); // NEW: Update the report
             updateInsights();
         }
 
@@ -1614,6 +1934,19 @@
             setTimeout(() => alert.remove(), 5000);
         }
 
+        // NEW: Toggle report visibility
+        function toggleReport() {
+            isReportExpanded = !isReportExpanded;
+            
+            if (isReportExpanded) {
+                reportContent.classList.remove('collapsed');
+                reportToggle.classList.remove('collapsed');
+            } else {
+                reportContent.classList.add('collapsed');
+                reportToggle.classList.add('collapsed');
+            }
+        }
+
         // Event listeners
         walletSelect.addEventListener('change', function() {
             currentWalletId = this.value;
@@ -1628,6 +1961,9 @@
         trendRange.addEventListener('change', updateTrendChart);
         
         comparisonRange.addEventListener('change', updateComparisonChart);
+
+        // NEW: Report toggle event
+        reportHeader.addEventListener('click', toggleReport);
 
         loginBtn.addEventListener('click', () => {
             window.location.href = 'index.html';
