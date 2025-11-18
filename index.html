@@ -1972,6 +1972,14 @@
             return uuidRegex.test(str);
         }
 
+        // ADD THIS MISSING FUNCTION - Refresh all category-related UI elements
+        async function refreshAllCategoryUI() {
+            console.log('Refreshing all category UI elements...');
+            await loadCategories(); // This will update the categories list and dropdowns
+            updateCategoryDropdowns(); // Ensure dropdowns are updated
+            loadParentCategories(); // Update parent category dropdown if needed
+        }        
+
         // Calculate wallet balance - purely based on income minus expenses
         function calculateWalletBalance(walletId) {
             const walletExpenses = expenses.filter(expense => expense.walletId === walletId);
@@ -1983,6 +1991,39 @@
             // Simple calculation: income minus expenses
             return totalIncome - totalExpenses;
         }
+
+        // ADD THIS FUNCTION - Delete confirmation
+        function confirmDelete(type, id, name) {
+            itemToDelete = id;
+            deleteType = type;
+            
+            let itemType = '';
+            switch(type) {
+                case 'expense':
+                    itemType = 'expense';
+                    break;
+                case 'income':
+                    itemType = 'income';
+                    break;
+                case 'wallet':
+                    itemType = 'wallet';
+                    break;
+                case 'category':
+                    itemType = 'category';
+                    break;
+            }
+            
+            deleteMessage.textContent = `Are you sure you want to delete ${itemType} "${name}"? This action cannot be undone.`;
+            deleteModal.classList.add('active');
+        }
+
+        // ADD THIS FUNCTION - Refresh all category-related UI elements
+        async function refreshAllCategoryUI() {
+            console.log('Refreshing all category UI elements...');
+            await loadCategories(); // This will update the categories list and dropdowns
+            updateCategoryDropdowns(); // Ensure dropdowns are updated
+            loadParentCategories(); // Update parent category dropdown if needed
+        }        
 
         // Initialize the app
         function initApp() {
@@ -2011,6 +2052,62 @@
         closeInsufficientBalanceModal.addEventListener('click', () => insufficientBalanceModal.classList.remove('active'));
         closeDeleteModal.addEventListener('click', () => deleteModal.classList.remove('active'));
         cancelDeleteBtn.addEventListener('click', () => deleteModal.classList.remove('active'));
+
+        // ADD THE DELETE CONFIRMATION EVENT LISTENER RIGHT HERE:
+    const mainCategories = categories.filter(c => c.type === 'main');
+    const subcategories = categories.filter(c => c.type === 'sub');
+    
+    mainCategories.forEach(category => {
+        const categoryItem = document.createElement('div');
+        categoryItem.className = 'category-item';
+        categoryItem.innerHTML = `
+            <div class="category-details">
+                <div><strong>${category.name}</strong></div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <div class="category-actions">
+                    <button class="add-subcategory-btn" data-id="${category.id}">
+                        <i class="fas fa-plus"></i> Add Subcategory
+                    </button>
+                </div>
+                <div class="action-buttons">
+                    <button class="edit-btn" onclick="editCategory('${category.id}')">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="delete-btn" onclick="confirmDelete('category', '${category.id}', '${category.name}')">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+        `;
+        categoriesList.appendChild(categoryItem);
+        
+        const addSubcategoryBtn = categoryItem.querySelector('.add-subcategory-btn');
+        addSubcategoryBtn.addEventListener('click', () => {
+            openSubcategoryModal(category.id);
+        });
+        
+        const categorySubcategories = subcategories.filter(sc => sc.parentId === category.id);
+        categorySubcategories.forEach(subcategory => {
+            const subcategoryItem = document.createElement('div');
+            subcategoryItem.className = 'category-item subcategory-item';
+            subcategoryItem.innerHTML = `
+                <div class="category-details">
+                    <div>${subcategory.name}</div>
+                </div>
+                <div class="action-buttons">
+                    <button class="edit-btn" onclick="editCategory('${subcategory.id}')">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="delete-btn" onclick="confirmDelete('category', '${subcategory.id}', '${subcategory.name}')">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            `;
+            categoriesList.appendChild(subcategoryItem);
+        });
+    });
+
 
         showSignupFromLogin.addEventListener('click', (e) => {
             e.preventDefault();
@@ -2883,12 +2980,14 @@
                 return true;
             } catch (error) {
                 console.error('Error deleting category:', error);
+                // Fallback to localStorage
                 const categories = JSON.parse(localStorage.getItem('fintrack_categories') || '[]');
                 const filteredCategories = categories.filter(category => category.id !== id);
                 localStorage.setItem('fintrack_categories', JSON.stringify(filteredCategories));
                 return true;
             }
         }
+
 
         async function loadExpensesFromSupabase() {
             try {
@@ -3416,138 +3515,223 @@
             });
         }
         
+        let categoriesCache = null;
+        let lastCategoriesLoad = 0;
+        const CACHE_DURATION = 5000; // 5 seconds
+
         async function loadCategories() {
             try {
-                categories = await loadCategoriesFromSupabase();
-                console.log('Loaded categories from database:', categories);
+                const { data: { user } } = await supabase.auth.getUser();
+                if (!user) return;
                 
-                const categoriesList = document.getElementById('categoriesList');
-                categoriesList.innerHTML = '';
+                const { data, error } = await supabase
+                    .from('categories')
+                    .select('*')
+                    .eq('user_id', user.id)
+                    .order('created_at', { ascending: true });
                 
-                if (categories.length === 0) {
-                    categoriesList.innerHTML = `
-                        <div class="category-item">
-                            <div class="category-details">
-                                <div>No categories yet. Add your first category!</div>
-                            </div>
-                        </div>
-                    `;
-                } else {
-                    // Separate main categories and subcategories
-                    const mainCategories = categories.filter(c => c.type === 'main');
-                    const subcategories = categories.filter(c => c.type === 'sub');
-                    
-                    console.log('Main categories for display:', mainCategories);
-                    console.log('Subcategories for display:', subcategories);
-                    
-                    if (mainCategories.length === 0) {
-                        categoriesList.innerHTML = `
-                            <div class="category-item">
-                                <div class="category-details">
-                                    <div>No main categories yet. Add your first main category!</div>
-                                </div>
-                            </div>
-                        `;
-                    } else {
-                        mainCategories.forEach(category => {
-                            const categoryItem = document.createElement('div');
-                            categoryItem.className = 'category-item';
-                            categoryItem.innerHTML = `
-                                <div class="category-details">
-                                    <div><strong>${category.name}</strong></div>
-                                </div>
-                                <div style="display: flex; align-items: center; gap: 10px;">
-                                    <div class="category-actions">
-                                        <button class="add-subcategory-btn" data-id="${category.id}">
-                                            <i class="fas fa-plus"></i> Add Subcategory
-                                        </button>
-                                    </div>
-                                    <div class="action-buttons">
-                                        <button class="edit-btn" onclick="editCategory('${category.id}')">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button class="delete-btn" onclick="confirmDelete('category', '${category.id}', '${category.name}')">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            `;
-                            categoriesList.appendChild(categoryItem);
-                            
-                            // Add event listener
-                            const addSubcategoryBtn = categoryItem.querySelector('.add-subcategory-btn');
-                            addSubcategoryBtn.addEventListener('click', () => {
-                                console.log('Opening subcategory modal for parent ID:', category.id);
-                                openSubcategoryModal(category.id);
-                            });
-                            
-                            // Add subcategories for this main category
-                            const categorySubcategories = subcategories.filter(sc => sc.parentId === category.id);
-                            categorySubcategories.forEach(subcategory => {
-                                const subcategoryItem = document.createElement('div');
-                                subcategoryItem.className = 'category-item subcategory-item';
-                                subcategoryItem.innerHTML = `
-                                    <div class="category-details">
-                                        <div>${subcategory.name}</div>
-                                    </div>
-                                    <div class="action-buttons">
-                                        <button class="edit-btn" onclick="editCategory('${subcategory.id}')">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button class="delete-btn" onclick="confirmDelete('category', '${subcategory.id}', '${subcategory.name}')">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </div>
-                                `;
-                                categoriesList.appendChild(subcategoryItem);
-                            });
-                        });
-                        
-                        // Handle orphaned subcategories (subcategories without a valid parent)
-                        const orphanSubcategories = subcategories.filter(sc => {
-                            return !mainCategories.some(mc => mc.id === sc.parentId);
-                        });
-                        
-                        if (orphanSubcategories.length > 0) {
-                            const orphanHeader = document.createElement('div');
-                            orphanHeader.className = 'category-item';
-                            orphanHeader.innerHTML = `
-                                <div class="category-details">
-                                    <div><strong>Orphaned Subcategories</strong></div>
-                                </div>
-                            `;
-                            categoriesList.appendChild(orphanHeader);
-                            
-                            orphanSubcategories.forEach(subcategory => {
-                                const subcategoryItem = document.createElement('div');
-                                subcategoryItem.className = 'category-item subcategory-item';
-                                subcategoryItem.innerHTML = `
-                                    <div class="category-details">
-                                        <div>${subcategory.name}</div>
-                                    </div>
-                                    <div class="action-buttons">
-                                        <button class="edit-btn" onclick="editCategory('${subcategory.id}')">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button class="delete-btn" onclick="confirmDelete('category', '${subcategory.id}', '${subcategory.name}')">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </div>
-                                `;
-                                categoriesList.appendChild(subcategoryItem);
-                            });
-                        }
-                    }
-                }
+                if (error) throw error;
                 
-                // ALWAYS update the dropdowns after loading categories
-                updateCategoryDropdowns();
+                console.log('Raw data from database:', data);
+                
+                // Transform data to match our app structure
+                categories = data.map(category => ({
+                    id: category.id,
+                    name: category.name,
+                    type: category.type || 'main',
+                    parentId: category.parent_id
+                }));
+                
+                console.log('Transformed categories:', categories);
+                
+                // Render the categories list
+                renderCategoriesList();
                 
             } catch (error) {
-                console.error('Error in loadCategories:', error);
-                showAlert('Error loading categories: ' + error.message, 'error');
+                console.error('Error loading categories:', error);
+                categories = JSON.parse(localStorage.getItem('fintrack_categories') || '[]');
+                renderCategoriesList();
+            }
+            
+            // ALWAYS update the dropdowns after loading categories
+            updateCategoryDropdowns();
+        }
+        
+        async function refreshAfterCategoryChange() {
+            console.log('Quick refresh after category change...');
+            
+            // Update categories array first
+            categories = categories.filter(c => c.id !== itemToDelete);
+            
+            // Update UI without full database reload
+            await quickLoadCategories();
+            updateCategoryDropdowns();
+            
+            // Only update stats if needed
+            updateStats();
+        }
+
+        // OPTIMIZED: Quick category load without full UI rebuild
+        async function quickLoadCategories() {
+            try {
+                const { data: { user } } = await supabase.auth.getUser();
+                if (!user) return;
+                
+                const { data, error } = await supabase
+                    .from('categories')
+                    .select('*')
+                    .eq('user_id', user.id)
+                    .order('created_at', { ascending: true });
+                
+                if (error) throw error;
+                
+                // Just update the categories array, don't rebuild UI yet
+                categories = data.map(category => ({
+                    id: category.id,
+                    name: category.name,
+                    type: category.type || 'main',
+                    parentId: category.parent_id
+                }));
+                
+            } catch (error) {
+                console.error('Error quick loading categories:', error);
+                categories = JSON.parse(localStorage.getItem('fintrack_categories') || '[]');
             }
         }        
+
+function renderCategoriesList() {
+    const categoriesList = document.getElementById('categoriesList');
+    if (!categoriesList) {
+        console.error('categoriesList element not found!');
+        return;
+    }
+    
+    categoriesList.innerHTML = '';
+    
+    if (categories.length === 0) {
+        categoriesList.innerHTML = `
+            <div class="category-item">
+                <div class="category-details">
+                    <div>No categories yet. Add your first category!</div>
+                </div>
+            </div>
+        `;
+        return;
+    }
+    
+    // Separate main categories and subcategories
+    const mainCategories = categories.filter(c => c.type === 'main');
+    const subcategories = categories.filter(c => c.type === 'sub');
+    
+    console.log('Main categories for display:', mainCategories);
+    console.log('Subcategories for display:', subcategories);
+    
+    if (mainCategories.length === 0) {
+        categoriesList.innerHTML = `
+            <div class="category-item">
+                <div class="category-details">
+                    <div>No main categories yet. Add your first main category!</div>
+                </div>
+            </div>
+        `;
+    } else {
+        mainCategories.forEach(category => {
+            const categoryItem = document.createElement('div');
+            categoryItem.className = 'category-item';
+            categoryItem.innerHTML = `
+                <div class="category-details">
+                    <div><strong>${category.name}</strong></div>
+                </div>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div class="category-actions">
+                        <button class="add-subcategory-btn" data-id="${category.id}">
+                            <i class="fas fa-plus"></i> Add Subcategory
+                        </button>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="edit-btn" onclick="editCategory('${category.id}')">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="delete-btn" onclick="confirmDelete('category', '${category.id}', '${category.name}')">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+            categoriesList.appendChild(categoryItem);
+            
+            // Add event listener
+            const addSubcategoryBtn = categoryItem.querySelector('.add-subcategory-btn');
+            addSubcategoryBtn.addEventListener('click', () => {
+                console.log('Opening subcategory modal for parent ID:', category.id);
+                openSubcategoryModal(category.id);
+            });
+            
+            // Add subcategories for this main category
+            const categorySubcategories = subcategories.filter(sc => sc.parentId === category.id);
+            categorySubcategories.forEach(subcategory => {
+                const subcategoryItem = document.createElement('div');
+                subcategoryItem.className = 'category-item subcategory-item';
+                subcategoryItem.innerHTML = `
+                    <div class="category-details">
+                        <div>${subcategory.name}</div>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="edit-btn" onclick="editCategory('${subcategory.id}')">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="delete-btn" onclick="confirmDelete('category', '${subcategory.id}', '${subcategory.name}')">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+                categoriesList.appendChild(subcategoryItem);
+            });
+        });
+        
+        // Handle orphaned subcategories (subcategories without a valid parent)
+        const orphanSubcategories = subcategories.filter(sc => {
+            return !mainCategories.some(mc => mc.id === sc.parentId);
+        });
+        
+        if (orphanSubcategories.length > 0) {
+            const orphanHeader = document.createElement('div');
+            orphanHeader.className = 'category-item';
+            orphanHeader.innerHTML = `
+                <div class="category-details">
+                    <div><strong>Orphaned Subcategories</strong></div>
+                </div>
+            `;
+            categoriesList.appendChild(orphanHeader);
+            
+            orphanSubcategories.forEach(subcategory => {
+                const subcategoryItem = document.createElement('div');
+                subcategoryItem.className = 'category-item subcategory-item';
+                subcategoryItem.innerHTML = `
+                    <div class="category-details">
+                        <div>${subcategory.name}</div>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="edit-btn" onclick="editCategory('${subcategory.id}')">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="delete-btn" onclick="confirmDelete('category', '${subcategory.id}', '${subcategory.name}')">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+                categoriesList.appendChild(subcategoryItem);
+            });
+        }
+    }
+}
+
+// SIMPLIFIED refresh function
+async function refreshAfterCategoryChange() {
+    console.log('Refreshing after category change...');
+    await loadCategories(); // This will call renderCategoriesList and updateCategoryDropdowns
+    updateStats();
+}      
 
         
         function loadParentCategories() {
