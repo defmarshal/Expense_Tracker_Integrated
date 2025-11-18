@@ -184,12 +184,6 @@
             margin-bottom: 1rem;
         }
 
-        .card-title {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--dark);
-        }
-
         /* FIXED: Smaller icon size */
         .card-icon {
             width: 32px;
@@ -399,6 +393,30 @@
             margin-top: 1rem;
         }
 
+        /* Additional style for the new chart */
+        .comparison-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 15px;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.02);
+            border-radius: 8px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.8rem;
+        }
+
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
         /* Responsive Styles */
         @media (max-width: 768px) {
             .analytics-container {
@@ -435,6 +453,11 @@
 
             .stat-value {
                 font-size: 1.6rem;
+            }
+
+            .comparison-legend {
+                flex-direction: column;
+                gap: 8px;
             }
         }
 
@@ -598,6 +621,27 @@
                 </div>
             </div>
 
+            <!-- NEW CHART: Enhanced Expense Trend Comparison -->
+            <div class="chart-container">
+                <div class="chart-header">
+                    <h3 class="chart-title" id="comparisonChartTitle">Daily Expense Trend Comparison</h3>
+                    <div class="chart-actions">
+                        <select id="comparisonRange" class="chart-select">
+                            <option value="3">Last 3 Months</option>
+                            <option value="6" selected>Last 6 Months</option>
+                            <option value="9">Last 9 Months</option>
+                            <option value="12">Last 12 Months</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="chart-wrapper">
+                    <canvas id="comparisonChart"></canvas>
+                </div>
+                <div class="comparison-legend" id="comparisonLegend">
+                    <!-- Legend will be populated by JavaScript -->
+                </div>
+            </div>
+
             <div class="insights-grid">
                 <div class="insight-card">
                     <div class="insight-header">
@@ -661,6 +705,7 @@
         const walletSelect = document.getElementById('walletSelect');
         const monthSelect = document.getElementById('monthSelect');
         const trendRange = document.getElementById('trendRange');
+        const comparisonRange = document.getElementById('comparisonRange');
         const noDataAlert = document.getElementById('noDataAlert');
         const analyticsContent = document.getElementById('analyticsContent');
         const alertContainer = document.getElementById('alertContainer');
@@ -677,6 +722,7 @@
         // Chart instances
         let categoryChart = null;
         let trendChart = null;
+        let comparisonChart = null;
 
         // Currency formatting
         function formatDisplayCurrency(amount) {
@@ -955,11 +1001,104 @@
             };
         }
 
+        // Get daily expense data for a specific month
+        function getDailyExpenseData(month) {
+            const [year, monthNum] = month.split('-');
+            const daysInMonth = new Date(year, monthNum, 0).getDate();
+            
+            const dailyData = Array(daysInMonth).fill(0);
+            
+            const monthExpenses = filterDataByWallet(expenses).filter(expense => {
+                const expenseDate = new Date(expense.date);
+                return expenseDate.getMonth() + 1 === parseInt(monthNum) && 
+                       expenseDate.getFullYear() === parseInt(year);
+            });
+            
+            monthExpenses.forEach(expense => {
+                const day = new Date(expense.date).getDate();
+                dailyData[day - 1] += expense.amount;
+            });
+            
+            return dailyData;
+        }
+
+        // Get comparison data for expense trend comparison with daily data
+        function getDailyComparisonData(period) {
+            if (!selectedMonth) return null;
+            
+            const [currentYear, currentMonthNum] = selectedMonth.split('-');
+            const daysInCurrentMonth = new Date(currentYear, currentMonthNum, 0).getDate();
+            
+            // Get current month daily data
+            const currentMonthDaily = getDailyExpenseData(selectedMonth);
+            
+            // Get historical months for comparison
+            const months = availableMonths.sort();
+            const currentMonthIndex = months.indexOf(selectedMonth);
+            
+            if (currentMonthIndex === -1) return null;
+            
+            const startIndex = Math.max(0, currentMonthIndex - period);
+            const historicalMonths = months.slice(startIndex, currentMonthIndex);
+            
+            // Calculate daily averages for historical months
+            const dailyAverages = Array(daysInCurrentMonth).fill(0);
+            const dayCounts = Array(daysInCurrentMonth).fill(0);
+            
+            historicalMonths.forEach(month => {
+                const [year, monthNum] = month.split('-');
+                const daysInHistoricalMonth = new Date(year, monthNum, 0).getDate();
+                const historicalDailyData = getDailyExpenseData(month);
+                
+                // For each day in the current month, add the corresponding day from historical month
+                // If historical month has fewer days, use interpolation for missing days
+                for (let day = 0; day < daysInCurrentMonth; day++) {
+                    if (day < daysInHistoricalMonth) {
+                        dailyAverages[day] += historicalDailyData[day];
+                        dayCounts[day]++;
+                    } else {
+                        // For months with fewer days, use the last available day's data
+                        dailyAverages[day] += historicalDailyData[daysInHistoricalMonth - 1];
+                        dayCounts[day]++;
+                    }
+                }
+            });
+            
+            // Calculate averages
+            const historicalAverageDaily = dailyAverages.map((sum, index) => 
+                dayCounts[index] > 0 ? sum / dayCounts[index] : 0
+            );
+            
+            // Create cumulative data for trend lines
+            const currentMonthCumulative = [];
+            const historicalAverageCumulative = [];
+            
+            let currentSum = 0;
+            let historicalSum = 0;
+            
+            for (let i = 0; i < daysInCurrentMonth; i++) {
+                currentSum += currentMonthDaily[i];
+                historicalSum += historicalAverageDaily[i];
+                
+                currentMonthCumulative.push(currentSum);
+                historicalAverageCumulative.push(historicalSum);
+            }
+            
+            return {
+                days: Array.from({length: daysInCurrentMonth}, (_, i) => i + 1),
+                currentMonthDaily: currentMonthDaily,
+                currentMonthCumulative: currentMonthCumulative,
+                historicalAverageDaily: historicalAverageDaily,
+                historicalAverageCumulative: historicalAverageCumulative
+            };
+        }
+
         // Update analytics
         function updateAnalytics() {
             updateSummaryCards();
             updateCategoryChart();
             updateTrendChart();
+            updateComparisonChart();
             updateInsights();
         }
 
@@ -1190,6 +1329,174 @@
             });
         }
 
+        // Update comparison chart for expense trend comparison with daily data
+        function updateComparisonChart() {
+            const ctx = document.getElementById('comparisonChart').getContext('2d');
+            
+            if (comparisonChart) {
+                comparisonChart.destroy();
+            }
+            
+            const period = parseInt(document.getElementById('comparisonRange').value);
+            const comparisonData = getDailyComparisonData(period);
+            
+            if (!comparisonData) return;
+            
+            // Update chart title
+            const monthName = new Date(
+                selectedMonth.split('-')[0], 
+                selectedMonth.split('-')[1] - 1
+            ).toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+            
+            document.getElementById('comparisonChartTitle').textContent = 
+                `Daily Expense Trend - ${monthName} vs ${period}-Month Average`;
+            
+            // Update legend
+            updateComparisonLegend([
+                `${monthName} Daily`,
+                `${monthName} Cumulative`,
+                `${period}-Month Average Daily`,
+                `${period}-Month Average Cumulative`
+            ], [
+                'rgba(255, 59, 48, 0.8)',
+                'rgba(255, 59, 48, 1)',
+                'rgba(0, 122, 255, 0.8)',
+                'rgba(0, 122, 255, 1)'
+            ]);
+            
+            comparisonChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: comparisonData.days,
+                    datasets: [
+                        {
+                            label: 'Current Month Daily',
+                            data: comparisonData.currentMonthDaily,
+                            borderColor: 'rgba(255, 59, 48, 0.8)',
+                            backgroundColor: 'rgba(255, 59, 48, 0.1)',
+                            borderWidth: 2,
+                            tension: 0.3,
+                            fill: false,
+                            pointRadius: 0
+                        },
+                        {
+                            label: 'Current Month Cumulative',
+                            data: comparisonData.currentMonthCumulative,
+                            borderColor: 'rgba(255, 59, 48, 1)',
+                            backgroundColor: 'rgba(255, 59, 48, 0.1)',
+                            borderWidth: 3,
+                            tension: 0.3,
+                            fill: false,
+                            pointRadius: 0
+                        },
+                        {
+                            label: 'Historical Average Daily',
+                            data: comparisonData.historicalAverageDaily,
+                            borderColor: 'rgba(0, 122, 255, 0.8)',
+                            backgroundColor: 'rgba(0, 122, 255, 0.1)',
+                            borderWidth: 2,
+                            tension: 0.3,
+                            fill: false,
+                            pointRadius: 0,
+                            borderDash: [5, 5]
+                        },
+                        {
+                            label: 'Historical Average Cumulative',
+                            data: comparisonData.historicalAverageCumulative,
+                            borderColor: 'rgba(0, 122, 255, 1)',
+                            backgroundColor: 'rgba(0, 122, 255, 0.1)',
+                            borderWidth: 3,
+                            tension: 0.3,
+                            fill: false,
+                            pointRadius: 0,
+                            borderDash: [5, 5]
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false // We'll use custom legend
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.dataset.label || '';
+                                    const value = context.raw || 0;
+                                    return `${label}: ${formatDisplayCurrency(value)}`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return formatDisplayCurrency(value);
+                                },
+                                font: {
+                                    size: 10
+                                }
+                            },
+                            title: {
+                                display: true,
+                                text: 'Amount (Rp)'
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                font: {
+                                    size: 10
+                                }
+                            },
+                            title: {
+                                display: true,
+                                text: 'Day of Month'
+                            }
+                        }
+                    },
+                    interaction: {
+                        mode: 'nearest',
+                        axis: 'x',
+                        intersect: false
+                    }
+                }
+            });
+        }
+
+        // Update comparison legend
+        function updateComparisonLegend(labels, colors) {
+            const legendContainer = document.getElementById('comparisonLegend');
+            legendContainer.innerHTML = '';
+            
+            labels.forEach((label, index) => {
+                const legendItem = document.createElement('div');
+                legendItem.className = 'legend-item';
+                
+                const colorBox = document.createElement('div');
+                colorBox.className = 'legend-color';
+                colorBox.style.backgroundColor = colors[index];
+                
+                // Add border style for dashed lines
+                if (label.includes('Historical')) {
+                    colorBox.style.backgroundImage = `repeating-linear-gradient(90deg, ${colors[index]}, ${colors[index]} 3px, transparent 3px, transparent 6px)`;
+                    colorBox.style.backgroundColor = 'transparent';
+                }
+                
+                const labelText = document.createElement('span');
+                labelText.textContent = label;
+                
+                legendItem.appendChild(colorBox);
+                legendItem.appendChild(labelText);
+                legendContainer.appendChild(legendItem);
+            });
+        }
+
         // Update insights
         function updateInsights() {
             if (!selectedMonth) return;
@@ -1319,6 +1626,8 @@
         });
 
         trendRange.addEventListener('change', updateTrendChart);
+        
+        comparisonRange.addEventListener('change', updateComparisonChart);
 
         loginBtn.addEventListener('click', () => {
             window.location.href = 'index.html';
