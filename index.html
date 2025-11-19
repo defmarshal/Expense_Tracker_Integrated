@@ -1046,8 +1046,34 @@
                 padding: 4rem 2rem;
             }
 
+            .dashboard-stats {
+                display: flex;
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                gap: 1rem;
+                padding-bottom: 0.5rem;
+                -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+            }
+            
+            .dashboard-stats::-webkit-scrollbar {
+                display: none; /* Hide scrollbar on WebKit browsers */
+            }
+            
+            .stat-card {
+                flex: 0 0 auto;
+                width: 80%; /* Adjust this percentage as needed */
+                min-width: 200px; /* Minimum width for each card */
+                padding: 1rem;
+            }
+            
             .stat-value {
-                font-size: 1.8rem;
+                font-size: 1.5rem;
+                white-space: nowrap;
+            }
+            
+            .stat-label {
+                font-size: 0.8rem;
+                white-space: nowrap;
             }
 
             /* Stack list items vertically */
@@ -1193,6 +1219,19 @@
 
             .nav-links {
                 gap: 0.5rem;
+            }   
+            
+            .dashboard-stats {
+                gap: 0.75rem;
+            }
+            
+            .stat-card {
+                min-width: 180px; /* Slightly smaller on very small screens */
+                padding: 0.75rem;
+            }
+            
+            .stat-value {
+                font-size: 1.3rem;
             }            
         }
     </style>
