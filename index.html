@@ -15,100 +15,104 @@
         }
 
         :root {
-            --primary: #007AFF;
-            --primary-dark: #0056CC;
-            --secondary: #5856D6;
-            --success: #34C759;
-            --danger: #FF3B30;
-            --warning: #FF9500;
-            --light: #F5F5F7;
-            --dark: #1D1D1F;
-            --gray: #86868B;
-            --gray-light: #D2D2D7;
-            --shadow: 0 4px 20px rgba(0, 0, 0, 0.07);
-            --gradient: linear-gradient(135deg, #007AFF 0%, #5856D6 100%);
-            --income-gradient: linear-gradient(135deg, #34C759 0%, #28A745 100%);
+            /* Purple-based casual theme */
+            --primary: #9333EA;
+            --primary-dark: #7E22CE;
+            --primary-light: #C084FC;
+            --secondary: #A78BFA;
+            --success: #10B981;
+            --success-dark: #059669;
+            --danger: #EF4444;
+            --warning: #F59E0B;
+            --light: #F9F5FF;
+            --light-gray: #F3F0FF;
+            --dark: #2D1B4E;
+            --text: #4B3B5C;
+            --gray: #9B8BA8;
+            --gray-light: #E9E0F5;
+            --shadow: 0 2px 8px rgba(147, 51, 234, 0.08);
+            --gradient: linear-gradient(135deg, #9333EA 0%, #A78BFA 100%);
+            --income-gradient: linear-gradient(135deg, #10B981 0%, #059669 100%);
         }
 
         body {
-            background-color: white;
-            color: var(--dark);
-            line-height: 1.6;
+            background: linear-gradient(180deg, #F9F5FF 0%, #FFFFFF 100%);
+            color: var(--text);
+            line-height: 1.5;
             min-height: 100vh;
             overflow-x: hidden;
-            overflow-wrap: break-word;
         }
 
         /* Navigation Links Styles */
         .nav-links {
             display: flex;
-            gap: 2rem;
+            gap: 1rem;
             align-items: center;
         }
 
         .nav-link {
-            color: var(--dark);
+            color: var(--text);
             text-decoration: none;
             font-weight: 500;
-            transition: color 0.3s;
+            transition: all 0.3s;
             display: flex;
             align-items: center;
-            gap: 8px;
-            padding: 8px 16px;
-            border-radius: 8px;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 12px;
+            font-size: 0.9rem;
         }
 
         .nav-link:hover, .nav-link.active {
             color: var(--primary);
-            background-color: rgba(0, 122, 255, 0.1);
+            background-color: rgba(147, 51, 234, 0.1);
         }
 
-        /* Update header padding for better spacing */
         header {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(15px);
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             z-index: 1000;
-            padding: 1rem 2rem;
+            padding: 0.75rem 1rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            border-bottom: 1px solid rgba(147, 51, 234, 0.1);
         }
 
         .logo {
             display: flex;
             align-items: center;
-            gap: 12px;
-            font-size: 1.5rem;
+            gap: 8px;
+            font-size: 1.3rem;
             font-weight: 700;
             color: var(--dark);
         }
 
         .logo i {
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             color: var(--primary);
         }
 
         .auth-section {
             display: flex;
-            gap: 15px;
+            gap: 10px;
         }
 
         .btn {
-            padding: 10px 24px;
+            padding: 8px 16px;
             border: none;
-            border-radius: 980px;
+            border-radius: 12px;
             cursor: pointer;
             font-weight: 600;
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-size: 0.95rem;
+            gap: 6px;
+            font-size: 0.9rem;
         }
 
         .btn-primary {
@@ -118,7 +122,7 @@
 
         .btn-primary:hover {
             background-color: var(--primary-dark);
-            transform: scale(1.05);
+            transform: translateY(-2px);
         }
 
         .btn-success {
@@ -127,23 +131,17 @@
         }
 
         .btn-success:hover {
-            background-color: #28A745;
-            transform: scale(1.05);
+            background-color: var(--success-dark);
         }
 
         .btn-outline {
             background-color: transparent;
-            border: 1px solid var(--primary);
+            border: 1.5px solid var(--primary);
             color: var(--primary);
         }
 
         .btn-outline:hover {
-            background-color: rgba(0, 122, 255, 0.1);
-        }
-
-        .btn-sm {
-            padding: 6px 12px;
-            font-size: 0.85rem;
+            background-color: rgba(147, 51, 234, 0.08);
         }
 
         /* Landing Page Styles */
@@ -158,8 +156,8 @@
             justify-content: center;
             align-items: center;
             text-align: center;
-            padding: 0 2rem;
-            background: linear-gradient(135deg, #F5F5F7 0%, #FFFFFF 100%);
+            padding: 2rem;
+            background: linear-gradient(135deg, #F9F5FF 0%, #FFFFFF 100%);
             position: relative;
             overflow: hidden;
         }
@@ -167,25 +165,25 @@
         .hero::before {
             content: '';
             position: absolute;
-            width: 800px;
-            height: 800px;
+            width: 600px;
+            height: 600px;
             border-radius: 50%;
             background: var(--gradient);
-            opacity: 0.03;
-            top: -400px;
-            right: -200px;
+            opacity: 0.05;
+            top: -300px;
+            right: -150px;
             z-index: 0;
         }
 
         .hero-content {
-            max-width: 900px;
+            max-width: 800px;
             z-index: 1;
         }
 
         .hero h1 {
-            font-size: 3.5rem;
+            font-size: 3rem;
             font-weight: 700;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
             background: var(--gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -193,167 +191,129 @@
         }
 
         .hero p {
-            font-size: 1.4rem;
+            font-size: 1.2rem;
             color: var(--gray);
-            margin-bottom: 2.5rem;
-            max-width: 600px;
+            margin-bottom: 2rem;
+            max-width: 500px;
             margin-left: auto;
             margin-right: auto;
         }
 
         .hero-buttons {
             display: flex;
-            gap: 15px;
+            gap: 12px;
             justify-content: center;
-            margin-bottom: 3rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
         }
 
         .hero-image {
-            max-width: 900px;
+            max-width: 800px;
             width: 100%;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(147, 51, 234, 0.12);
             overflow: hidden;
-            margin-top: 2rem;
-            border: 1px solid rgba(0, 0, 0, 0.05);
+            margin-top: 1.5rem;
+            border: 1px solid rgba(147, 51, 234, 0.1);
         }
 
         .features {
-            padding: 6rem 2rem;
+            padding: 4rem 2rem;
             background-color: var(--light);
         }
 
         .section-header {
             text-align: center;
-            max-width: 700px;
-            margin: 0 auto 4rem;
+            max-width: 650px;
+            margin: 0 auto 3rem;
         }
 
         .section-title {
-            font-size: 2.5rem;
+            font-size: 2.2rem;
             font-weight: 700;
-            margin-bottom: 1rem;
+            margin-bottom: 0.8rem;
             color: var(--dark);
         }
 
         .section-subtitle {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             color: var(--gray);
         }
 
         .features-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            max-width: 1200px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            max-width: 1100px;
             margin: 0 auto;
         }
 
         .feature-card {
             background: white;
-            border-radius: 20px;
-            padding: 2.5rem;
+            border-radius: 16px;
+            padding: 2rem;
             text-align: center;
             box-shadow: var(--shadow);
-            transition: transform 0.3s ease;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(147, 51, 234, 0.05);
         }
 
         .feature-card:hover {
-            transform: translateY(-10px);
+            transform: translateY(-6px);
+            box-shadow: 0 8px 20px rgba(147, 51, 234, 0.12);
         }
 
         .feature-icon {
-            width: 70px;
-            height: 70px;
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 1.5rem;
+            margin: 0 auto 1rem;
             background: var(--gradient);
             color: white;
-            font-size: 1.8rem;
+            font-size: 1.5rem;
         }
 
         .feature-title {
-            font-size: 1.4rem;
+            font-size: 1.2rem;
             font-weight: 600;
-            margin-bottom: 1rem;
+            margin-bottom: 0.8rem;
             color: var(--dark);
         }
 
         .feature-description {
             color: var(--gray);
-            line-height: 1.6;
-        }
-
-        .benefits {
-            padding: 6rem 2rem;
-            background: white;
-        }
-
-        .benefits-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 3rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .benefit-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 1.5rem;
-        }
-
-        .benefit-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: 12px;
-            background: var(--gradient);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.2rem;
-            flex-shrink: 0;
-        }
-
-        .benefit-content h3 {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: var(--dark);
-        }
-
-        .benefit-content p {
-            color: var(--gray);
+            line-height: 1.5;
+            font-size: 0.95rem;
         }
 
         .cta {
-            padding: 6rem 2rem;
+            padding: 4rem 2rem;
             background: var(--gradient);
             color: white;
             text-align: center;
         }
 
         .cta h2 {
-            font-size: 2.5rem;
+            font-size: 2.2rem;
             font-weight: 700;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
         }
 
         .cta p {
-            font-size: 1.2rem;
-            max-width: 600px;
-            margin: 0 auto 2.5rem;
-            opacity: 0.9;
+            font-size: 1.1rem;
+            max-width: 550px;
+            margin: 0 auto 2rem;
+            opacity: 0.95;
         }
 
         .cta-buttons {
             display: flex;
-            gap: 15px;
+            gap: 12px;
             justify-content: center;
+            flex-wrap: wrap;
         }
 
         .btn-white {
@@ -362,36 +322,27 @@
         }
 
         .btn-white:hover {
-            background: rgba(255, 255, 255, 0.9);
-        }
-
-        .btn-transparent {
-            background: transparent;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            color: white;
-        }
-
-        .btn-transparent:hover {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.95);
         }
 
         footer {
-            padding: 4rem 2rem 2rem;
+            padding: 3rem 2rem 1.5rem;
             background: var(--dark);
             color: white;
         }
 
         .footer-content {
-            max-width: 1200px;
+            max-width: 1100px;
             margin: 0 auto;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 3rem;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
         }
 
         .footer-column h3 {
-            font-size: 1.2rem;
-            margin-bottom: 1.5rem;
+            font-size: 1rem;
+            margin-bottom: 1rem;
             font-weight: 600;
         }
 
@@ -400,13 +351,14 @@
         }
 
         .footer-links li {
-            margin-bottom: 0.8rem;
+            margin-bottom: 0.6rem;
         }
 
         .footer-links a {
-            color: var(--gray-light);
+            color: rgba(255, 255, 255, 0.7);
             text-decoration: none;
             transition: color 0.3s;
+            font-size: 0.9rem;
         }
 
         .footer-links a:hover {
@@ -414,61 +366,65 @@
         }
 
         .footer-bottom {
-            max-width: 1200px;
-            margin: 3rem auto 0;
-            padding-top: 2rem;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding-top: 1.5rem;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
             text-align: center;
-            color: var(--gray);
-            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.85rem;
         }
 
         /* Dashboard Styles */
         .dashboard-container {
             display: none;
             min-height: 100vh;
-            padding-top: 80px;
-            background: var(--light);
+            padding-top: 70px;
+            padding-bottom: 2rem;
+            background: linear-gradient(180deg, #F9F5FF 0%, #FFFFFF 100%);
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1000px;
             margin: 0 auto;
-            padding: 0 2rem;
+            padding: 0 1rem;
         }
 
         .dashboard-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
+            gap: 1rem;
+            flex-wrap: wrap;
         }
 
         .dashboard-title {
-            font-size: 2rem;
+            font-size: 1.8rem;
             font-weight: 700;
             color: var(--dark);
         }
 
         .dashboard-stats {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
         }
 
         .stat-card {
             background: white;
-            border-radius: 16px;
-            padding: 1.5rem;
+            border-radius: 14px;
+            padding: 1.2rem;
             box-shadow: var(--shadow);
             text-align: center;
+            border: 1px solid rgba(147, 51, 234, 0.05);
         }
 
         .stat-value {
-            font-size: 2rem;
+            font-size: 1.6rem;
             font-weight: 700;
-            margin: 0.5rem 0;
+            margin: 0.4rem 0;
         }
 
         .stat-value.income {
@@ -485,27 +441,32 @@
 
         .stat-label {
             color: var(--gray);
-            font-size: 0.9rem;
+            font-size: 0.8rem;
+            font-weight: 500;
         }
 
         .dashboard-tabs {
             display: flex;
             background: white;
-            border-radius: 16px;
+            border-radius: 12px;
             padding: 0.5rem;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
             box-shadow: var(--shadow);
+            overflow-x: auto;
+            gap: 0.5rem;
         }
 
         .tab {
             flex: 1;
-            padding: 1rem;
+            padding: 0.8rem 1rem;
             text-align: center;
             cursor: pointer;
-            border-radius: 12px;
+            border-radius: 10px;
             transition: all 0.3s;
             font-weight: 600;
             color: var(--gray);
+            font-size: 0.85rem;
+            white-space: nowrap;
         }
 
         .tab.active {
@@ -523,65 +484,58 @@
 
         .form-card {
             background: white;
-            border-radius: 16px;
-            padding: 2rem;
-            margin-bottom: 2rem;
+            border-radius: 14px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
             box-shadow: var(--shadow);
+            border: 1px solid rgba(147, 51, 234, 0.05);
         }
 
         .form-title {
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             font-weight: 600;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.2rem;
             color: var(--dark);
         }
 
         .form-group {
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.2rem;
         }
 
         label {
             display: block;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.4rem;
             font-weight: 500;
-            color: var(--dark);
+            color: var(--text);
+            font-size: 0.9rem;
         }
 
-        /* --- MODIFIED: Added appearance: none and background-color --- */
         input, select {
             width: 100%;
-            padding: 12px 16px;
-            border: 1px solid var(--gray-light);
-            border-radius: 12px;
-            font-size: 1rem;
-            transition: border 0.3s;
+            padding: 10px 12px;
+            border: 1.5px solid var(--gray-light);
+            border-radius: 10px;
+            font-size: 0.95rem;
+            transition: all 0.3s;
             min-width: 0;
-            
-            /* Force custom appearance, remove iOS native styling */
             -webkit-appearance: none;
             -moz-appearance: none;
             appearance: none;
-            /* Explicitly set background to white */
             background-color: white;
         }
 
-        /* --- ADDED: Restore dropdown arrow for select elements --- */
         select {
-            background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%2386868B%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-13%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2013l128%20128c3.6%203.6%207.8%205.4%2013%205.4s9.4-1.8%2013-5.4l128-128c3.6-3.6%205.4-7.8%205.4-13%200-5-1.8-9.3-5.4-13z%22%2F%3E%3C%2Fsvg%3E');
+            background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%239B8BA8%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-13%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2013l128%20128c3.6%203.6%207.8%205.4%2013%205.4s9.4-1.8%2013-5.4l128-128c3.6-3.6%205.4-7.8%205.4-13%200-5-1.8-9.3-5.4-13z%22%2F%3E%3C%2Fsvg%3E');
             background-repeat: no-repeat;
-            background-position: right 16px top 50%;
-            background-size: .65em auto;
+            background-position: right 10px top 50%;
+            background-size: 0.6em auto;
+            padding-right: 32px;
         }
 
-        /* --- ADDED: Fix for date input text alignment after appearance:none --- */
-        input[type="date"] {
-            line-height: 1.6; /* Match other inputs */
-        }
-        
         input:focus, select:focus {
             outline: none;
             border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.1);
+            box-shadow: 0 0 0 3px rgba(147, 51, 234, 0.1);
         }
 
         .form-row {
@@ -595,16 +549,19 @@
 
         .expense-list, .wallet-list, .category-list, .income-list {
             background: white;
-            border-radius: 16px;
-            padding: 2rem;
+            border-radius: 14px;
+            padding: 1.5rem;
             box-shadow: var(--shadow);
+            border: 1px solid rgba(147, 51, 234, 0.05);
         }
 
         .expense-item, .wallet-item, .category-item, .income-item {
             display: flex;
             justify-content: space-between;
+            align-items: center;
             padding: 1rem 0;
             border-bottom: 1px solid var(--gray-light);
+            gap: 1rem;
         }
 
         .expense-item:last-child, .wallet-item:last-child, .category-item:last-child, .income-item:last-child {
@@ -613,16 +570,17 @@
 
         .expense-details, .wallet-details, .category-details, .income-details {
             flex: 1;
+            min-width: 0;
         }
 
         .expense-amount, .wallet-balance, .income-amount {
             font-weight: 600;
-            font-size: 1.1rem;
+            font-size: 1rem;
             color: var(--dark);
         }
 
         .expense-amount {
-            color: var(--danger);
+            color: var(--primary);
         }
 
         .income-amount {
@@ -630,30 +588,33 @@
         }
 
         .expense-category, .income-source {
-            background: var(--light);
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
+            background: var(--light-gray);
+            padding: 3px 10px;
+            border-radius: 16px;
+            font-size: 0.75rem;
             color: var(--gray);
+            margin-top: 0.3rem;
+            display: inline-block;
         }
 
-        /* Action buttons */
         .action-buttons {
             display: flex;
             gap: 0.5rem;
             align-items: center;
+            flex-shrink: 0;
         }
 
         .edit-btn, .delete-btn {
             background: none;
             border: none;
             cursor: pointer;
-            padding: 6px;
-            border-radius: 6px;
-            transition: background 0.3s;
+            padding: 8px;
+            border-radius: 8px;
+            transition: all 0.3s;
             display: flex;
             align-items: center;
             justify-content: center;
+            font-size: 0.95rem;
         }
 
         .edit-btn {
@@ -661,7 +622,7 @@
         }
 
         .edit-btn:hover {
-            background: rgba(0, 122, 255, 0.1);
+            background: rgba(147, 51, 234, 0.1);
         }
 
         .delete-btn {
@@ -669,7 +630,7 @@
         }
 
         .delete-btn:hover {
-            background: rgba(255, 59, 48, 0.1);
+            background: rgba(239, 68, 68, 0.1);
         }
 
         /* Modal Styles */
@@ -679,7 +640,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: rgba(0, 0, 0, 0.5);
+            background-color: rgba(45, 27, 78, 0.4);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -687,6 +648,7 @@
             opacity: 0;
             visibility: hidden;
             transition: all 0.3s ease;
+            padding: 1rem;
         }
 
         .modal-overlay.active {
@@ -696,14 +658,14 @@
 
         .modal {
             background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
-            width: 90%;
-            max-width: 500px;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(45, 27, 78, 0.15);
+            width: 100%;
+            max-width: 450px;
             padding: 0;
             overflow: hidden;
-            transform: translateY(50px) scale(0.9);
-            transition: transform 0.5s ease;
+            transform: translateY(30px) scale(0.95);
+            transition: transform 0.3s ease;
         }
 
         .modal-overlay.active .modal {
@@ -713,8 +675,9 @@
         .modal-header {
             background: var(--gradient);
             color: white;
-            padding: 2rem;
+            padding: 1.5rem;
             text-align: center;
+            position: relative;
         }
 
         .modal-header.income {
@@ -722,47 +685,47 @@
         }
 
         .modal-title {
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             font-weight: 700;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.3rem;
         }
 
         .modal-subtitle {
-            font-size: 1rem;
+            font-size: 0.95rem;
             opacity: 0.9;
         }
 
         .modal-body {
-            padding: 2rem;
+            padding: 1.5rem;
         }
 
         .modal-close {
             position: absolute;
-            top: 20px;
-            right: 20px;
-            background: rgba(255, 255, 255, 0.2);
+            top: 12px;
+            right: 12px;
+            background: rgba(255, 255, 255, 0.25);
             border: none;
             color: white;
-            width: 36px;
-            height: 36px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             transition: background 0.3s;
         }
 
         .modal-close:hover {
-            background: rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.35);
         }
 
         .password-strength {
-            height: 4px;
+            height: 3px;
             background: #eee;
             border-radius: 2px;
-            margin-top: 8px;
+            margin-top: 6px;
             overflow: hidden;
         }
 
@@ -789,14 +752,15 @@
 
         /* Alert Styles */
         .alert {
-            padding: 12px 16px;
-            border-radius: 12px;
+            padding: 11px 14px;
+            border-radius: 10px;
             margin-bottom: 1rem;
             display: flex;
             align-items: center;
             gap: 10px;
             box-shadow: var(--shadow);
             animation: slideIn 0.3s ease;
+            font-size: 0.9rem;
         }
 
         @keyframes slideIn {
@@ -805,52 +769,50 @@
         }
 
         .alert-success {
-            background-color: rgba(52, 199, 89, 0.1);
+            background-color: rgba(16, 185, 129, 0.1);
             color: var(--success);
-            border: 1px solid rgba(52, 199, 89, 0.2);
+            border: 1px solid rgba(16, 185, 129, 0.2);
         }
 
         .alert-error {
-            background-color: rgba(255, 59, 48, 0.1);
+            background-color: rgba(239, 68, 68, 0.1);
             color: var(--danger);
-            border: 1px solid rgba(255, 59, 48, 0.2);
+            border: 1px solid rgba(239, 68, 68, 0.2);
         }
 
         .alert-warning {
-            background-color: rgba(255, 149, 0, 0.1);
+            background-color: rgba(245, 158, 11, 0.1);
             color: var(--warning);
-            border: 1px solid rgba(255, 149, 0, 0.2);
+            border: 1px solid rgba(245, 158, 11, 0.2);
         }
 
-        /* Hidden utility class */
         .hidden {
             display: none !important;
         }
 
-        /* Currency input styling */
         .currency-input {
             position: relative;
         }
 
         .currency-input input {
-            padding-left: 40px;
+            padding-left: 32px;
         }
 
         .currency-symbol {
             position: absolute;
-            left: 16px;
+            left: 12px;
             top: 50%;
             transform: translateY(-50%);
             color: var(--gray);
             font-weight: 500;
+            font-size: 0.9rem;
         }
 
-        /* Subcategory styles */
         .subcategory-item {
-            padding-left: 2rem;
+            padding-left: 1.5rem;
             color: var(--gray);
             border-left: 2px solid var(--gray-light);
-            margin-left: 1rem;
+            margin-left: 0.8rem;
         }
 
         .category-actions {
@@ -862,8 +824,8 @@
             background: var(--success);
             color: white;
             border: none;
-            border-radius: 6px;
-            padding: 4px 8px;
+            border-radius: 8px;
+            padding: 4px 10px;
             cursor: pointer;
             font-size: 0.8rem;
             display: flex;
@@ -871,23 +833,24 @@
             gap: 4px;
         }
 
-        /* Wallet Selector Styles */
         .wallet-selector-container {
             display: flex;
             align-items: center;
             background: white;
-            padding: 8px 16px;
-            border-radius: 12px;
-            border: 1px solid var(--gray-light);
+            padding: 8px 12px;
+            border-radius: 10px;
+            border: 1.5px solid var(--gray-light);
             box-shadow: var(--shadow);
+            gap: 8px;
         }
 
         .wallet-selector-container select {
             border: none;
             background: transparent;
             font-weight: 600;
-            color: var(--dark);
+            color: var(--text);
             cursor: pointer;
+            font-size: 0.85rem;
         }
 
         .wallet-selector-container select:focus {
@@ -895,24 +858,23 @@
             box-shadow: none;
         }
 
-        /* Insufficient Balance Modal */
         .insufficient-balance-modal .modal-header {
-            background: var(--danger);
+            background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
         }
 
         .balance-warning {
             display: flex;
             align-items: center;
-            gap: 12px;
-            margin-bottom: 1.5rem;
+            gap: 10px;
+            margin-bottom: 1.2rem;
             padding: 1rem;
-            border-radius: 12px;
-            background: rgba(255, 59, 48, 0.1);
-            border: 1px solid rgba(255, 59, 48, 0.2);
+            border-radius: 10px;
+            background: rgba(239, 68, 68, 0.08);
+            border: 1px solid rgba(239, 68, 68, 0.15);
         }
 
         .balance-warning i {
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             color: var(--danger);
         }
 
@@ -920,7 +882,7 @@
             display: flex;
             flex-direction: column;
             gap: 8px;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.2rem;
         }
 
         .balance-item {
@@ -928,311 +890,263 @@
             justify-content: space-between;
             padding: 8px 0;
             border-bottom: 1px solid var(--gray-light);
+            font-size: 0.9rem;
         }
 
         .balance-item:last-child {
             border-bottom: none;
         }
-        
-        /* New styles for historical expenses */
+
         .month-filter {
             display: flex;
             gap: 1rem;
             align-items: center;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.2rem;
             padding: 1rem;
             background: white;
             border-radius: 12px;
             box-shadow: var(--shadow);
+            flex-wrap: wrap;
         }
-        
+
         .month-filter label {
             margin-bottom: 0;
             font-weight: 600;
-            color: var(--dark);
+            color: var(--text);
+            font-size: 0.9rem;
         }
-        
+
         .month-filter select {
             flex: 1;
-            max-width: 200px;
+            min-width: 120px;
         }
-        
+
         .expense-summary {
             background: white;
             border-radius: 12px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
+            padding: 1.2rem;
+            margin-bottom: 1.2rem;
             box-shadow: var(--shadow);
             text-align: center;
+            border: 1px solid rgba(147, 51, 234, 0.05);
         }
-        
+
         .expense-summary h3 {
-            margin-bottom: 1rem;
-            color: var(--dark);
+            margin-bottom: 0.8rem;
+            color: var(--text);
+            font-size: 1rem;
         }
-        
+
         .expense-summary-amount {
-            font-size: 2rem;
+            font-size: 1.8rem;
             font-weight: 700;
-            color: var(--danger);
+            color: var(--primary);
         }
-        
+
         .no-expenses-message {
             text-align: center;
-            padding: 3rem 2rem;
+            padding: 2rem 1rem;
             color: var(--gray);
             font-style: italic;
+            font-size: 0.95rem;
         }
-        /* * =========================================
-         * MODIFIED & NEW RESPONSIVE STYLES
-         * =========================================
-        */
 
+        /* Mobile Optimizations */
         @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2.5rem;
-            }
-            
-            .hero p {
-                font-size: 1.2rem;
-            }
-            
-            .hero-buttons, .cta-buttons {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .section-title {
-                font-size: 2rem;
-            }
-            
-            .feature-card {
-                padding: 2rem;
-            }
-            
             header {
-                padding: 1rem;
+                padding: 0.6rem 0.8rem;
             }
-            
+
+            .logo {
+                font-size: 1.1rem;
+                gap: 6px;
+            }
+
+            .logo i {
+                font-size: 1.3rem;
+            }
+
+            .dashboard-title {
+                font-size: 1.4rem;
+            }
+
             .form-row {
                 flex-direction: column;
                 gap: 0;
             }
-            
+
             .dashboard-tabs {
-                flex-direction: column;
-            }
-            
-            .category-actions {
-                flex-direction: column;
-            }
-            
-            .wallet-selector-container {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 8px;
-            }
-            
-            .dashboard-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 1rem;
-            }
-
-            /* --- NEW: Mobile Optimizations --- */
-
-            /* Reduce section padding on tablets */
-            .features, .benefits, .cta {
-                padding: 4rem 2rem;
+                flex-direction: row;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
             }
 
             .dashboard-stats {
                 display: flex;
                 flex-wrap: nowrap;
                 overflow-x: auto;
-                gap: 1rem;
+                gap: 0.8rem;
                 padding-bottom: 0.5rem;
-                -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+                -webkit-overflow-scrolling: touch;
             }
-            
+
             .dashboard-stats::-webkit-scrollbar {
-                display: none; /* Hide scrollbar on WebKit browsers */
+                display: none;
             }
-            
+
             .stat-card {
                 flex: 0 0 auto;
-                width: 80%; /* Adjust this percentage as needed */
-                min-width: 200px; /* Minimum width for each card */
+                width: 75%;
+                min-width: 150px;
                 padding: 1rem;
             }
-            
+
             .stat-value {
-                font-size: 1.5rem;
-                white-space: nowrap;
+                font-size: 1.4rem;
             }
-            
+
             .stat-label {
-                font-size: 0.8rem;
-                white-space: nowrap;
+                font-size: 0.75rem;
             }
 
-            /* Stack list items vertically */
-            .expense-item, .wallet-item, .income-item {
+            .expense-item, .wallet-item, .income-item, .category-item {
                 flex-direction: column;
                 align-items: flex-start;
-                gap: 12px;
+                gap: 10px;
             }
 
-            .category-item {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 12px;
-            }
-
-            /* Ensure the bottom row (amount + buttons) spans full width */
             .expense-item > div:last-child, 
             .income-item > div:last-child, 
-            .wallet-item > div:last-child {
+            .wallet-item > div:last-child,
+            .category-item > div:last-child {
                 width: 100%;
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
             }
-            
-            .category-item > div:last-child {
-                width: 100%;
-            }
 
-            /* Improve touch target size */
             .edit-btn, .delete-btn {
-                padding: 10px;
-                font-size: 1.1rem; /* Make icon slightly larger */
+                padding: 8px;
             }
 
-            .add-subcategory-btn {
-                padding: 8px 12px;
+            .nav-links {
+                gap: 0.5rem;
             }
 
-            /* Prevent input zoom on iOS */
+            .nav-link span {
+                display: none;
+            }
+
+            .nav-link {
+                padding: 6px;
+                font-size: 0.8rem;
+            }
+
+            .month-filter {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 0.8rem;
+            }
+
+            .month-filter select {
+                min-width: auto;
+            }
+
             input, select {
                 font-size: 16px;
             }
 
-            .nav-links {
-                gap: 1rem;
+            .modal {
+                max-width: 95%;
             }
-            
-            .nav-link span {
-                display: none;
-            }
-            
-            .nav-link {
-                padding: 8px;
-            }
-            
-            /* Month filter responsive */
-            .month-filter {
-                flex-direction: column;
-                align-items: stretch;
-                gap: 1rem;
-            }
-            
-            .month-filter select {
-                max-width: none;
-            }            
         }
 
-        /* --- NEW: Added breakpoint for small phones --- */
         @media (max-width: 480px) {
             .container {
-                padding: 0 1rem;
+                padding: 0 0.8rem;
             }
 
-            /* Icon-only buttons in header */
+            header {
+                padding: 0.5rem 0.6rem;
+            }
+
             .auth-section .btn span {
                 display: none;
             }
 
             .auth-section .btn {
-                padding: 10px 12px;
+                padding: 8px 10px;
                 gap: 0;
             }
-            
+
             .auth-section {
-                gap: 8px;
+                gap: 6px;
             }
 
             .logo {
-                font-size: 1.3rem;
-            }
-            .logo i {
-                font-size: 1.5rem;
-            }
-
-            /* Further reduce fonts */
-            .hero h1 {
-                font-size: 2.2rem;
-            }
-            .hero p {
-                font-size: 1.1rem;
-            }
-            .section-title {
-                font-size: 1.8rem;
-            }
-            .section-subtitle {
                 font-size: 1rem;
             }
-            
-            /* Further reduce padding */
-            .features, .benefits, .cta {
-                padding: 4rem 1.5rem;
-            }
-            .form-card,
-            .expense-list, .wallet-list, .category-list, .income-list {
-                padding: 1.5rem;
-            }
-            
-            .modal-body {
-                padding: 1.5rem;
-            }
-            .modal-header {
-                padding: 1.5rem;
-            }
-            .modal-title {
-                font-size: 1.5rem;
+
+            .logo i {
+                font-size: 1.2rem;
             }
 
             .dashboard-title {
-                font-size: 1.5rem;
+                font-size: 1.2rem;
             }
 
-            /* Make category/source tags smaller */
-            .expense-category, .income-source {
-                display: block;
-                margin-top: 4px;
-                text-align: right;
+            .form-card,
+            .expense-list, .wallet-list, .category-list, .income-list {
+                padding: 1.2rem;
             }
 
-            .expense-amount, .income-amount {
-                text-align: right;
+            .modal-body, .modal-header {
+                padding: 1.2rem;
             }
 
-            .nav-links {
-                gap: 0.5rem;
-            }   
-            
-            .dashboard-stats {
-                gap: 0.75rem;
+            .modal-title {
+                font-size: 1.4rem;
             }
-            
+
+            .section-title {
+                font-size: 1.8rem;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .tab {
+                padding: 0.6rem 0.8rem;
+                font-size: 0.75rem;
+            }
+
             .stat-card {
-                min-width: 180px; /* Slightly smaller on very small screens */
-                padding: 0.75rem;
+                width: 100%;
+                min-width: 100px;
+                padding: 0.8rem;
             }
-            
+
             .stat-value {
-                font-size: 1.3rem;
-            }            
+                font-size: 1.2rem;
+            }
+
+            .form-title {
+                font-size: 1.1rem;
+            }
+
+            label {
+                font-size: 0.85rem;
+            }
+
+            input, select {
+                padding: 9px 10px;
+                font-size: 15px;
+            }
         }
     </style>
 </head>
@@ -1243,7 +1157,6 @@
             <span>FinTrack</span>
         </div>
         
-        <!-- Add this navigation section -->
         <div class="nav-links">
             <a href="index.html" class="nav-link active">
                 <i class="fas fa-home"></i>
@@ -1262,7 +1175,7 @@
             </button>
             <button id="signupBtn" class="btn btn-primary">
                 <i class="fas fa-user-plus"></i>
-                <span>Get Started</span>
+                <span>Join</span>
             </button>
             <button id="logoutBtn" class="btn btn-outline hidden">
                 <i class="fas fa-sign-out-alt"></i>
@@ -1287,7 +1200,7 @@
                     </button>
                 </div>
                 <div class="hero-image">
-                    <div style="background: var(--gradient); height: 400px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem;">
+                    <div style="background: var(--gradient); height: 320px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.3rem;">
                         FinTrack Dashboard Preview
                     </div>
                 </div>
@@ -1296,8 +1209,8 @@
 
         <section class="features">
             <div class="section-header">
-                <h2 class="section-title">Everything You Need to Manage Expenses</h2>
-                <p class="section-subtitle">FinTrack provides all the tools you need to take control of your financial life</p>
+                <h2 class="section-title">Everything You Need</h2>
+                <p class="section-subtitle">Manage your finances with ease</p>
             </div>
             <div class="features-grid">
                 <div class="feature-card">
@@ -1305,120 +1218,53 @@
                         <i class="fas fa-wallet"></i>
                     </div>
                     <h3 class="feature-title">Multiple Wallets</h3>
-                    <p class="feature-description">Track expenses across multiple wallets, bank accounts, and credit cards in one place.</p>
+                    <p class="feature-description">Track expenses across multiple wallets and bank accounts.</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">
                         <i class="fas fa-tags"></i>
                     </div>
                     <h3 class="feature-title">Smart Categories</h3>
-                    <p class="feature-description">Automatically categorize expenses and create custom categories for better organization.</p>
+                    <p class="feature-description">Organize expenses with custom categories.</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">
                         <i class="fas fa-chart-bar"></i>
                     </div>
                     <h3 class="feature-title">Visual Reports</h3>
-                    <p class="feature-description">Understand your spending patterns with beautiful charts and visualizations.</p>
+                    <p class="feature-description">Understand spending patterns instantly.</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">
                         <i class="fas fa-money-bill-wave"></i>
                     </div>
                     <h3 class="feature-title">Income Tracking</h3>
-                    <p class="feature-description">Track all your income sources and see how they contribute to your financial health.</p>
+                    <p class="feature-description">Track all your income sources.</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">
                         <i class="fas fa-shield-alt"></i>
                     </div>
                     <h3 class="feature-title">Secure & Private</h3>
-                    <p class="feature-description">Your data is encrypted and secure with enterprise-grade security infrastructure.</p>
+                    <p class="feature-description">Enterprise-grade security for your data.</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">
                         <i class="fas fa-sync"></i>
                     </div>
                     <h3 class="feature-title">Real-time Sync</h3>
-                    <p class="feature-description">Your data syncs instantly across all devices so you're always up to date.</p>
-                </div>
-            </div>
-        </section>
-
-        <section class="benefits">
-            <div class="section-header">
-                <h2 class="section-title">Why Choose FinTrack?</h2>
-                <p class="section-subtitle">Join thousands of users who have transformed their financial lives</p>
-            </div>
-            <div class="benefits-grid">
-                <div class="benefit-item">
-                    <div class="benefit-icon">
-                        <i class="fas fa-clock"></i>
-                    </div>
-                    <div class="benefit-content">
-                        <h3>Save Time</h3>
-                        <p>Automate expense tracking and categorization to spend less time managing finances.</p>
-                    </div>
-                </div>
-                <div class="benefit-item">
-                    <div class="benefit-icon">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-                    <div class="benefit-content">
-                        <h3>Gain Insights</h3>
-                        <p>Discover spending patterns and identify opportunities to save more money.</p>
-                    </div>
-                </div>
-                <div class="benefit-item">
-                    <div class="benefit-icon">
-                        <i class="fas fa-bullseye"></i>
-                    </div>
-                    <div class="benefit-content">
-                        <h3>Achieve Goals</h3>
-                        <p>Set financial goals and track your progress with personalized recommendations.</p>
-                    </div>
-                </div>
-                <div class="benefit-item">
-                    <div class="benefit-icon">
-                        <i class="fas fa-user-friends"></i>
-                    </div>
-                    <div class="benefit-content">
-                        <h3>Share with Partners</h3>
-                        <p>Easily share expense tracking with family members or business partners.</p>
-                    </div>
-                </div>
-                <div class="benefit-item">
-                    <div class="benefit-icon">
-                        <i class="fas fa-file-export"></i>
-                    </div>
-                    <div class="benefit-content">
-                        <h3>Export Data</h3>
-                        <p>Download your financial data in multiple formats for tax preparation or analysis.</p>
-                    </div>
-                </div>
-                <div class="benefit-item">
-                    <div class="benefit-icon">
-                        <i class="fas fa-headset"></i>
-                    </div>
-                    <div class="benefit-content">
-                        <h3>Premium Support</h3>
-                        <p>Get help when you need it with our responsive customer support team.</p>
-                    </div>
+                    <p class="feature-description">Stay updated across all devices.</p>
                 </div>
             </div>
         </section>
 
         <section class="cta">
-            <h2>Ready to Transform Your Finances?</h2>
-            <p>Join FinTrack today and start your journey to financial clarity and control.</p>
+            <h2>Ready to take control?</h2>
+            <p>Join thousands of users who've transformed their finances with FinTrack.</p>
             <div class="cta-buttons">
                 <button id="ctaSignupBtn" class="btn btn-white">
                     <i class="fas fa-rocket"></i>
                     Get Started Free
-                </button>
-                <button class="btn btn-transparent">
-                    <i class="fas fa-calendar"></i>
-                    Book a Demo
                 </button>
             </div>
         </section>
@@ -1429,16 +1275,14 @@
                     <h3>FinTrack</h3>
                     <ul class="footer-links">
                         <li><a href="#">About Us</a></li>
-                        <li><a href="#">Careers</a></li>
-                        <li><a href="#">Press</a></li>
                         <li><a href="#">Blog</a></li>
+                        <li><a href="#">Press</a></li>
                     </ul>
                 </div>
                 <div class="footer-column">
                     <h3>Product</h3>
                     <ul class="footer-links">
                         <li><a href="#">Features</a></li>
-                        <li><a href="#">Pricing</a></li>
                         <li><a href="#">Security</a></li>
                         <li><a href="#">Roadmap</a></li>
                     </ul>
@@ -1449,80 +1293,76 @@
                         <li><a href="#">Help Center</a></li>
                         <li><a href="#">Community</a></li>
                         <li><a href="#">Guides</a></li>
-                        <li><a href="#">API</a></li>
                     </ul>
                 </div>
                 <div class="footer-column">
                     <h3>Legal</h3>
                     <ul class="footer-links">
-                        <li><a href="#">Privacy Policy</a></li>
-                        <li><a href="#">Terms of Service</a></li>
-                        <li><a href="#">Cookie Policy</a></li>
+                        <li><a href="#">Privacy</a></li>
+                        <li><a href="#">Terms</a></li>
                         <li><a href="#">GDPR</a></li>
                     </ul>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2023 FinTrack. All rights reserved.</p>
+                <p>&copy; 2024 FinTrack. All rights reserved.</p>
             </div>
         </footer>
     </div>
+
     <div id="dashboardContainer" class="dashboard-container">
         <div class="container">
-            <!-- Add this back button -->
-            <div style="margin-bottom: 1.5rem;">
+            <div style="margin-bottom: 1rem;">
                 <a href="analytics.html" class="btn btn-outline">
                     <i class="fas fa-chart-bar"></i>
-                    View Analytics
+                    Analytics
                 </a>
             </div>
             
             <div class="dashboard-header">
-                <h1 class="dashboard-title">Financial Dashboard</h1>
-                <div style="display: flex; align-items: center; gap: 20px;">
+                <h1 class="dashboard-title">Dashboard</h1>
+                <div style="display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
                     <div class="wallet-selector-container">
-                        <label for="globalWalletSelect" style="font-size: 0.9rem; color: var(--gray); margin-right: 8px;">Current Wallet:</label>
-                        <select id="globalWalletSelect" style="padding: 8px 12px; border-radius: 8px; border: 1px solid var(--gray-light);">
-                            <option value="">Select a wallet</option>
+                        <label for="globalWalletSelect" style="font-size: 0.8rem; color: var(--gray); margin-bottom: 0;">Wallet:</label>
+                        <select id="globalWalletSelect">
+                            <option value="">Select wallet</option>
                         </select>
                     </div>
-                    <span id="userEmail" style="color: var(--gray);"></span>
+                    <span id="userEmail" style="color: var(--gray); font-size: 0.85rem;"></span>
                 </div>
             </div>
 
             <div class="dashboard-stats">
                 <div class="stat-card">
-                    <div class="stat-label">Total Income</div>
+                    <div class="stat-label">Income</div>
                     <div class="stat-value income" id="totalIncome">Rp 0</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-label">Total Expenses</div>
+                    <div class="stat-label">Expenses</div>
                     <div class="stat-value expense" id="totalExpenses">Rp 0</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-label">Current Wallet Balance</div>
+                    <div class="stat-label">Balance</div>
                     <div class="stat-value balance" id="currentWalletBalance">Rp 0</div>
                 </div>
             </div>
 
-            <!-- UPDATED: Added historical expenses tab -->
             <div class="dashboard-tabs">
                 <div class="tab active" data-tab="expenses">This Month</div>
-                <div class="tab" data-tab="historical">All Expenses</div>
+                <div class="tab" data-tab="historical">History</div>
                 <div class="tab" data-tab="income">Income</div>
                 <div class="tab" data-tab="wallets">Wallets</div>
                 <div class="tab" data-tab="categories">Categories</div>
             </div>
 
-            <!-- UPDATED: This Month Expenses Tab -->
             <div id="expensesTab" class="tab-content active">
                 <div class="form-card">
-                    <h2 class="form-title">Add New Expense</h2>
+                    <h2 class="form-title">Add Expense</h2>
                     <form id="expenseForm">
                         <input type="hidden" id="expenseId">
                         <div class="form-group">
-                            <label for="expenseDescription">Description</label>
-                            <input type="text" id="expenseDescription" placeholder="What did you spend on?" required>
+                            <label for="expenseDescription">What did you spend on?</label>
+                            <input type="text" id="expenseDescription" placeholder="e.g., Lunch, Gas" required>
                         </div>
                         <div class="form-row">
                             <div class="form-group">
@@ -1541,19 +1381,19 @@
                             <div class="form-group">
                                 <label for="expenseCategory">Category</label>
                                 <select id="expenseCategory" required>
-                                    <option value="">Select a category</option>
+                                    <option value="">Select category</option>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label for="expenseSubcategory">Subcategory</label>
                                 <select id="expenseSubcategory">
-                                    <option value="">Select a subcategory (optional)</option>
+                                    <option value="">Optional</option>
                                 </select>
                             </div>
                         </div>
                         <div class="form-row">
                             <button type="submit" class="btn btn-primary" id="expenseSubmitBtn">
-                                <i class="fas fa-minus-circle"></i> Add Expense
+                                <i class="fas fa-plus"></i> Add
                             </button>
                             <button type="button" class="btn btn-outline hidden" id="expenseCancelBtn">
                                 <i class="fas fa-times"></i> Cancel
@@ -1563,42 +1403,33 @@
                 </div>
                 
                 <div class="expense-list">
-                    <h2 class="form-title">This Month's Expenses</h2>
+                    <h2 class="form-title">This Month</h2>
                     <div id="expensesList">
                         <div class="expense-item">
-                            <div class="expense-details">
-                                <div>No expenses this month yet. Add your first expense!</div>
-                            </div>
+                            <div class="expense-details">No expenses yet</div>
                         </div>
                     </div>
                 </div>
             </div>
             
-            <!-- NEW: Historical Expenses Tab -->
             <div id="historicalTab" class="tab-content">
                 <div class="month-filter">
-                    <label for="monthSelect">Filter by Month:</label>
-                    <select id="monthSelect">
-                        <!-- Options will be populated by JavaScript -->
-                    </select>
+                    <label for="monthSelect">Month:</label>
+                    <select id="monthSelect"></select>
                     <label for="yearSelect">Year:</label>
-                    <select id="yearSelect">
-                        <!-- Options will be populated by JavaScript -->
-                    </select>
+                    <select id="yearSelect"></select>
                 </div>
                 
                 <div class="expense-summary">
-                    <h3>Total Expenses for <span id="selectedMonthYear">Current Month</span></h3>
+                    <h3>Total for <span id="selectedMonthYear">this month</span></h3>
                     <div class="expense-summary-amount" id="monthlyExpenseTotal">Rp 0</div>
                 </div>
                 
                 <div class="expense-list">
-                    <h2 class="form-title">Expenses for <span id="currentFilterDisplay">Current Month</span></h2>
+                    <h2 class="form-title">Expenses</h2>
                     <div id="historicalExpensesList">
                         <div class="expense-item">
-                            <div class="expense-details">
-                                <div>Select a month to view expenses</div>
-                            </div>
+                            <div class="expense-details">Select a month</div>
                         </div>
                     </div>
                 </div>
@@ -1606,12 +1437,12 @@
             
             <div id="incomeTab" class="tab-content">
                 <div class="form-card">
-                    <h2 class="form-title">Add New Income</h2>
+                    <h2 class="form-title">Add Income</h2>
                     <form id="incomeForm">
                         <input type="hidden" id="incomeId">
                         <div class="form-group">
-                            <label for="incomeDescription">Description</label>
-                            <input type="text" id="incomeDescription" placeholder="Where did this income come from?" required>
+                            <label for="incomeDescription">Source</label>
+                            <input type="text" id="incomeDescription" placeholder="e.g., Salary, Freelance" required>
                         </div>
                         <div class="form-row">
                             <div class="form-group">
@@ -1627,9 +1458,9 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="incomeSource">Income Source</label>
+                            <label for="incomeSource">Type</label>
                             <select id="incomeSource" required>
-                                <option value="">Select income source</option>
+                                <option value="">Select type</option>
                                 <option value="Salary">Salary</option>
                                 <option value="Freelance">Freelance</option>
                                 <option value="Investment">Investment</option>
@@ -1640,7 +1471,7 @@
                         </div>
                         <div class="form-row">
                             <button type="submit" class="btn btn-success" id="incomeSubmitBtn">
-                                <i class="fas fa-plus-circle"></i> Add Income
+                                <i class="fas fa-plus"></i> Add
                             </button>
                             <button type="button" class="btn btn-outline hidden" id="incomeCancelBtn">
                                 <i class="fas fa-times"></i> Cancel
@@ -1650,12 +1481,10 @@
                 </div>
                 
                 <div class="income-list">
-                    <h2 class="form-title">Recent Income</h2>
+                    <h2 class="form-title">Income</h2>
                     <div id="incomesList">
                         <div class="income-item">
-                            <div class="income-details">
-                                <div>No income yet. Add your first income!</div>
-                            </div>
+                            <div class="income-details">No income yet</div>
                         </div>
                     </div>
                 </div>
@@ -1663,16 +1492,16 @@
             
             <div id="walletsTab" class="tab-content">
                 <div class="form-card">
-                    <h2 class="form-title">Add New Wallet</h2>
+                    <h2 class="form-title">Add Wallet</h2>
                     <form id="walletForm">
                         <input type="hidden" id="walletId">
                         <div class="form-group">
                             <label for="walletName">Wallet Name</label>
-                            <input type="text" id="walletName" placeholder="e.g., Cash, Bank Account, Credit Card" required>
+                            <input type="text" id="walletName" placeholder="e.g., Cash, Bank Account" required>
                         </div>
                         <div class="form-row">
                             <button type="submit" class="btn btn-primary" id="walletSubmitBtn">
-                                <i class="fas fa-plus-circle"></i> Add Wallet
+                                <i class="fas fa-plus"></i> Add
                             </button>
                             <button type="button" class="btn btn-outline hidden" id="walletCancelBtn">
                                 <i class="fas fa-times"></i> Cancel
@@ -1682,12 +1511,10 @@
                 </div>
                 
                 <div class="wallet-list">
-                    <h2 class="form-title">Your Wallets</h2>
+                    <h2 class="form-title">My Wallets</h2>
                     <div id="walletsList">
                         <div class="wallet-item">
-                            <div class="wallet-details">
-                                <div>No wallets yet. Add your first wallet!</div>
-                            </div>
+                            <div class="wallet-details">No wallets yet</div>
                         </div>
                     </div>
                 </div>
@@ -1695,11 +1522,11 @@
             
             <div id="categoriesTab" class="tab-content">
                 <div class="form-card">
-                    <div class="form-title">Add New Category</div>
+                    <div class="form-title">Add Category</div>
                     <form id="categoryForm">
                         <input type="hidden" id="categoryId">
                         <div class="form-group">
-                            <label for="categoryType">Category Type</label>
+                            <label for="categoryType">Type</label>
                             <select id="categoryType" required>
                                 <option value="">Select type</option>
                                 <option value="main">Main Category</option>
@@ -1707,18 +1534,18 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="categoryName">Category Name</label>
-                            <input type="text" id="categoryName" placeholder="e.g., Food, Transportation" required>
+                            <label for="categoryName">Name</label>
+                            <input type="text" id="categoryName" placeholder="e.g., Food, Transport" required>
                         </div>
                         <div class="form-group hidden" id="parentCategoryGroup">
                             <label for="parentCategory">Parent Category</label>
                             <select id="parentCategory">
-                                <option value="">Select a parent category</option>
+                                <option value="">Select parent</option>
                             </select>
                         </div>
                         <div class="form-row">
                             <button type="submit" class="btn btn-primary" id="categorySubmitBtn">
-                                <i class="fas fa-plus-circle"></i> Add Category
+                                <i class="fas fa-plus"></i> Add
                             </button>
                             <button type="button" class="btn btn-outline hidden" id="categoryCancelBtn">
                                 <i class="fas fa-times"></i> Cancel
@@ -1728,12 +1555,10 @@
                 </div>
                 
                 <div class="category-list">
-                    <h2 class="form-title">Your Categories</h2>
+                    <h2 class="form-title">Categories</h2>
                     <div id="categoriesList">
                         <div class="category-item">
-                            <div class="category-details">
-                                <div>No categories yet. Add your first category!</div>
-                            </div>
+                            <div class="category-details">No categories yet</div>
                         </div>
                     </div>
                 </div>
@@ -1748,17 +1573,17 @@
                     <i class="fas fa-times"></i>
                 </button>
                 <h2 class="modal-title">Add Subcategory</h2>
-                <p class="modal-subtitle">Create a new subcategory</p>
+                <p class="modal-subtitle">Quick add</p>
             </div>
             <div class="modal-body">
                 <form id="subcategoryForm">
                     <div class="form-group">
-                        <label for="subcategoryName">Subcategory Name</label>
-                        <input type="text" id="subcategoryName" placeholder="e.g., Groceries, Restaurants" required>
+                        <label for="subcategoryName">Name</label>
+                        <input type="text" id="subcategoryName" placeholder="e.g., Groceries" required>
                     </div>
                     <input type="hidden" id="parentCategoryId">
-                    <button type="submit" class="btn btn-primary" style="width: 100%; padding: 14px;">
-                        <i class="fas fa-plus-circle"></i> Add Subcategory
+                    <button type="submit" class="btn btn-primary" style="width: 100%; padding: 12px;">
+                        <i class="fas fa-plus"></i> Add
                     </button>
                 </form>
             </div>
@@ -1767,20 +1592,20 @@
 
     <div class="modal-overlay" id="deleteModal">
         <div class="modal">
-            <div class="modal-header" style="background: var(--danger);">
+            <div class="modal-header" style="background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);">
                 <button class="modal-close" id="closeDeleteModal">
                     <i class="fas fa-times"></i>
                 </button>
-                <h2 class="modal-title">Confirm Deletion</h2>
-                <p class="modal-subtitle">This action cannot be undone</p>
+                <h2 class="modal-title">Delete?</h2>
+                <p class="modal-subtitle">This can't be undone</p>
             </div>
             <div class="modal-body">
-                <p id="deleteMessage">Are you sure you want to delete this item?</p>
-                <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <p id="deleteMessage" style="margin-bottom: 1.5rem; font-size: 0.95rem;"></p>
+                <div style="display: flex; gap: 10px;">
                     <button class="btn btn-outline" id="cancelDeleteBtn" style="flex: 1;">
                         <i class="fas fa-times"></i> Cancel
                     </button>
-                    <button class="btn btn-danger" id="confirmDeleteBtn" style="flex: 1; background: var(--danger);">
+                    <button class="btn" id="confirmDeleteBtn" style="flex: 1; background: #EF4444; color: white;">
                         <i class="fas fa-trash"></i> Delete
                     </button>
                 </div>
@@ -1794,34 +1619,34 @@
                 <button class="modal-close" id="closeInsufficientBalanceModal">
                     <i class="fas fa-times"></i>
                 </button>
-                <h2 class="modal-title">Insufficient Balance</h2>
-                <p class="modal-subtitle">Your wallet doesn't have enough funds</p>
+                <h2 class="modal-title">Not Enough Balance</h2>
+                <p class="modal-subtitle">Need more funds</p>
             </div>
             <div class="modal-body">
                 <div class="balance-warning">
                     <i class="fas fa-exclamation-triangle"></i>
                     <div>
-                        <h3>Expense exceeds wallet balance</h3>
-                        <p>You cannot add this expense because your wallet doesn't have sufficient funds.</p>
+                        <h3 style="font-size: 0.95rem; margin-bottom: 0.3rem;">Insufficient funds</h3>
+                        <p style="font-size: 0.85rem; opacity: 0.9;">Add income to proceed</p>
                     </div>
                 </div>
                 <div class="balance-details">
                     <div class="balance-item">
-                        <span>Expense Amount:</span>
+                        <span>Expense:</span>
                         <strong id="expenseAmountDetail">Rp 0</strong>
                     </div>
                     <div class="balance-item">
-                        <span>Current Wallet Balance:</span>
+                        <span>Balance:</span>
                         <strong id="walletBalanceDetail">Rp 0</strong>
                     </div>
                     <div class="balance-item">
-                        <span>Remaining After Expense:</span>
+                        <span>After:</span>
                         <strong id="remainingBalanceDetail" style="color: var(--danger);">Rp 0</strong>
                     </div>
                 </div>
                 <div style="display: flex; gap: 10px;">
                     <button class="btn btn-success" id="addFundsBtn" style="flex: 1;">
-                        <i class="fas fa-plus-circle"></i> Add Income
+                        <i class="fas fa-plus"></i> Add Income
                     </button>
                     <button class="btn btn-outline" id="cancelExpenseBtn" style="flex: 1;">
                         <i class="fas fa-times"></i> Cancel
@@ -1837,32 +1662,32 @@
                 <button class="modal-close" id="closeSignupModal">
                     <i class="fas fa-times"></i>
                 </button>
-                <h2 class="modal-title">Create Account</h2>
-                <p class="modal-subtitle">Start your journey to financial clarity</p>
+                <h2 class="modal-title">Join FinTrack</h2>
+                <p class="modal-subtitle">Start tracking today</p>
             </div>
             <div class="modal-body">
                 <form id="signupForm">
                     <div class="form-group">
-                        <label for="signupEmail">Email Address</label>
-                        <input type="email" id="signupEmail" placeholder="Enter your email" required>
+                        <label for="signupEmail">Email</label>
+                        <input type="email" id="signupEmail" placeholder="your@email.com" required>
                     </div>
                     <div class="form-group">
                         <label for="signupPassword">Password</label>
-                        <input type="password" id="signupPassword" placeholder="Create a password" required>
+                        <input type="password" id="signupPassword" placeholder="Create password" required>
                         <div class="password-strength">
                             <div class="strength-bar" id="passwordStrength"></div>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="confirmPassword">Confirm Password</label>
-                        <input type="password" id="confirmPassword" placeholder="Confirm your password" required>
+                        <label for="confirmPassword">Confirm</label>
+                        <input type="password" id="confirmPassword" placeholder="Confirm password" required>
                     </div>
-                    <button type="submit" class="btn btn-primary" style="width: 100%; padding: 14px;">
+                    <button type="submit" class="btn btn-primary" style="width: 100%; padding: 12px;">
                         <i class="fas fa-user-plus"></i> Create Account
                     </button>
                 </form>
-                <div style="text-align: center; margin-top: 20px;">
-                    <p>Already have an account? <a href="#" id="showLoginFromSignup" style="color: var(--primary); text-decoration: none; font-weight: 600;">Sign in here</a></p>
+                <div style="text-align: center; margin-top: 1.2rem;">
+                    <p style="font-size: 0.9rem;">Already have an account? <a href="#" id="showLoginFromSignup" style="color: var(--primary); text-decoration: none; font-weight: 600;">Sign in</a></p>
                 </div>
             </div>
         </div>
@@ -1875,36 +1700,36 @@
                     <i class="fas fa-times"></i>
                 </button>
                 <h2 class="modal-title">Welcome Back</h2>
-                <p class="modal-subtitle">Sign in to your account</p>
+                <p class="modal-subtitle">Sign in to continue</p>
             </div>
             <div class="modal-body">
                 <form id="loginForm">
                     <div class="form-group">
-                        <label for="loginEmail">Email Address</label>
-                        <input type="email" id="loginEmail" placeholder="Enter your email" required>
+                        <label for="loginEmail">Email</label>
+                        <input type="email" id="loginEmail" placeholder="your@email.com" required>
                     </div>
                     <div class="form-group">
                         <label for="loginPassword">Password</label>
-                        <input type="password" id="loginPassword" placeholder="Enter your password" required>
+                        <input type="password" id="loginPassword" placeholder="Enter password" required>
                     </div>
-                    <button type="submit" class="btn btn-primary" style="width: 100%; padding: 14px;">
+                    <button type="submit" class="btn btn-primary" style="width: 100%; padding: 12px;">
                         <i class="fas fa-sign-in-alt"></i> Sign In
                     </button>
                 </form>
-                <div style="text-align: center; margin-top: 20px;">
-                    <p>Don't have an account? <a href="#" id="showSignupFromLogin" style="color: var(--primary); text-decoration: none; font-weight: 600;">Sign up here</a></p>
+                <div style="text-align: center; margin-top: 1.2rem;">
+                    <p style="font-size: 0.9rem;">Don't have an account? <a href="#" id="showSignupFromLogin" style="color: var(--primary); text-decoration: none; font-weight: 600;">Join now</a></p>
                 </div>
             </div>
         </div>
     </div>
 
-    <div id="alertContainer" style="position: fixed; top: 100px; right: 20px; z-index: 3000; max-width: 400px;"></div>
+    <div id="alertContainer" style="position: fixed; top: 80px; right: 12px; z-index: 3000; max-width: 350px;"></div>
+
     <script>
         // Supabase Configuration
         const SUPABASE_URL = 'https://slgzgaojmgzjhtuaptod.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNsZ3pnYW9qbWd6amh0dWFwdG9kIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMyNzQyMzMsImV4cCI6MjA3ODg1MDIzM30.aD9cjbekiufRaatuNaAEP2uD2uU7ggpPor6jtSGM-F4';
 
-        // Initialize Supabase client
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         // DOM Elements
@@ -1971,13 +1796,12 @@
         const addFundsBtn = document.getElementById('addFundsBtn');
         const cancelExpenseBtn = document.getElementById('cancelExpenseBtn');
 
-        // NEW: Historical expenses elements
+        // Historical expenses elements
         const monthSelect = document.getElementById('monthSelect');
         const yearSelect = document.getElementById('yearSelect');
         const historicalExpensesList = document.getElementById('historicalExpensesList');
         const monthlyExpenseTotal = document.getElementById('monthlyExpenseTotal');
         const selectedMonthYear = document.getElementById('selectedMonthYear');
-        const currentFilterDisplay = document.getElementById('currentFilterDisplay');
 
         // Data storage
         let expenses = [];
@@ -2004,22 +1828,12 @@
             return `Rp ${amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}`;
         }
 
-        // Helper function to check if a string is a valid UUID
         function isValidUUID(str) {
             if (!str) return false;
             const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
             return uuidRegex.test(str);
         }
 
-        // ADD THIS MISSING FUNCTION - Refresh all category-related UI elements
-        async function refreshAllCategoryUI() {
-            console.log('Refreshing all category UI elements...');
-            await loadCategories(); // This will update the categories list and dropdowns
-            updateCategoryDropdowns(); // Ensure dropdowns are updated
-            loadParentCategories(); // Update parent category dropdown if needed
-        }        
-
-        // Calculate wallet balance - purely based on income minus expenses
         function calculateWalletBalance(walletId) {
             const walletExpenses = expenses.filter(expense => expense.walletId === walletId);
             const totalExpenses = walletExpenses.reduce((sum, expense) => sum + expense.amount, 0);
@@ -2027,44 +1841,21 @@
             const walletIncome = incomes.filter(income => income.walletId === walletId);
             const totalIncome = walletIncome.reduce((sum, income) => sum + income.amount, 0);
             
-            // Simple calculation: income minus expenses
             return totalIncome - totalExpenses;
         }
 
-        // ADD THIS FUNCTION - Delete confirmation
         function confirmDelete(type, id, name) {
             itemToDelete = id;
             deleteType = type;
-            
-            let itemType = '';
-            switch(type) {
-                case 'expense':
-                    itemType = 'expense';
-                    break;
-                case 'income':
-                    itemType = 'income';
-                    break;
-                case 'wallet':
-                    itemType = 'wallet';
-                    break;
-                case 'category':
-                    itemType = 'category';
-                    break;
-            }
-            
-            deleteMessage.textContent = `Are you sure you want to delete ${itemType} "${name}"? This action cannot be undone.`;
+            deleteMessage.textContent = `Delete "${name}"? This can't be undone.`;
             deleteModal.classList.add('active');
         }
 
-        // ADD THIS FUNCTION - Refresh all category-related UI elements
         async function refreshAllCategoryUI() {
-            console.log('Refreshing all category UI elements...');
-            await loadCategories(); // This will update the categories list and dropdowns
-            updateCategoryDropdowns(); // Ensure dropdowns are updated
-            loadParentCategories(); // Update parent category dropdown if needed
-        }        
+            await loadCategories();
+            updateCategoryDropdowns();
+        }
 
-        // Initialize the app
         function initApp() {
             logoutBtn.classList.add('hidden');
             loginBtn.classList.remove('hidden');
@@ -2092,62 +1883,6 @@
         closeDeleteModal.addEventListener('click', () => deleteModal.classList.remove('active'));
         cancelDeleteBtn.addEventListener('click', () => deleteModal.classList.remove('active'));
 
-        // ADD THE DELETE CONFIRMATION EVENT LISTENER RIGHT HERE:
-    const mainCategories = categories.filter(c => c.type === 'main');
-    const subcategories = categories.filter(c => c.type === 'sub');
-    
-    mainCategories.forEach(category => {
-        const categoryItem = document.createElement('div');
-        categoryItem.className = 'category-item';
-        categoryItem.innerHTML = `
-            <div class="category-details">
-                <div><strong>${category.name}</strong></div>
-            </div>
-            <div style="display: flex; align-items: center; gap: 10px;">
-                <div class="category-actions">
-                    <button class="add-subcategory-btn" data-id="${category.id}">
-                        <i class="fas fa-plus"></i> Add Subcategory
-                    </button>
-                </div>
-                <div class="action-buttons">
-                    <button class="edit-btn" onclick="editCategory('${category.id}')">
-                        <i class="fas fa-edit"></i>
-                    </button>
-                    <button class="delete-btn" onclick="confirmDelete('category', '${category.id}', '${category.name}')">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </div>
-            </div>
-        `;
-        categoriesList.appendChild(categoryItem);
-        
-        const addSubcategoryBtn = categoryItem.querySelector('.add-subcategory-btn');
-        addSubcategoryBtn.addEventListener('click', () => {
-            openSubcategoryModal(category.id);
-        });
-        
-        const categorySubcategories = subcategories.filter(sc => sc.parentId === category.id);
-        categorySubcategories.forEach(subcategory => {
-            const subcategoryItem = document.createElement('div');
-            subcategoryItem.className = 'category-item subcategory-item';
-            subcategoryItem.innerHTML = `
-                <div class="category-details">
-                    <div>${subcategory.name}</div>
-                </div>
-                <div class="action-buttons">
-                    <button class="edit-btn" onclick="editCategory('${subcategory.id}')">
-                        <i class="fas fa-edit"></i>
-                    </button>
-                    <button class="delete-btn" onclick="confirmDelete('category', '${subcategory.id}', '${subcategory.name}')">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </div>
-            `;
-            categoriesList.appendChild(subcategoryItem);
-        });
-    });
-
-
         showSignupFromLogin.addEventListener('click', (e) => {
             e.preventDefault();
             loginModal.classList.remove('active');
@@ -2160,7 +1895,6 @@
             loginModal.classList.add('active');
         });
 
-        // Close modal when clicking outside
         window.addEventListener('click', (e) => {
             if (e.target === signupModal) signupModal.classList.remove('active');
             if (e.target === loginModal) loginModal.classList.remove('active');
@@ -2169,12 +1903,10 @@
             if (e.target === deleteModal) deleteModal.classList.remove('active');
         });
 
-        // Insufficient balance modal buttons
         addFundsBtn.addEventListener('click', () => {
             insufficientBalanceModal.classList.remove('active');
-            // Switch to income tab to add funds
             document.querySelector('[data-tab="income"]').click();
-            showAlert('Please add income to your wallet first', 'warning');
+            showAlert('Add income to your wallet', 'warning');
         });
 
         cancelExpenseBtn.addEventListener('click', () => {
@@ -2182,7 +1914,6 @@
             pendingExpense = null;
         });
 
-        // Password strength indicator
         signupPassword.addEventListener('input', function() {
             const password = this.value;
             let strength = 0;
@@ -2211,36 +1942,28 @@
         categoryForm.addEventListener('submit', handleAddCategory);
         subcategoryForm.addEventListener('submit', handleAddSubcategory);
 
-        // Cancel buttons
         expenseCancelBtn.addEventListener('click', resetExpenseForm);
         incomeCancelBtn.addEventListener('click', resetIncomeForm);
         walletCancelBtn.addEventListener('click', resetWalletForm);
         categoryCancelBtn.addEventListener('click', resetCategoryForm);
 
-        // Global wallet selector event listener - UPDATED
         if (globalWalletSelect) {
             globalWalletSelect.addEventListener('change', async function() {
                 currentWalletId = this.value;
-                console.log('Wallet changed to:', currentWalletId);
                 
                 if (currentWalletId) {
                     await loadExpenses();
                     await loadIncomes();
                     updateStats();
                 } else {
-                    // If no wallet selected, clear everything
                     document.getElementById('expensesList').innerHTML = `
                         <div class="expense-item">
-                            <div class="expense-details">
-                                <div>Please select a wallet to view expenses</div>
-                            </div>
+                            <div class="expense-details">Select a wallet</div>
                         </div>
                     `;
                     document.getElementById('incomesList').innerHTML = `
                         <div class="income-item">
-                            <div class="income-details">
-                                <div>Please select a wallet to view income</div>
-                            </div>
+                            <div class="income-details">Select a wallet</div>
                         </div>
                     `;
                     updateStats();
@@ -2248,7 +1971,6 @@
             });
         }
 
-        // NEW: Event listeners for month/year filters - with prevention of initial recursion
         monthSelect.addEventListener('change', function() {
             if (!isProgrammaticChange) {
                 updateHistoricalExpensesView();
@@ -2261,34 +1983,23 @@
             }
         });
 
-        // Tab switching setup
         function setupTabs() {
             tabs.forEach(tab => {
                 tab.addEventListener('click', () => {
                     const tabId = tab.getAttribute('data-tab');
                     
-                    // Update active tab
                     tabs.forEach(t => t.classList.remove('active'));
                     tab.classList.add('active');
                     
-                    // Show corresponding content
                     tabContents.forEach(content => {
                         content.classList.remove('active');
                         if (content.id === `${tabId}Tab`) {
                             content.classList.add('active');
                             
-                            // If switching to expenses tab, update current month view
                             if (tabId === 'expenses') {
                                 updateCurrentMonthExpenses();
-                            }
-                            // If switching to historical tab, update historical view
-                            else if (tabId === 'historical') {
+                            } else if (tabId === 'historical') {
                                 updateHistoricalExpensesView();
-                            }
-                            // If switching to expenses tab, ensure category dropdowns are updated
-                            else if (tabId === 'expenses') {
-                                console.log('Switched to expenses tab, updating category dropdowns...');
-                                updateCategoryDropdowns();
                             }
                         }
                     });
@@ -2296,7 +2007,6 @@
             });
         }
 
-        // Currency input setup
         function setupCurrencyInputs() {
             const expenseAmount = document.getElementById('expenseAmount');
             const incomeAmount = document.getElementById('incomeAmount');
@@ -2310,7 +2020,6 @@
             });
         }
 
-        // Category type toggle setup
         function setupCategoryTypeToggle() {
             categoryType.addEventListener('change', function() {
                 if (this.value === 'sub') {
@@ -2322,11 +2031,11 @@
             });
         }
 
-        // Open subcategory modal
         function openSubcategoryModal(parentId) {
             document.getElementById('parentCategoryId').value = parentId;
             subcategoryModal.classList.add('active');
         }
+
         // Authentication Functions
         async function handleSignup(e) {
             e.preventDefault();
@@ -2336,12 +2045,12 @@
             const confirmPassword = document.getElementById('confirmPassword').value;
             
             if (!email || !password) {
-                showAlert('Please enter both email and password', 'error');
+                showAlert('Please enter email and password', 'error');
                 return;
             }
             
             if (password !== confirmPassword) {
-                showAlert('Passwords do not match', 'error');
+                showAlert('Passwords don\'t match', 'error');
                 return;
             }
             
@@ -2358,25 +2067,19 @@
                     showAlert(error.message, 'error');
                 } else {
                     if (data.user && data.session) {
-                        // User is immediately confirmed (might be due to Supabase settings)
-                        showAlert('Account created successfully! Welcome to FinTrack.', 'success');
+                        showAlert('Account created!', 'success');
                         signupModal.classList.remove('active');
                         signupForm.reset();
                         passwordStrength.className = 'strength-bar';
                         showDashboard(email);
                     } else {
-                        // Email confirmation required
-                        showAlert('Account created successfully! Please check your email for verification link.', 'success');
+                        showAlert('Check your email to verify', 'success');
                         signupModal.classList.remove('active');
                         signupForm.reset();
-                        passwordStrength.className = 'strength-bar';
-                        // Don't show dashboard until email is confirmed
                     }
                 }
             } catch (error) {
-                console.error('Signup error:', error);
-                // Don't automatically fall back to demo mode on error
-                showAlert('Error creating account. Please try again.', 'error');
+                showAlert('Signup error', 'error');
             }
         }
         
@@ -2387,7 +2090,7 @@
             const password = document.getElementById('loginPassword').value;
             
             if (!email || !password) {
-                showAlert('Please enter both email and password', 'error');
+                showAlert('Please enter email and password', 'error');
                 return;
             }
             
@@ -2395,52 +2098,39 @@
                 const { data, error } = await supabase.auth.signInWithPassword({ email, password });
                 
                 if (error) {
-                    if (error.message.includes('Email not confirmed')) {
-                        showAlert('Please check your email and confirm your account before signing in.', 'error');
-                    } else {
-                        showAlert(error.message, 'error');
-                    }
+                    showAlert(error.message, 'error');
                 } else {
-                    showAlert('Login successful!', 'success');
+                    showAlert('Welcome back!', 'success');
                     loginModal.classList.remove('active');
                     showDashboard(email);
                 }
             } catch (error) {
-                console.error('Login error:', error);
-                showAlert('Error signing in. Please try again.', 'error');
+                showAlert('Login error', 'error');
             }
         }
         
         async function handleLogout() {
             try {
-                const { error } = await supabase.auth.signOut();
-                if (error) showAlert(error.message, 'error');
-                else showAlert('Logged out successfully', 'success');
+                await supabase.auth.signOut();
+                showAlert('Logged out', 'success');
                 hideDashboard();
             } catch (error) {
-                console.error('Logout error:', error);
                 hideDashboard();
             }
         }
 
-        // Check authentication state
         async function checkAuthState() {
             try {
                 const { data: { user } } = await supabase.auth.getUser();
-                if (user) {
-                    // Check if email is confirmed using the auth user data
-                    if (user.email_confirmed_at) {
-                        showDashboard(user.email);
-                    } else {
-                        showAlert('Please confirm your email address before accessing the dashboard.', 'warning');
-                        // You might want to sign them out here, or show a confirmation reminder
-                        await supabase.auth.signOut();
-                    }
+                if (user && user.email_confirmed_at) {
+                    showDashboard(user.email);
+                } else if (user) {
+                    showAlert('Verify your email first', 'warning');
+                    await supabase.auth.signOut();
                 } else {
                     hideDashboard();
                 }
             } catch (error) {
-                console.error('Auth state check error:', error);
                 hideDashboard();
             }
         }
@@ -2455,19 +2145,17 @@
             if (email) userEmail.textContent = email;
             
             await loadWallets();
-            await loadCategories(); // This will call updateCategoryDropdowns internally
+            await loadCategories();
             await loadExpenses();
             await loadIncomes();
             updateStats();
             
-            // Set the first wallet as current if none is selected
             if (wallets.length > 0 && !currentWalletId) {
                 currentWalletId = wallets[0].id;
                 updateGlobalWalletSelector();
                 updateStats();
             }
             
-            // Force update category dropdowns one more time to ensure they're populated
             updateCategoryDropdowns();
         }
 
@@ -2479,34 +2167,24 @@
             logoutBtn.classList.add('hidden');
         }
 
-        // NEW: Expense view functions
         async function loadExpenses() {
             expenses = await loadExpensesFromSupabase();
-            
-            // Update both current month and historical views
             updateCurrentMonthExpenses();
             updateHistoricalExpensesView();
-            
-            // Also update the month/year dropdowns
             updateMonthYearFilters();
         }
 
-        // NEW: Function to update current month expenses view
         function updateCurrentMonthExpenses() {
             const expensesList = document.getElementById('expensesList');
-            
-            // Get current month and year
             const now = new Date();
             const currentMonth = now.getMonth();
             const currentYear = now.getFullYear();
             
-            // Filter expenses for current wallet and current month
             let displayExpenses = expenses;
             if (currentWalletId) {
                 displayExpenses = expenses.filter(expense => expense.walletId === currentWalletId);
             }
             
-            // Filter for current month
             displayExpenses = displayExpenses.filter(expense => {
                 const expenseDate = new Date(expense.date);
                 return expenseDate.getMonth() === currentMonth && 
@@ -2514,83 +2192,52 @@
             });
             
             if (displayExpenses.length === 0) {
-                expensesList.innerHTML = `
-                    <div class="expense-item">
-                        <div class="expense-details">
-                            <div>No expenses this month yet. Add your first expense!</div>
-                        </div>
-                    </div>
-                `;
+                expensesList.innerHTML = `<div class="expense-item"><div class="expense-details">No expenses yet</div></div>`;
                 return;
             }
             
             renderExpenseList(displayExpenses, expensesList);
         }
 
-        // NEW: Function to update historical expenses view
         function updateHistoricalExpensesView() {
             const selectedMonth = monthSelect.value;
             const selectedYear = yearSelect.value;
             
-            // If no selection, set defaults but don't recursively call
             if (!selectedMonth || !selectedYear) {
-                // Set to current month/year by default but don't trigger recursive call
                 const now = new Date();
                 monthSelect.value = now.getMonth().toString();
                 yearSelect.value = now.getFullYear().toString();
-                
-                // Update the display with the new values without recursion
-                const monthNames = ["January", "February", "March", "April", "May", "June",
-                    "July", "August", "September", "October", "November", "December"];
-                selectedMonthYear.textContent = `${monthNames[now.getMonth()]} ${now.getFullYear()}`;
-                currentFilterDisplay.textContent = `${monthNames[now.getMonth()]} ${now.getFullYear()}`;
-                
-                // Show empty state
-                historicalExpensesList.innerHTML = `
-                    <div class="no-expenses-message">
-                        No expenses found for ${monthNames[now.getMonth()]} ${now.getFullYear()}
-                    </div>
-                `;
+                historicalExpensesList.innerHTML = `<div class="no-expenses-message">Select a month</div>`;
                 monthlyExpenseTotal.textContent = formatDisplayCurrency(0);
                 return;
             }
             
-            // Filter expenses for current wallet and selected month/year
             let displayExpenses = expenses;
             if (currentWalletId) {
                 displayExpenses = expenses.filter(expense => expense.walletId === currentWalletId);
             }
             
-            // Filter for selected month/year
             displayExpenses = displayExpenses.filter(expense => {
                 const expenseDate = new Date(expense.date);
                 return expenseDate.getMonth() === parseInt(selectedMonth) && 
                     expenseDate.getFullYear() === parseInt(selectedYear);
             });
             
-            // Update the display text
             const monthNames = ["January", "February", "March", "April", "May", "June",
                 "July", "August", "September", "October", "November", "December"];
             selectedMonthYear.textContent = `${monthNames[selectedMonth]} ${selectedYear}`;
-            currentFilterDisplay.textContent = `${monthNames[selectedMonth]} ${selectedYear}`;
             
-            // Calculate and display total for the month
             const monthlyTotal = displayExpenses.reduce((sum, expense) => sum + expense.amount, 0);
             monthlyExpenseTotal.textContent = formatDisplayCurrency(monthlyTotal);
             
             if (displayExpenses.length === 0) {
-                historicalExpensesList.innerHTML = `
-                    <div class="no-expenses-message">
-                        No expenses found for ${monthNames[selectedMonth]} ${selectedYear}
-                    </div>
-                `;
+                historicalExpensesList.innerHTML = `<div class="no-expenses-message">No expenses</div>`;
                 return;
             }
             
             renderExpenseList(displayExpenses, historicalExpensesList);
         }
 
-        // NEW: Function to render expense list (reusable)
         function renderExpenseList(expensesArray, containerElement) {
             containerElement.innerHTML = '';
             const sortedExpenses = [...expensesArray].sort((a, b) => new Date(b.date) - new Date(a.date));
@@ -2608,14 +2255,14 @@
                 expenseItem.className = 'expense-item';
                 expenseItem.innerHTML = `
                     <div class="expense-details">
-                        <div>${expense.description}</div>
-                        <div style="font-size: 0.9rem; color: var(--gray);">
-                            ${expenseDate} • ${wallet ? wallet.name : 'Unknown Wallet'}
+                        <div style="font-weight: 500;">${expense.description}</div>
+                        <div style="font-size: 0.8rem; color: var(--gray);">
+                            ${expenseDate} • ${wallet ? wallet.name : 'Unknown'}
                         </div>
                     </div>
-                    <div style="display: flex; align-items: center; gap: 10px;">
-                        <div class="expense-amount">
-                            ${formatDisplayCurrency(expense.amount)}
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <div>
+                            <div class="expense-amount">${formatDisplayCurrency(expense.amount)}</div>
                             <span class="expense-category">${categoryText}</span>
                         </div>
                         <div class="action-buttons">
@@ -2632,25 +2279,19 @@
             });
         }
 
-        // NEW: Function to update month/year filter dropdowns
-        // Also update the updateMonthYearFilters function to use the flag:
         function updateMonthYearFilters() {
-            isProgrammaticChange = true; // Set flag to prevent event recursion
+            isProgrammaticChange = true;
             
-            // Clear existing options
             monthSelect.innerHTML = '';
             yearSelect.innerHTML = '';
             
-            // Get unique years from expenses
             const years = [...new Set(expenses.map(expense => new Date(expense.date).getFullYear()))];
-            years.sort((a, b) => b - a); // Sort descending (newest first)
+            years.sort((a, b) => b - a);
             
-            // If no expenses, add current year
             if (years.length === 0) {
                 years.push(new Date().getFullYear());
             }
             
-            // Add year options
             years.forEach(year => {
                 const option = document.createElement('option');
                 option.value = year;
@@ -2658,7 +2299,6 @@
                 yearSelect.appendChild(option);
             });
             
-            // Add month options
             const monthNames = ["January", "February", "March", "April", "May", "June",
                 "July", "August", "September", "October", "November", "December"];
             
@@ -2669,23 +2309,20 @@
                 monthSelect.appendChild(option);
             });
             
-            // Set to current month/year by default
             const now = new Date();
             monthSelect.value = now.getMonth().toString();
             yearSelect.value = now.getFullYear().toString();
             
-            isProgrammaticChange = false; // Reset flag
+            isProgrammaticChange = false;
         }
-        // ... (Supabase data functions remain the same as in the original file) ...
 
-        // Supabase Data Functions
+        // Supabase Data Functions (simplified versions)
         async function saveExpense(expense) {
             try {
                 const { data: { user } } = await supabase.auth.getUser();
-                if (!user) throw new Error('User not authenticated');
+                if (!user) throw new Error('Not authenticated');
                 
                 if (expense.id) {
-                    // Update existing expense
                     const { data, error } = await supabase
                         .from('expenses')
                         .update({
@@ -2702,7 +2339,6 @@
                     if (error) throw error;
                     return data[0];
                 } else {
-                    // Create new expense
                     const { data, error } = await supabase
                         .from('expenses')
                         .insert([{
@@ -2721,33 +2357,16 @@
                 }
             } catch (error) {
                 console.error('Error saving expense:', error);
-                const expenses = JSON.parse(localStorage.getItem('fintrack_expenses') || '[]');
-                
-                if (expense.id) {
-                    // Update existing
-                    const index = expenses.findIndex(e => e.id === expense.id);
-                    if (index !== -1) {
-                        expenses[index] = expense;
-                    }
-                } else {
-                    // Create new
-                    expense.id = expense.id || Date.now().toString();
-                    expenses.push(expense);
-                }
-                
-                localStorage.setItem('fintrack_expenses', JSON.stringify(expenses));
                 return expense;
             }
         }
 
-        // Save income to Supabase or localStorage
         async function saveIncome(income) {
             try {
                 const { data: { user } } = await supabase.auth.getUser();
-                if (!user) throw new Error('User not authenticated');
+                if (!user) throw new Error('Not authenticated');
                 
                 if (income.id) {
-                    // Update existing income
                     const { data, error } = await supabase
                         .from('incomes')
                         .update({
@@ -2763,7 +2382,6 @@
                     if (error) throw error;
                     return data[0];
                 } else {
-                    // Create new income
                     const { data, error } = await supabase
                         .from('incomes')
                         .insert([{
@@ -2781,21 +2399,6 @@
                 }
             } catch (error) {
                 console.error('Error saving income:', error);
-                const incomes = JSON.parse(localStorage.getItem('fintrack_incomes') || '[]');
-                
-                if (income.id) {
-                    // Update existing
-                    const index = incomes.findIndex(i => i.id === income.id);
-                    if (index !== -1) {
-                        incomes[index] = income;
-                    }
-                } else {
-                    // Create new
-                    income.id = income.id || `income-${Date.now()}`;
-                    incomes.push(income);
-                }
-                
-                localStorage.setItem('fintrack_incomes', JSON.stringify(incomes));
                 return income;
             }
         }
@@ -2803,28 +2406,21 @@
         async function saveWallet(wallet) {
             try {
                 const { data: { user } } = await supabase.auth.getUser();
-                if (!user) throw new Error('User not authenticated');
+                if (!user) throw new Error('Not authenticated');
                 
                 if (wallet.id) {
-                    // Update existing wallet
                     const { data, error } = await supabase
                         .from('wallets')
-                        .update({
-                            name: wallet.name
-                        })
+                        .update({ name: wallet.name })
                         .eq('id', wallet.id)
                         .select();
                     
                     if (error) throw error;
                     return data[0];
                 } else {
-                    // Create new wallet
                     const { data, error } = await supabase
                         .from('wallets')
-                        .insert([{
-                            name: wallet.name,
-                            user_id: user.id
-                        }])
+                        .insert([{ name: wallet.name, user_id: user.id }])
                         .select();
                     
                     if (error) throw error;
@@ -2832,107 +2428,45 @@
                 }
             } catch (error) {
                 console.error('Error saving wallet:', error);
-                const wallets = JSON.parse(localStorage.getItem('fintrack_wallets') || '[]');
-                
-                if (wallet.id) {
-                    // Update existing
-                    const index = wallets.findIndex(w => w.id === wallet.id);
-                    if (index !== -1) {
-                        wallets[index] = wallet;
-                    }
-                } else {
-                    // Create new
-                    wallet.id = wallet.id || `wallet-${Date.now()}`;
-                    wallets.push(wallet);
-                }
-                
-                localStorage.setItem('fintrack_wallets', JSON.stringify(wallets));
                 return wallet;
             }
         }
 
-        // Updated saveCategory function - let Supabase handle ID generation
         async function saveCategory(category) {
             try {
                 const { data: { user } } = await supabase.auth.getUser();
-                if (!user) throw new Error('User not authenticated');
+                if (!user) throw new Error('Not authenticated');
                 
-                // Prepare the data for insertion
                 const categoryData = {
                     name: category.name,
                     type: category.type,
                     user_id: user.id
                 };
                 
-                // Only add parent_id if it exists and is a valid UUID
                 if (category.parentId && isValidUUID(category.parentId)) {
                     categoryData.parent_id = category.parentId;
                 }
                 
-                console.log('Saving to database:', categoryData);
-                
                 if (category.id) {
-                    // Update existing category
                     const { data, error } = await supabase
                         .from('categories')
                         .update(categoryData)
                         .eq('id', category.id)
                         .select();
                     
-                    if (error) {
-                        console.error('Supabase update error:', error);
-                        throw error;
-                    }
-                    
-                    console.log('Database response:', data);
-                    return {
-                        id: data[0].id,
-                        name: data[0].name,
-                        type: data[0].type,
-                        parentId: data[0].parent_id
-                    };
+                    if (error) throw error;
+                    return { id: data[0].id, name: data[0].name, type: data[0].type, parentId: data[0].parent_id };
                 } else {
-                    // Create new category
                     const { data, error } = await supabase
                         .from('categories')
                         .insert([categoryData])
                         .select();
                     
-                    if (error) {
-                        console.error('Supabase insert error:', error);
-                        throw error;
-                    }
-                    
-                    console.log('Database response:', data);
-                    
-                    // Return the saved category
-                    return {
-                        id: data[0].id,
-                        name: data[0].name,
-                        type: data[0].type,
-                        parentId: data[0].parent_id
-                    };
+                    if (error) throw error;
+                    return { id: data[0].id, name: data[0].name, type: data[0].type, parentId: data[0].parent_id };
                 }
             } catch (error) {
                 console.error('Error saving category:', error);
-                showAlert('Error saving category: ' + error.message, 'error');
-                
-                // Fallback to localStorage
-                const localCategories = JSON.parse(localStorage.getItem('fintrack_categories') || '[]');
-                
-                if (category.id) {
-                    // Update existing
-                    const index = localCategories.findIndex(c => c.id === category.id);
-                    if (index !== -1) {
-                        localCategories[index] = category;
-                    }
-                } else {
-                    // Create new
-                    category.id = category.id || Date.now().toString();
-                    localCategories.push(category);
-                }
-                
-                localStorage.setItem('fintrack_categories', JSON.stringify(localCategories));
                 return category;
             }
         }
@@ -2941,21 +2475,10 @@
         async function deleteExpense(id) {
             try {
                 const { data: { user } } = await supabase.auth.getUser();
-                if (!user) throw new Error('User not authenticated');
-                
-                const { error } = await supabase
-                    .from('expenses')
-                    .delete()
-                    .eq('id', id)
-                    .eq('user_id', user.id);
-                
+                const { error } = await supabase.from('expenses').delete().eq('id', id).eq('user_id', user.id);
                 if (error) throw error;
                 return true;
             } catch (error) {
-                console.error('Error deleting expense:', error);
-                const expenses = JSON.parse(localStorage.getItem('fintrack_expenses') || '[]');
-                const filteredExpenses = expenses.filter(expense => expense.id !== id);
-                localStorage.setItem('fintrack_expenses', JSON.stringify(filteredExpenses));
                 return true;
             }
         }
@@ -2963,21 +2486,10 @@
         async function deleteIncome(id) {
             try {
                 const { data: { user } } = await supabase.auth.getUser();
-                if (!user) throw new Error('User not authenticated');
-                
-                const { error } = await supabase
-                    .from('incomes')
-                    .delete()
-                    .eq('id', id)
-                    .eq('user_id', user.id);
-                
+                const { error } = await supabase.from('incomes').delete().eq('id', id).eq('user_id', user.id);
                 if (error) throw error;
                 return true;
             } catch (error) {
-                console.error('Error deleting income:', error);
-                const incomes = JSON.parse(localStorage.getItem('fintrack_incomes') || '[]');
-                const filteredIncomes = incomes.filter(income => income.id !== id);
-                localStorage.setItem('fintrack_incomes', JSON.stringify(filteredIncomes));
                 return true;
             }
         }
@@ -2985,21 +2497,10 @@
         async function deleteWallet(id) {
             try {
                 const { data: { user } } = await supabase.auth.getUser();
-                if (!user) throw new Error('User not authenticated');
-                
-                const { error } = await supabase
-                    .from('wallets')
-                    .delete()
-                    .eq('id', id)
-                    .eq('user_id', user.id);
-                
+                const { error } = await supabase.from('wallets').delete().eq('id', id).eq('user_id', user.id);
                 if (error) throw error;
                 return true;
             } catch (error) {
-                console.error('Error deleting wallet:', error);
-                const wallets = JSON.parse(localStorage.getItem('fintrack_wallets') || '[]');
-                const filteredWallets = wallets.filter(wallet => wallet.id !== id);
-                localStorage.setItem('fintrack_wallets', JSON.stringify(filteredWallets));
                 return true;
             }
         }
@@ -3007,27 +2508,15 @@
         async function deleteCategory(id) {
             try {
                 const { data: { user } } = await supabase.auth.getUser();
-                if (!user) throw new Error('User not authenticated');
-                
-                const { error } = await supabase
-                    .from('categories')
-                    .delete()
-                    .eq('id', id)
-                    .eq('user_id', user.id);
-                
+                const { error } = await supabase.from('categories').delete().eq('id', id).eq('user_id', user.id);
                 if (error) throw error;
                 return true;
             } catch (error) {
-                console.error('Error deleting category:', error);
-                // Fallback to localStorage
-                const categories = JSON.parse(localStorage.getItem('fintrack_categories') || '[]');
-                const filteredCategories = categories.filter(category => category.id !== id);
-                localStorage.setItem('fintrack_categories', JSON.stringify(filteredCategories));
                 return true;
             }
         }
 
-
+        // Load functions
         async function loadExpensesFromSupabase() {
             try {
                 const { data: { user } } = await supabase.auth.getUser();
@@ -3040,7 +2529,6 @@
                     .order('date', { ascending: false });
                 
                 if (error) throw error;
-                
                 return data.map(expense => ({
                     id: expense.id,
                     description: expense.description,
@@ -3051,12 +2539,10 @@
                     walletId: expense.wallet_id
                 }));
             } catch (error) {
-                console.error('Error loading expenses:', error);
-                return JSON.parse(localStorage.getItem('fintrack_expenses') || '[]');
+                return [];
             }
         }
 
-        // Load incomes from Supabase or localStorage
         async function loadIncomesFromSupabase() {
             try {
                 const { data: { user } } = await supabase.auth.getUser();
@@ -3069,7 +2555,6 @@
                     .order('date', { ascending: false });
                 
                 if (error) throw error;
-                
                 return data.map(income => ({
                     id: income.id,
                     description: income.description,
@@ -3079,8 +2564,7 @@
                     walletId: income.wallet_id
                 }));
             } catch (error) {
-                console.error('Error loading incomes:', error);
-                return JSON.parse(localStorage.getItem('fintrack_incomes') || '[]');
+                return [];
             }
         }
 
@@ -3095,14 +2579,9 @@
                     .eq('user_id', user.id);
                 
                 if (error) throw error;
-                
-                return data.map(wallet => ({
-                    id: wallet.id,
-                    name: wallet.name
-                }));
+                return data.map(wallet => ({ id: wallet.id, name: wallet.name }));
             } catch (error) {
-                console.error('Error loading wallets:', error);
-                return JSON.parse(localStorage.getItem('fintrack_wallets') || '[]');
+                return [];
             }
         }
 
@@ -3117,29 +2596,67 @@
                     .eq('user_id', user.id)
                     .order('created_at', { ascending: true });
                 
-                if (error) {
-                    console.error('Supabase load error:', error);
-                    throw error;
-                }
-                
-                console.log('Raw data from database:', data);
-                
-                // Transform data to match our app structure
-                const transformedData = data.map(category => ({
+                if (error) throw error;
+                return data.map(category => ({
                     id: category.id,
                     name: category.name,
                     type: category.type || 'main',
                     parentId: category.parent_id
                 }));
-                
-                console.log('Transformed categories:', transformedData);
-                return transformedData;
             } catch (error) {
-                console.error('Error loading categories:', error);
-                return JSON.parse(localStorage.getItem('fintrack_categories') || '[]');
+                return [];
             }
         }
 
+        async function handleAddExpense(e) {
+            e.preventDefault();
+            
+            const id = document.getElementById('expenseId').value;
+            const description = document.getElementById('expenseDescription').value;
+            const amount = parseCurrency(document.getElementById('expenseAmount').value);
+            const date = document.getElementById('expenseDate').value;
+            const category = document.getElementById('expenseCategory').value;
+            const subcategory = document.getElementById('expenseSubcategory').value;
+            const walletId = currentWalletId;
+            
+            if (!walletId) {
+                showAlert('Select a wallet first', 'error');
+                return;
+            }
+            
+            if (amount <= 0) {
+                showAlert('Enter a valid amount', 'error');
+                return;
+            }
+            
+            if (!id) {
+                const walletBalance = calculateWalletBalance(walletId);
+                if (walletBalance < amount) {
+                    pendingExpense = { description, amount, date, category, subcategory, walletId };
+                    expenseAmountDetail.textContent = formatDisplayCurrency(amount);
+                    walletBalanceDetail.textContent = formatDisplayCurrency(walletBalance);
+                    remainingBalanceDetail.textContent = formatDisplayCurrency(walletBalance - amount);
+                    insufficientBalanceModal.classList.add('active');
+                    return;
+                }
+            }
+            
+            const expense = { id, description, amount, date, category, subcategory, walletId };
+            const savedExpense = await saveExpense(expense);
+            
+            if (id) {
+                const index = expenses.findIndex(e => e.id === id);
+                if (index !== -1) expenses[index] = savedExpense;
+                showAlert('Expense updated', 'success');
+            } else {
+                expenses.push(savedExpense);
+                showAlert('Expense added', 'success');
+            }
+            
+            resetExpenseForm();
+            await loadExpenses();
+            updateStats();
+        }
 
         async function handleAddIncome(e) {
             e.preventDefault();
@@ -3149,24 +2666,15 @@
             const amount = parseCurrency(document.getElementById('incomeAmount').value);
             const date = document.getElementById('incomeDate').value;
             const source = document.getElementById('incomeSource').value;
-            
-            // Use the current wallet instead of selecting from form
             const walletId = currentWalletId;
             
             if (!walletId) {
-                showAlert('Please select a wallet from the top-right selector', 'error');
+                showAlert('Select a wallet first', 'error');
                 return;
             }
             
             if (amount <= 0) {
-                showAlert('Please enter a valid amount', 'error');
-                return;
-            }
-            
-            // Find the current wallet
-            const currentWallet = wallets.find(w => w.id === walletId);
-            if (!currentWallet) {
-                showAlert('Selected wallet not found', 'error');
+                showAlert('Enter a valid amount', 'error');
                 return;
             }
             
@@ -3174,16 +2682,12 @@
             const savedIncome = await saveIncome(income);
             
             if (id) {
-                // Update existing income
                 const index = incomes.findIndex(i => i.id === id);
-                if (index !== -1) {
-                    incomes[index] = savedIncome;
-                }
-                showAlert('Income updated successfully!', 'success');
+                if (index !== -1) incomes[index] = savedIncome;
+                showAlert('Income updated', 'success');
             } else {
-                // Add new income
                 incomes.push(savedIncome);
-                showAlert('Income added successfully!', 'success');
+                showAlert('Income added', 'success');
             }
             
             resetIncomeForm();
@@ -3191,7 +2695,6 @@
             updateStats();
         }
 
-        // Wallet Functions
         async function handleAddWallet(e) {
             e.preventDefault();
             
@@ -3202,22 +2705,16 @@
             const savedWallet = await saveWallet(wallet);
             
             if (id) {
-                // Update existing wallet
                 const index = wallets.findIndex(w => w.id === id);
-                if (index !== -1) {
-                    wallets[index] = savedWallet;
-                }
-                showAlert('Wallet updated successfully!', 'success');
+                if (index !== -1) wallets[index] = savedWallet;
+                showAlert('Wallet updated', 'success');
             } else {
-                // Add new wallet
                 wallets.push(savedWallet);
-                
-                // If this is the first wallet, set it as current
                 if (wallets.length === 1) {
                     currentWalletId = savedWallet.id;
                     updateGlobalWalletSelector();
                 }
-                showAlert('Wallet added successfully!', 'success');
+                showAlert('Wallet added', 'success');
             }
             
             resetWalletForm();
@@ -3225,7 +2722,6 @@
             updateStats();
         }
 
-        // Category Functions
         async function handleAddCategory(e) {
             e.preventDefault();
             
@@ -3237,88 +2733,49 @@
             if (type === 'sub') {
                 parentId = document.getElementById('parentCategory').value;
                 if (!parentId) {
-                    showAlert('Please select a parent category for the subcategory', 'error');
+                    showAlert('Select a parent category', 'error');
                     return;
                 }
             }
             
             const category = { id, name, type, parentId };
+            const savedCategory = await saveCategory(category);
             
-            console.log('Adding/updating category:', category);
-            
-            try {
-                const savedCategory = await saveCategory(category);
-                console.log('Saved category:', savedCategory);
-                
-                if (id) {
-                    // Update existing category
-                    const index = categories.findIndex(c => c.id === id);
-                    if (index !== -1) {
-                        categories[index] = savedCategory;
-                    }
-                    showAlert('Category updated successfully!', 'success');
-                } else {
-                    // Add new category
-                    categories.push(savedCategory);
-                    showAlert(`${type === 'main' ? 'Category' : 'Subcategory'} added successfully!`, 'success');
-                }
-                
-                resetCategoryForm();
-                
-                // Force refresh all category-related UI
-                await refreshAllCategoryUI();
-                
-            } catch (error) {
-                console.error('Error in handleAddCategory:', error);
-                showAlert('Error adding category: ' + error.message, 'error');
+            if (id) {
+                const index = categories.findIndex(c => c.id === id);
+                if (index !== -1) categories[index] = savedCategory;
+                showAlert('Category updated', 'success');
+            } else {
+                categories.push(savedCategory);
+                showAlert('Category added', 'success');
             }
+            
+            resetCategoryForm();
+            await refreshAllCategoryUI();
         }
 
-        // Subcategory Functions
         async function handleAddSubcategory(e) {
             e.preventDefault();
             
             const name = document.getElementById('subcategoryName').value;
             const parentId = document.getElementById('parentCategoryId').value;
             
-            if (!name) {
-                showAlert('Please enter a subcategory name', 'error');
+            if (!name || !parentId) {
+                showAlert('Enter subcategory name', 'error');
                 return;
             }
             
-            if (!parentId) {
-                showAlert('Parent category ID is missing', 'error');
-                return;
-            }
+            const newSubcategory = { name, type: 'sub', parentId };
+            const savedSubcategory = await saveCategory(newSubcategory);
             
-            const newSubcategory = { 
-                name, 
-                type: 'sub', 
-                parentId: parentId
-            };
+            categories.push(savedSubcategory);
+            showAlert('Subcategory added', 'success');
+            subcategoryForm.reset();
+            subcategoryModal.classList.remove('active');
             
-            console.log('Adding subcategory:', newSubcategory);
-            
-            try {
-                const savedSubcategory = await saveCategory(newSubcategory);
-                console.log('Saved subcategory:', savedSubcategory);
-                
-                categories.push(savedSubcategory);
-                
-                showAlert('Subcategory added successfully!', 'success');
-                subcategoryForm.reset();
-                subcategoryModal.classList.remove('active');
-                
-                // Force refresh all category-related UI
-                await refreshAllCategoryUI();
-                
-            } catch (error) {
-                console.error('Error in handleAddSubcategory:', error);
-                showAlert('Error adding subcategory: ' + error.message, 'error');
-            }
+            await refreshAllCategoryUI();
         }
 
-        // Edit functions
         function editExpense(id) {
             const expense = expenses.find(e => e.id === id);
             if (!expense) return;
@@ -3329,18 +2786,12 @@
             document.getElementById('expenseDate').value = expense.date;
             document.getElementById('expenseCategory').value = expense.category;
             
-            // Update subcategory dropdown based on selected category
-            const categoryChangeEvent = new Event('change');
-            document.getElementById('expenseCategory').dispatchEvent(categoryChangeEvent);
-            
             setTimeout(() => {
                 document.getElementById('expenseSubcategory').value = expense.subcategory || '';
             }, 100);
             
-            expenseSubmitBtn.innerHTML = '<i class="fas fa-save"></i> Update Expense';
+            expenseSubmitBtn.innerHTML = '<i class="fas fa-save"></i> Update';
             expenseCancelBtn.classList.remove('hidden');
-            
-            // Scroll to form
             document.getElementById('expenseForm').scrollIntoView({ behavior: 'smooth' });
         }
 
@@ -3354,10 +2805,8 @@
             document.getElementById('incomeDate').value = income.date;
             document.getElementById('incomeSource').value = income.source;
             
-            incomeSubmitBtn.innerHTML = '<i class="fas fa-save"></i> Update Income';
+            incomeSubmitBtn.innerHTML = '<i class="fas fa-save"></i> Update';
             incomeCancelBtn.classList.remove('hidden');
-            
-            // Scroll to form
             document.getElementById('incomeForm').scrollIntoView({ behavior: 'smooth' });
         }
 
@@ -3368,10 +2817,8 @@
             document.getElementById('walletId').value = wallet.id;
             document.getElementById('walletName').value = wallet.name;
             
-            walletSubmitBtn.innerHTML = '<i class="fas fa-save"></i> Update Wallet';
+            walletSubmitBtn.innerHTML = '<i class="fas fa-save"></i> Update';
             walletCancelBtn.classList.remove('hidden');
-            
-            // Scroll to form
             document.getElementById('walletForm').scrollIntoView({ behavior: 'smooth' });
         }
 
@@ -3393,18 +2840,16 @@
                 parentCategoryGroup.classList.add('hidden');
             }
             
-            categorySubmitBtn.innerHTML = '<i class="fas fa-save"></i> Update Category';
+            categorySubmitBtn.innerHTML = '<i class="fas fa-save"></i> Update';
             categoryCancelBtn.classList.remove('hidden');
-            
-            // Scroll to form
             document.getElementById('categoryForm').scrollIntoView({ behavior: 'smooth' });
-        }        
+        }
 
         function resetExpenseForm() {
             document.getElementById('expenseId').value = '';
             expenseForm.reset();
             document.getElementById('expenseDate').valueAsDate = new Date();
-            expenseSubmitBtn.innerHTML = '<i class="fas fa-minus-circle"></i> Add Expense';
+            expenseSubmitBtn.innerHTML = '<i class="fas fa-plus"></i> Add';
             expenseCancelBtn.classList.add('hidden');
         }
 
@@ -3412,14 +2857,14 @@
             document.getElementById('incomeId').value = '';
             incomeForm.reset();
             document.getElementById('incomeDate').valueAsDate = new Date();
-            incomeSubmitBtn.innerHTML = '<i class="fas fa-plus-circle"></i> Add Income';
+            incomeSubmitBtn.innerHTML = '<i class="fas fa-plus"></i> Add';
             incomeCancelBtn.classList.add('hidden');
         }
 
         function resetWalletForm() {
             document.getElementById('walletId').value = '';
             walletForm.reset();
-            walletSubmitBtn.innerHTML = '<i class="fas fa-plus-circle"></i> Add Wallet';
+            walletSubmitBtn.innerHTML = '<i class="fas fa-plus"></i> Add';
             walletCancelBtn.classList.add('hidden');
         }
 
@@ -3428,7 +2873,7 @@
             categoryForm.reset();
             document.getElementById('categoryType').value = '';
             parentCategoryGroup.classList.add('hidden');
-            categorySubmitBtn.innerHTML = '<i class="fas fa-plus-circle"></i> Add Category';
+            categorySubmitBtn.innerHTML = '<i class="fas fa-plus"></i> Add';
             categoryCancelBtn.classList.add('hidden');
         }
 
@@ -3436,20 +2881,13 @@
             incomes = await loadIncomesFromSupabase();
             const incomesList = document.getElementById('incomesList');
             
-            // Filter incomes for current wallet if one is selected
             let displayIncomes = incomes;
             if (currentWalletId) {
                 displayIncomes = incomes.filter(income => income.walletId === currentWalletId);
             }
             
             if (displayIncomes.length === 0) {
-                incomesList.innerHTML = `
-                    <div class="income-item">
-                        <div class="income-details">
-                            <div>No income yet. Add your first income!</div>
-                        </div>
-                    </div>
-                `;
+                incomesList.innerHTML = `<div class="income-item"><div class="income-details">No income yet</div></div>`;
                 return;
             }
             
@@ -3464,14 +2902,14 @@
                 incomeItem.className = 'income-item';
                 incomeItem.innerHTML = `
                     <div class="income-details">
-                        <div>${income.description}</div>
-                        <div style="font-size: 0.9rem; color: var(--gray);">
-                            ${incomeDate} • ${wallet ? wallet.name : 'Unknown Wallet'}
+                        <div style="font-weight: 500;">${income.description}</div>
+                        <div style="font-size: 0.8rem; color: var(--gray);">
+                            ${incomeDate} • ${wallet ? wallet.name : 'Unknown'}
                         </div>
                     </div>
-                    <div style="display: flex; align-items: center; gap: 10px;">
-                        <div class="income-amount">
-                            ${formatDisplayCurrency(income.amount)}
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <div>
+                            <div class="income-amount">${formatDisplayCurrency(income.amount)}</div>
                             <span class="income-source">${income.source}</span>
                         </div>
                         <div class="action-buttons">
@@ -3492,18 +2930,14 @@
             wallets = await loadWalletsFromSupabase();
             const walletsList = document.getElementById('walletsList');
             
-            // Update global wallet selector - REMOVED BALANCE FROM DISPLAY
-            globalWalletSelect.innerHTML = '<option value="">Select a wallet</option>';
+            globalWalletSelect.innerHTML = '<option value="">Select wallet</option>';
             wallets.forEach(wallet => {
                 const option = document.createElement('option');
                 option.value = wallet.id;
-                
-                // Only show wallet name, no balance
                 option.textContent = wallet.name;
                 globalWalletSelect.appendChild(option);
             });
             
-            // Set the current wallet in the selector
             if (currentWalletId) {
                 globalWalletSelect.value = currentWalletId;
             } else if (wallets.length > 0) {
@@ -3511,35 +2945,24 @@
                 globalWalletSelect.value = currentWalletId;
             }
             
-            // Update wallet list - KEEP balance in the wallet list view
             walletsList.innerHTML = '';
             
             if (wallets.length === 0) {
-                walletsList.innerHTML = `
-                    <div class="wallet-item">
-                        <div class="wallet-details">
-                            <div>No wallets yet. Add your first wallet!</div>
-                        </div>
-                    </div>
-                `;
+                walletsList.innerHTML = `<div class="wallet-item"><div class="wallet-details">No wallets yet</div></div>`;
                 return;
             }
             
             wallets.forEach(wallet => {
                 const walletItem = document.createElement('div');
                 walletItem.className = 'wallet-item';
-                
-                // Calculate balance for this wallet
                 const balance = calculateWalletBalance(wallet.id);
                 
                 walletItem.innerHTML = `
                     <div class="wallet-details">
-                        <div>${wallet.name}</div>
+                        <div style="font-weight: 500;">${wallet.name}</div>
                     </div>
-                    <div style="display: flex; align-items: center; gap: 10px;">
-                        <div class="wallet-balance">
-                            ${formatDisplayCurrency(balance)}
-                        </div>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <div class="wallet-balance">${formatDisplayCurrency(balance)}</div>
                         <div class="action-buttons">
                             <button class="edit-btn" onclick="editWallet('${wallet.id}')">
                                 <i class="fas fa-edit"></i>
@@ -3554,227 +2977,86 @@
             });
         }
         
-        let categoriesCache = null;
-        let lastCategoriesLoad = 0;
-        const CACHE_DURATION = 5000; // 5 seconds
-
         async function loadCategories() {
             try {
-                const { data: { user } } = await supabase.auth.getUser();
-                if (!user) return;
-                
-                const { data, error } = await supabase
-                    .from('categories')
-                    .select('*')
-                    .eq('user_id', user.id)
-                    .order('created_at', { ascending: true });
-                
-                if (error) throw error;
-                
-                console.log('Raw data from database:', data);
-                
-                // Transform data to match our app structure
-                categories = data.map(category => ({
-                    id: category.id,
-                    name: category.name,
-                    type: category.type || 'main',
-                    parentId: category.parent_id
-                }));
-                
-                console.log('Transformed categories:', categories);
-                
-                // Render the categories list
+                categories = await loadCategoriesFromSupabase();
                 renderCategoriesList();
-                
+                updateCategoryDropdowns();
             } catch (error) {
                 console.error('Error loading categories:', error);
-                categories = JSON.parse(localStorage.getItem('fintrack_categories') || '[]');
-                renderCategoriesList();
+            }
+        }
+
+        function renderCategoriesList() {
+            const categoriesList = document.getElementById('categoriesList');
+            categoriesList.innerHTML = '';
+            
+            if (categories.length === 0) {
+                categoriesList.innerHTML = `<div class="category-item"><div class="category-details">No categories yet</div></div>`;
+                return;
             }
             
-            // ALWAYS update the dropdowns after loading categories
-            updateCategoryDropdowns();
-        }
-        
-        async function refreshAfterCategoryChange() {
-            console.log('Quick refresh after category change...');
+            const mainCategories = categories.filter(c => c.type === 'main');
+            const subcategories = categories.filter(c => c.type === 'sub');
             
-            // Update categories array first
-            categories = categories.filter(c => c.id !== itemToDelete);
-            
-            // Update UI without full database reload
-            await quickLoadCategories();
-            updateCategoryDropdowns();
-            
-            // Only update stats if needed
-            updateStats();
-        }
-
-        // OPTIMIZED: Quick category load without full UI rebuild
-        async function quickLoadCategories() {
-            try {
-                const { data: { user } } = await supabase.auth.getUser();
-                if (!user) return;
-                
-                const { data, error } = await supabase
-                    .from('categories')
-                    .select('*')
-                    .eq('user_id', user.id)
-                    .order('created_at', { ascending: true });
-                
-                if (error) throw error;
-                
-                // Just update the categories array, don't rebuild UI yet
-                categories = data.map(category => ({
-                    id: category.id,
-                    name: category.name,
-                    type: category.type || 'main',
-                    parentId: category.parent_id
-                }));
-                
-            } catch (error) {
-                console.error('Error quick loading categories:', error);
-                categories = JSON.parse(localStorage.getItem('fintrack_categories') || '[]');
+            if (mainCategories.length === 0) {
+                categoriesList.innerHTML = `<div class="category-item"><div class="category-details">No main categories</div></div>`;
+            } else {
+                mainCategories.forEach(category => {
+                    const categoryItem = document.createElement('div');
+                    categoryItem.className = 'category-item';
+                    categoryItem.innerHTML = `
+                        <div class="category-details">
+                            <div style="font-weight: 500;">${category.name}</div>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <div class="category-actions">
+                                <button class="add-subcategory-btn" data-id="${category.id}">
+                                    <i class="fas fa-plus"></i> Sub
+                                </button>
+                            </div>
+                            <div class="action-buttons">
+                                <button class="edit-btn" onclick="editCategory('${category.id}')">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="delete-btn" onclick="confirmDelete('category', '${category.id}', '${category.name}')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    categoriesList.appendChild(categoryItem);
+                    
+                    const addSubcategoryBtn = categoryItem.querySelector('.add-subcategory-btn');
+                    addSubcategoryBtn.addEventListener('click', () => {
+                        openSubcategoryModal(category.id);
+                    });
+                    
+                    const categorySubcategories = subcategories.filter(sc => sc.parentId === category.id);
+                    categorySubcategories.forEach(subcategory => {
+                        const subcategoryItem = document.createElement('div');
+                        subcategoryItem.className = 'category-item subcategory-item';
+                        subcategoryItem.innerHTML = `
+                            <div class="category-details">
+                                <div>${subcategory.name}</div>
+                            </div>
+                            <div class="action-buttons">
+                                <button class="edit-btn" onclick="editCategory('${subcategory.id}')">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="delete-btn" onclick="confirmDelete('category', '${subcategory.id}', '${subcategory.name}')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        `;
+                        categoriesList.appendChild(subcategoryItem);
+                    });
+                });
             }
-        }        
-
-function renderCategoriesList() {
-    const categoriesList = document.getElementById('categoriesList');
-    if (!categoriesList) {
-        console.error('categoriesList element not found!');
-        return;
-    }
-    
-    categoriesList.innerHTML = '';
-    
-    if (categories.length === 0) {
-        categoriesList.innerHTML = `
-            <div class="category-item">
-                <div class="category-details">
-                    <div>No categories yet. Add your first category!</div>
-                </div>
-            </div>
-        `;
-        return;
-    }
-    
-    // Separate main categories and subcategories
-    const mainCategories = categories.filter(c => c.type === 'main');
-    const subcategories = categories.filter(c => c.type === 'sub');
-    
-    console.log('Main categories for display:', mainCategories);
-    console.log('Subcategories for display:', subcategories);
-    
-    if (mainCategories.length === 0) {
-        categoriesList.innerHTML = `
-            <div class="category-item">
-                <div class="category-details">
-                    <div>No main categories yet. Add your first main category!</div>
-                </div>
-            </div>
-        `;
-    } else {
-        mainCategories.forEach(category => {
-            const categoryItem = document.createElement('div');
-            categoryItem.className = 'category-item';
-            categoryItem.innerHTML = `
-                <div class="category-details">
-                    <div><strong>${category.name}</strong></div>
-                </div>
-                <div style="display: flex; align-items: center; gap: 10px;">
-                    <div class="category-actions">
-                        <button class="add-subcategory-btn" data-id="${category.id}">
-                            <i class="fas fa-plus"></i> Add Subcategory
-                        </button>
-                    </div>
-                    <div class="action-buttons">
-                        <button class="edit-btn" onclick="editCategory('${category.id}')">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button class="delete-btn" onclick="confirmDelete('category', '${category.id}', '${category.name}')">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
-                </div>
-            `;
-            categoriesList.appendChild(categoryItem);
-            
-            // Add event listener
-            const addSubcategoryBtn = categoryItem.querySelector('.add-subcategory-btn');
-            addSubcategoryBtn.addEventListener('click', () => {
-                console.log('Opening subcategory modal for parent ID:', category.id);
-                openSubcategoryModal(category.id);
-            });
-            
-            // Add subcategories for this main category
-            const categorySubcategories = subcategories.filter(sc => sc.parentId === category.id);
-            categorySubcategories.forEach(subcategory => {
-                const subcategoryItem = document.createElement('div');
-                subcategoryItem.className = 'category-item subcategory-item';
-                subcategoryItem.innerHTML = `
-                    <div class="category-details">
-                        <div>${subcategory.name}</div>
-                    </div>
-                    <div class="action-buttons">
-                        <button class="edit-btn" onclick="editCategory('${subcategory.id}')">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button class="delete-btn" onclick="confirmDelete('category', '${subcategory.id}', '${subcategory.name}')">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
-                `;
-                categoriesList.appendChild(subcategoryItem);
-            });
-        });
-        
-        // Handle orphaned subcategories (subcategories without a valid parent)
-        const orphanSubcategories = subcategories.filter(sc => {
-            return !mainCategories.some(mc => mc.id === sc.parentId);
-        });
-        
-        if (orphanSubcategories.length > 0) {
-            const orphanHeader = document.createElement('div');
-            orphanHeader.className = 'category-item';
-            orphanHeader.innerHTML = `
-                <div class="category-details">
-                    <div><strong>Orphaned Subcategories</strong></div>
-                </div>
-            `;
-            categoriesList.appendChild(orphanHeader);
-            
-            orphanSubcategories.forEach(subcategory => {
-                const subcategoryItem = document.createElement('div');
-                subcategoryItem.className = 'category-item subcategory-item';
-                subcategoryItem.innerHTML = `
-                    <div class="category-details">
-                        <div>${subcategory.name}</div>
-                    </div>
-                    <div class="action-buttons">
-                        <button class="edit-btn" onclick="editCategory('${subcategory.id}')">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button class="delete-btn" onclick="confirmDelete('category', '${subcategory.id}', '${subcategory.name}')">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
-                `;
-                categoriesList.appendChild(subcategoryItem);
-            });
         }
-    }
-}
 
-// SIMPLIFIED refresh function
-async function refreshAfterCategoryChange() {
-    console.log('Refreshing after category change...');
-    await loadCategories(); // This will call renderCategoriesList and updateCategoryDropdowns
-    updateStats();
-}      
-
-        
         function loadParentCategories() {
-            parentCategory.innerHTML = '<option value="">Select a parent category</option>';
+            parentCategory.innerHTML = '<option value="">Select parent</option>';
             const mainCategories = categories.filter(c => c.type === 'main');
             
             mainCategories.forEach(category => {
@@ -3786,21 +3068,14 @@ async function refreshAfterCategoryChange() {
         }
         
         function updateCategoryDropdowns() {
-            console.log('Updating category dropdowns with:', categories);
-            
-            // Update expense category dropdown
             const expenseCategorySelect = document.getElementById('expenseCategory');
             const expenseSubcategorySelect = document.getElementById('expenseSubcategory');
             
-            // Clear existing options
-            expenseCategorySelect.innerHTML = '<option value="">Select a category</option>';
-            expenseSubcategorySelect.innerHTML = '<option value="">Select a subcategory (optional)</option>';
+            expenseCategorySelect.innerHTML = '<option value="">Select category</option>';
+            expenseSubcategorySelect.innerHTML = '<option value="">Optional</option>';
             
-            // Get main categories only
             const mainCategories = categories.filter(c => c.type === 'main');
-            console.log('Main categories for dropdown:', mainCategories);
             
-            // Populate main categories dropdown
             mainCategories.forEach(category => {
                 const option = document.createElement('option');
                 option.value = category.name;
@@ -3808,9 +3083,8 @@ async function refreshAfterCategoryChange() {
                 expenseCategorySelect.appendChild(option);
             });
             
-            // Update parent category dropdown (for category form)
             const parentCategorySelect = document.getElementById('parentCategory');
-            parentCategorySelect.innerHTML = '<option value="">Select a parent category</option>';
+            parentCategorySelect.innerHTML = '<option value="">Select parent</option>';
             mainCategories.forEach(category => {
                 const option = document.createElement('option');
                 option.value = category.id;
@@ -3818,28 +3092,18 @@ async function refreshAfterCategoryChange() {
                 parentCategorySelect.appendChild(option);
             });
             
-            // Remove any existing event listeners to prevent duplicates
             const newExpenseCategorySelect = expenseCategorySelect.cloneNode(true);
             expenseCategorySelect.parentNode.replaceChild(newExpenseCategorySelect, expenseCategorySelect);
             
-            // Add fresh event listener to update subcategories when category changes
             newExpenseCategorySelect.addEventListener('change', function() {
                 const selectedCategory = this.value;
-                console.log('Category selected:', selectedCategory);
-                
                 const expenseSubcategorySelect = document.getElementById('expenseSubcategory');
-                expenseSubcategorySelect.innerHTML = '<option value="">Select a subcategory (optional)</option>';
+                expenseSubcategorySelect.innerHTML = '<option value="">Optional</option>';
                 
                 if (selectedCategory) {
-                    // Find the main category by name
                     const mainCategory = categories.find(c => c.name === selectedCategory && c.type === 'main');
-                    console.log('Found main category:', mainCategory);
-                    
                     if (mainCategory) {
-                        // Get subcategories for this main category
                         const subcategories = categories.filter(c => c.type === 'sub' && c.parentId === mainCategory.id);
-                        console.log('Subcategories for', selectedCategory, ':', subcategories);
-                        
                         subcategories.forEach(subcategory => {
                             const option = document.createElement('option');
                             option.value = subcategory.name;
@@ -3849,176 +3113,35 @@ async function refreshAfterCategoryChange() {
                     }
                 }
             });
-            
-            // Update the global reference
-            window.expenseCategory = newExpenseCategorySelect;
         }
         
-        // UPDATED: Stats function with better filtering and debugging
         function updateStats() {
-            console.log('Updating stats, current wallet:', currentWalletId);
-            console.log('All expenses:', expenses);
-            console.log('All incomes:', incomes);
-            
             if (!currentWalletId) {
-                // If no wallet is selected, show zeros
                 document.getElementById('totalIncome').textContent = formatDisplayCurrency(0);
                 document.getElementById('totalExpenses').textContent = formatDisplayCurrency(0);
                 document.getElementById('currentWalletBalance').textContent = formatDisplayCurrency(0);
-                showAlert('Please select a wallet first', 'warning');
                 return;
             }
 
-            // Filter expenses and incomes for the current wallet only
             const walletExpenses = expenses.filter(expense => expense.walletId === currentWalletId);
             const walletIncomes = incomes.filter(income => income.walletId === currentWalletId);
             
-            console.log('Wallet expenses:', walletExpenses);
-            console.log('Wallet incomes:', walletIncomes);
-            
-            // Calculate total expenses for current wallet
             const totalExpenses = walletExpenses.reduce((sum, expense) => sum + expense.amount, 0);
             document.getElementById('totalExpenses').textContent = formatDisplayCurrency(totalExpenses);
             
-            // Calculate total income for current wallet
             const totalIncome = walletIncomes.reduce((sum, income) => sum + income.amount, 0);
             document.getElementById('totalIncome').textContent = formatDisplayCurrency(totalIncome);
             
-            // Calculate current wallet balance (income - expenses)
             const currentWalletBalance = totalIncome - totalExpenses;
             document.getElementById('currentWalletBalance').textContent = formatDisplayCurrency(currentWalletBalance);
-            
-            console.log('Stats updated - Income:', totalIncome, 'Expenses:', totalExpenses, 'Balance:', currentWalletBalance);
         }
 
-        // Function to update global wallet selector
         function updateGlobalWalletSelector() {
             if (globalWalletSelect && currentWalletId) {
                 globalWalletSelect.value = currentWalletId;
             }
         }
 
-        // Function to update global wallet selector
-        function updateGlobalWalletSelector() {
-            if (globalWalletSelect && currentWalletId) {
-                globalWalletSelect.value = currentWalletId;
-            }
-        }
-
-        // Function to test category dropdowns (for debugging)
-        function testCategoryDropdowns() {
-            console.log('=== Testing Category Dropdowns ===');
-            console.log('Categories array:', categories);
-            console.log('Main categories:', categories.filter(c => c.type === 'main'));
-            console.log('Subcategories:', categories.filter(c => c.type === 'sub'));
-            
-            const expenseCategorySelect = document.getElementById('expenseCategory');
-            console.log('Expense category select options:', expenseCategorySelect.innerHTML);
-            
-            const expenseSubcategorySelect = document.getElementById('expenseSubcategory');
-            console.log('Expense subcategory select options:', expenseSubcategorySelect.innerHTML);
-        }
-
-        // Add this function to check if dropdowns need initialization
-        function initializeCategoryDropdowns() {
-            const expenseCategorySelect = document.getElementById('expenseCategory');
-            if (expenseCategorySelect && expenseCategorySelect.options.length <= 1) {
-                console.log('Initializing empty category dropdowns...');
-                updateCategoryDropdowns();
-            }
-        }
-
-        // Debug function for wallet info
-        function debugWalletInfo() {
-            console.log('=== WALLET DEBUG INFO ===');
-            console.log('Current Wallet ID:', currentWalletId);
-            console.log('Available Wallets:', wallets);
-            console.log('All Expenses:', expenses);
-            console.log('All Incomes:', incomes);
-            
-            if (currentWalletId) {
-                const walletExpenses = expenses.filter(e => e.walletId === currentWalletId);
-                const walletIncomes = incomes.filter(i => i.walletId === currentWalletId);
-                console.log('Current Wallet Expenses:', walletExpenses);
-                console.log('Current Wallet Incomes:', walletIncomes);
-                console.log('Current Wallet Balance:', calculateWalletBalance(currentWalletId));
-            }
-        }        
-
-        // UPDATED: After adding/updating/deleting expenses, refresh both views
-        async function handleAddExpense(e) {
-            e.preventDefault();
-            
-            const id = document.getElementById('expenseId').value;
-            const description = document.getElementById('expenseDescription').value;
-            const amount = parseCurrency(document.getElementById('expenseAmount').value);
-            const date = document.getElementById('expenseDate').value;
-            const category = document.getElementById('expenseCategory').value;
-            const subcategory = document.getElementById('expenseSubcategory').value;
-            
-            // Use the current wallet instead of selecting from form
-            const walletId = currentWalletId;
-            
-            if (!walletId) {
-                showAlert('Please select a wallet from the top-right selector first', 'error');
-                return;
-            }
-            
-            if (amount <= 0) {
-                showAlert('Please enter a valid amount', 'error');
-                return;
-            }
-            
-            // Find the current wallet
-            const currentWallet = wallets.find(w => w.id === walletId);
-            if (!currentWallet) {
-                showAlert('Selected wallet not found', 'error');
-                return;
-            }
-            
-            // VALIDATION: Check if wallet has sufficient balance (only for new expenses)
-            if (!id) {
-                const walletBalance = calculateWalletBalance(walletId);
-                if (walletBalance < amount) {
-                    // Store the pending expense for potential future use
-                    pendingExpense = { description, amount, date, category, subcategory, walletId };
-                    
-                    // Show insufficient balance modal with details
-                    expenseAmountDetail.textContent = formatDisplayCurrency(amount);
-                    walletBalanceDetail.textContent = formatDisplayCurrency(walletBalance);
-                    remainingBalanceDetail.textContent = formatDisplayCurrency(walletBalance - amount);
-                    
-                    insufficientBalanceModal.classList.add('active');
-                    return;
-                }
-            }
-            
-            const expense = { id, description, amount, date, category, subcategory, walletId };
-            console.log('Saving expense:', expense);
-            
-            const savedExpense = await saveExpense(expense);
-            
-            if (id) {
-                // Update existing expense
-                const index = expenses.findIndex(e => e.id === id);
-                if (index !== -1) {
-                    expenses[index] = savedExpense;
-                }
-                showAlert('Expense updated successfully!', 'success');
-            } else {
-                // Add new expense
-                expenses.push(savedExpense);
-                showAlert('Expense added successfully!', 'success');
-            }
-            
-            resetExpenseForm();
-            await loadExpenses(); // This will update both current month and historical views
-            updateStats();
-            
-            console.log('After adding expense - Expenses:', expenses);
-        }
-
-        // Make sure to update both views after deleting expenses too
         confirmDeleteBtn.addEventListener('click', async () => {
             if (!itemToDelete || !deleteType) return;
             
@@ -4030,14 +3153,14 @@ async function refreshAfterCategoryChange() {
                         success = await deleteExpense(itemToDelete);
                         if (success) {
                             expenses = expenses.filter(e => e.id !== itemToDelete);
-                            showAlert('Expense deleted successfully!', 'success');
+                            showAlert('Expense deleted', 'success');
                         }
                         break;
                     case 'income':
                         success = await deleteIncome(itemToDelete);
                         if (success) {
                             incomes = incomes.filter(i => i.id !== itemToDelete);
-                            showAlert('Income deleted successfully!', 'success');
+                            showAlert('Income deleted', 'success');
                         }
                         break;
                     case 'wallet':
@@ -4047,49 +3170,37 @@ async function refreshAfterCategoryChange() {
                             expenses = expenses.filter(e => e.walletId !== itemToDelete);
                             incomes = incomes.filter(i => i.walletId !== itemToDelete);
                             
-                            // If we deleted the current wallet, select another one
                             if (currentWalletId === itemToDelete) {
                                 currentWalletId = wallets.length > 0 ? wallets[0].id : null;
                                 updateGlobalWalletSelector();
                             }
-                            showAlert('Wallet deleted successfully!', 'success');
+                            showAlert('Wallet deleted', 'success');
                         }
                         break;
                     case 'category':
                         success = await deleteCategory(itemToDelete);
                         if (success) {
                             categories = categories.filter(c => c.id !== itemToDelete);
-                            // Also remove this category from expenses
-                            expenses.forEach(expense => {
-                                if (expense.category === itemToDelete) {
-                                    expense.category = '';
-                                }
-                            });
-                            showAlert('Category deleted successfully!', 'success');
+                            showAlert('Category deleted', 'success');
                         }
                         break;
                 }
                 
                 if (success) {
-                    // Refresh both expense views
-                    await loadExpenses(); // This updates both current month and historical views
+                    await loadExpenses();
                     await loadIncomes();
                     await loadWallets();
                     await loadCategories();
                     updateStats();
                 }
             } catch (error) {
-                console.error('Error deleting item:', error);
-                showAlert('Error deleting item: ' + error.message, 'error');
+                showAlert('Error deleting', 'error');
             }
             
             deleteModal.classList.remove('active');
             itemToDelete = null;
             deleteType = null;
         });
-
-        // ... (rest of the existing functions: loadIncomes, loadWallets, loadCategories, 
-        // updateStats, edit functions, reset functions, etc. remain the same) ...
 
         function showAlert(message, type) {
             const alert = document.createElement('div');
@@ -4099,27 +3210,24 @@ async function refreshAfterCategoryChange() {
             alert.innerHTML = `<i class="fas ${icon}"></i> ${message}`;
             alertContainer.appendChild(alert);
             
-            setTimeout(() => alert.remove(), 5000);
+            setTimeout(() => alert.remove(), 4000);
         }
 
-        // Initialize the app when the page loads
         document.addEventListener('DOMContentLoaded', function() {
             initApp();
-            
-            // Check and initialize dropdowns after a short delay to ensure DOM is ready
-            setTimeout(initializeCategoryDropdowns, 500);
+            setTimeout(() => {
+                const expenseCategorySelect = document.getElementById('expenseCategory');
+                if (expenseCategorySelect && expenseCategorySelect.options.length <= 1) {
+                    updateCategoryDropdowns();
+                }
+            }, 500);
         });
 
-        // Set up auth state listener
         supabase.auth.onAuthStateChange((event, session) => {
             if (event === 'SIGNED_IN' || event === 'SIGNED_OUT') {
                 checkAuthState();
             }
         });
-
-        // Note: All the existing Supabase data functions (saveExpense, saveIncome, saveWallet, 
-        // saveCategory, delete functions, loadFromSupabase functions) remain exactly the same
-        // as in the original file. They are not included here to avoid redundancy.
     </script>
 </body>
-</html>                                
+</html>
