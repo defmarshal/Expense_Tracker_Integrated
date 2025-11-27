@@ -2631,14 +2631,14 @@
             
             if (!id) {
                 const walletBalance = calculateWalletBalance(walletId);
-                if (walletBalance < amount) {
-                    pendingExpense = { description, amount, date, category, subcategory, walletId };
-                    expenseAmountDetail.textContent = formatDisplayCurrency(amount);
-                    walletBalanceDetail.textContent = formatDisplayCurrency(walletBalance);
-                    remainingBalanceDetail.textContent = formatDisplayCurrency(walletBalance - amount);
-                    insufficientBalanceModal.classList.add('active');
-                    return;
-                }
+                // if (walletBalance < amount) {
+                //     pendingExpense = { description, amount, date, category, subcategory, walletId };
+                //     expenseAmountDetail.textContent = formatDisplayCurrency(amount);
+                //     walletBalanceDetail.textContent = formatDisplayCurrency(walletBalance);
+                //     remainingBalanceDetail.textContent = formatDisplayCurrency(walletBalance - amount);
+                //     insufficientBalanceModal.classList.add('active');
+                //     return;
+                // }
             }
             
             const expense = { id, description, amount, date, category, subcategory, walletId };
@@ -3230,4 +3230,5 @@
         });
     </script>
 </body>
+
 </html>
