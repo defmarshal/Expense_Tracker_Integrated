@@ -476,61 +476,244 @@
             display: none;
         }
 
-        .report-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.85rem;
-        }
-
-        .report-table th {
-            text-align: left;
-            padding: 10px 12px;
-            border-bottom: 1px solid var(--gray-light);
-            font-weight: 600;
-            color: var(--dark);
-            background-color: rgba(147, 51, 234, 0.03);
-        }
-
-        .report-table td {
-            padding: 10px 12px;
-            border-bottom: 1px solid var(--gray-light);
-        }
-
-        .category-row {
-            font-weight: 600;
-            background-color: rgba(147, 51, 234, 0.04);
-        }
-
-        .subcategory-row {
-            padding-left: 24px !important;
-            background-color: rgba(147, 51, 234, 0.01);
-        }
-
-        .amount-cell {
-            text-align: right;
-            font-weight: 500;
-        }
-
-        .percentage-cell {
-            text-align: center;
-            font-size: 0.8rem;
-            color: var(--gray);
-            width: 70px;
-        }
-
-        .total-row {
-            font-weight: 700;
-            background-color: rgba(147, 51, 234, 0.08);
-            border-top: 2px solid var(--primary);
-        }
-
-        .no-data-message {
-            text-align: center;
-            padding: 1.5rem 1rem;
-            color: var(--gray);
+        /* Category Breakdown Styles */
+        .category-breakdown {
             font-size: 0.9rem;
         }
 
+        .category-group {
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            overflow: hidden;
+            border: 1px solid rgba(147, 51, 234, 0.1);
+        }
+
+        .category-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            cursor: pointer;
+            background: var(--light-gray);
+            transition: background 0.3s;
+            border-bottom: 1px solid rgba(147, 51, 234, 0.1);
+        }
+
+        .category-header:hover {
+            background: rgba(147, 51, 234, 0.08);
+        }
+
+        .category-header h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--dark);
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .category-total {
+            font-weight: 600;
+            color: var(--primary);
+            font-size: 0.9rem;
+        }
+
+        .category-toggle {
+            background: none;
+            border: none;
+            color: var(--primary);
+            cursor: pointer;
+            font-size: 0.9rem;
+            padding: 4px 8px;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+
+        .category-toggle:hover {
+            background: rgba(147, 51, 234, 0.1);
+        }
+
+        .category-content {
+            padding: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, padding 0.3s ease-out;
+        }
+
+        .category-content.expanded {
+            max-height: 2000px;
+            padding: 16px;
+        }
+
+        .subcategory-group {
+            margin-bottom: 12px;
+            background: rgba(147, 51, 234, 0.02);
+            border-radius: 6px;
+            padding: 12px;
+            border: 1px solid rgba(147, 51, 234, 0.05);
+        }
+
+        .subcategory-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            cursor: pointer;
+            border-bottom: 1px solid rgba(147, 51, 234, 0.1);
+        }
+
+        .subcategory-header h4 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text);
+            margin: 0;
+        }
+
+        .subcategory-total {
+            font-weight: 600;
+            color: var(--secondary);
+            font-size: 0.85rem;
+        }
+
+        .subcategory-toggle {
+            background: none;
+            border: none;
+            color: var(--secondary);
+            cursor: pointer;
+            font-size: 0.8rem;
+            padding: 2px 6px;
+        }
+
+        .subcategory-content {
+            padding: 8px 0 0 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+
+        .subcategory-content.expanded {
+            max-height: 1000px;
+        }
+
+        .expense-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .expense-item-detail {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background: white;
+            border-radius: 6px;
+            border: 1px solid rgba(147, 51, 234, 0.08);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .expense-item-detail:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .expense-info {
+            flex: 1;
+        }
+
+        .expense-description {
+            font-weight: 500;
+            color: var(--dark);
+            font-size: 0.85rem;
+            margin-bottom: 2px;
+        }
+
+        .expense-meta {
+            font-size: 0.75rem;
+            color: var(--gray);
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .expense-date {
+            font-weight: 500;
+        }
+
+        .expense-wallet {
+            padding: 1px 6px;
+            background: rgba(147, 51, 234, 0.08);
+            border-radius: 10px;
+        }
+
+        .expense-amount-detail {
+            font-weight: 600;
+            color: var(--primary);
+            font-size: 0.9rem;
+            text-align: right;
+            min-width: 80px;
+        }
+
+        .no-expenses {
+            text-align: center;
+            padding: 20px;
+            color: var(--gray);
+            font-size: 0.85rem;
+            font-style: italic;
+        }
+
+        .category-percentage {
+            font-size: 0.75rem;
+            color: var(--gray);
+            background: rgba(147, 51, 234, 0.08);
+            padding: 2px 8px;
+            border-radius: 10px;
+            margin-left: 8px;
+        }
+
+        .subcategory-percentage {
+            font-size: 0.7rem;
+            color: var(--gray);
+            background: rgba(147, 51, 234, 0.05);
+            padding: 1px 6px;
+            border-radius: 8px;
+            margin-left: 6px;
+        }
+
+        /* Progress bar for category visualization */
+        .category-progress {
+            height: 4px;
+            background: rgba(147, 51, 234, 0.1);
+            border-radius: 2px;
+            margin-top: 6px;
+            overflow: hidden;
+        }
+
+        .category-progress-bar {
+            height: 100%;
+            background: var(--gradient);
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        .subcategory-progress {
+            height: 3px;
+            background: rgba(167, 139, 250, 0.1);
+            border-radius: 2px;
+            margin-top: 4px;
+            overflow: hidden;
+        }
+
+        .subcategory-progress-bar {
+            height: 100%;
+            background: var(--secondary);
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Mobile optimizations */
         @media (max-width: 768px) {
             header {
                 padding: 0.6rem 0.8rem;
@@ -601,16 +784,32 @@
                 gap: 8px;
             }
 
-            .report-table {
-                font-size: 0.8rem;
+            /* Category breakdown mobile styles */
+            .category-header {
+                padding: 10px 12px;
             }
-
-            .report-table th, .report-table td {
-                padding: 8px 10px;
+            
+            .category-header h3 {
+                font-size: 0.95rem;
             }
-
-            .subcategory-row {
-                padding-left: 20px !important;
+            
+            .expense-item-detail {
+                padding: 8px;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 6px;
+            }
+            
+            .expense-amount-detail {
+                text-align: left;
+                width: 100%;
+                padding-top: 6px;
+                border-top: 1px solid rgba(147, 51, 234, 0.1);
+            }
+            
+            .expense-meta {
+                flex-wrap: wrap;
+                gap: 6px;
             }
         }
 
@@ -762,19 +961,6 @@
                 padding: 0.8rem;
             }
 
-            .report-table {
-                font-size: 0.75rem;
-            }
-
-            .report-table th, .report-table td {
-                padding: 6px 8px;
-            }
-
-            .percentage-cell {
-                width: 60px;
-                font-size: 0.7rem;
-            }
-
             .selectors-container {
                 flex-direction: column;
                 width: 100%;
@@ -811,26 +997,23 @@
                 font-size: 0.8rem;
             }
 
-            .no-data-message {
+            .no-expenses {
                 padding: 1rem 0.8rem;
                 font-size: 0.85rem;
             }
 
-            /* --- START OF FIX --- */
-            /* 1. Allow the Daily Trend card to expand to fit the legend */
+            /* Fix for Daily Trend card */
             #dailyTrendCard {
                 height: auto !important;
                 min-height: 260px;
                 padding-bottom: 1rem;
             }
 
-            /* 2. Give the chart wrapper a fixed height so the canvas renders correctly */
             #dailyTrendCard .chart-wrapper {
                 height: 200px; 
                 margin-bottom: 10px;
             }
             
-            /* 3. Adjust legend spacing */
             .comparison-legend {
                 margin-top: 0;
             }
@@ -941,23 +1124,16 @@
                 <div class="report-header" id="reportHeader">
                     <div class="report-title">
                         <i class="fas fa-file-invoice"></i>
-                        Expense Summary
+                        Expense Breakdown (Click to expand)
                     </div>
                     <button class="report-toggle" id="reportToggle">
                         <i class="fas fa-chevron-down"></i>
                     </button>
                 </div>
                 <div class="report-content" id="reportContent">
-                    <table class="report-table">
-                        <thead>
-                            <tr>
-                                <th>Category</th>
-                                <th class="amount-cell">Amount</th>
-                                <th class="percentage-cell">%</th>
-                            </tr>
-                        </thead>
-                        <tbody id="reportTableBody"></tbody>
-                    </table>
+                    <div class="category-breakdown" id="categoryBreakdown">
+                        <!-- This will be populated by JavaScript -->
+                    </div>
                 </div>
             </div>
 
@@ -1149,12 +1325,11 @@
         const reportHeader = document.getElementById('reportHeader');
         const reportToggle = document.getElementById('reportToggle');
         const reportContent = document.getElementById('reportContent');
-        const reportTableBody = document.getElementById('reportTableBody');
 
         let expenses = [];
         let incomes = [];
         let wallets = [];
-        let categories = [];
+        let categoryDefinitions = []; // Renamed from categories to avoid conflict
         let currentWalletId = 'all';
         let selectedPeriod = null;
         let availablePeriods = [];
@@ -1166,6 +1341,227 @@
 
         function formatDisplayCurrency(amount) {
             return `Rp ${amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}`;
+        }
+
+        // Function to create drill-down category breakdown
+        function createCategoryBreakdown() {
+            if (!selectedPeriod) return;
+            
+            const filteredExpenses = filterDataByWallet(expenses);
+            const periodExpenses = filteredExpenses.filter(expense => 
+                isInPeriod(expense.date, selectedPeriod)
+            );
+            
+            if (periodExpenses.length === 0) {
+                document.getElementById('categoryBreakdown').innerHTML = `
+                    <div class="no-expenses">
+                        <i class="fas fa-receipt" style="font-size: 2rem; margin-bottom: 10px; opacity: 0.3;"></i>
+                        <p>No expenses for this period</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            const totalExpenses = periodExpenses.reduce((sum, expense) => sum + expense.amount, 0);
+            
+            // Group by category
+            const categories = {};
+            
+            periodExpenses.forEach(expense => {
+                const category = expense.category || 'Uncategorized';
+                const subcategory = expense.subcategory || 'General';
+                
+                if (!categories[category]) {
+                    categories[category] = {
+                        total: 0,
+                        percentage: 0,
+                        subcategories: {}
+                    };
+                }
+                
+                if (!categories[category].subcategories[subcategory]) {
+                    categories[category].subcategories[subcategory] = {
+                        total: 0,
+                        percentage: 0,
+                        expenses: []
+                    };
+                }
+                
+                categories[category].total += expense.amount;
+                categories[category].subcategories[subcategory].total += expense.amount;
+                categories[category].subcategories[subcategory].expenses.push(expense);
+            });
+            
+            // Calculate percentages
+            Object.keys(categories).forEach(category => {
+                categories[category].percentage = Math.round((categories[category].total / totalExpenses) * 100);
+                
+                Object.keys(categories[category].subcategories).forEach(subcategory => {
+                    categories[category].subcategories[subcategory].percentage = 
+                        Math.round((categories[category].subcategories[subcategory].total / categories[category].total) * 100);
+                });
+            });
+            
+            // Sort categories by total (descending)
+            const sortedCategories = Object.keys(categories).sort((a, b) => 
+                categories[b].total - categories[a].total
+            );
+            
+            // Generate HTML
+            let html = '';
+            
+            sortedCategories.forEach(category => {
+                const catData = categories[category];
+                const categoryProgress = (catData.total / totalExpenses) * 100;
+                const safeCategoryId = category.replace(/[^a-zA-Z0-9]/g, '-');
+                
+                html += `
+                    <div class="category-group">
+                        <div class="category-header" onclick="toggleCategory('${safeCategoryId}')">
+                            <h3>
+                                <i class="fas fa-folder" style="color: var(--primary);"></i>
+                                ${category}
+                                <span class="category-percentage">${catData.percentage}%</span>
+                            </h3>
+                            <div style="display: flex; align-items: center; gap: 12px;">
+                                <span class="category-total">${formatDisplayCurrency(catData.total)}</span>
+                                <button class="category-toggle" id="toggle-${safeCategoryId}">
+                                    <i class="fas fa-chevron-down"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="category-progress">
+                            <div class="category-progress-bar" style="width: ${categoryProgress}%"></div>
+                        </div>
+                        <div class="category-content" id="content-${safeCategoryId}">
+                            ${createSubcategoryBreakdown(safeCategoryId, catData.subcategories, catData.total)}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            document.getElementById('categoryBreakdown').innerHTML = html;
+        }
+
+        // Function to create subcategory breakdown - FIXED VERSION
+        function createSubcategoryBreakdown(safeCategoryId, subcategories, categoryTotal) {
+            const sortedSubcategories = Object.keys(subcategories).sort((a, b) => 
+                subcategories[b].total - subcategories[a].total
+            );
+            
+            if (sortedSubcategories.length === 0) {
+                return `<div class="no-expenses" style="padding: 16px;">No subcategories</div>`;
+            }
+            
+            let html = '';
+            
+            sortedSubcategories.forEach(subcategory => {
+                const subData = subcategories[subcategory];
+                const subcategoryProgress = (subData.total / categoryTotal) * 100; // FIXED: Using categoryTotal parameter
+                const safeSubcategoryId = subcategory.replace(/[^a-zA-Z0-9]/g, '-');
+                
+                html += `
+                    <div class="subcategory-group">
+                        <div class="subcategory-header" onclick="toggleSubcategory('${safeCategoryId}', '${safeSubcategoryId}')">
+                            <h4>
+                                <i class="fas fa-folder-open" style="color: var(--secondary); font-size: 0.8rem;"></i>
+                                ${subcategory}
+                                <span class="subcategory-percentage">${subData.percentage}%</span>
+                            </h4>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span class="subcategory-total">${formatDisplayCurrency(subData.total)}</span>
+                                <button class="subcategory-toggle" id="toggle-${safeCategoryId}-${safeSubcategoryId}">
+                                    <i class="fas fa-chevron-down"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="subcategory-progress">
+                            <div class="subcategory-progress-bar" style="width: ${subcategoryProgress}%"></div>
+                        </div>
+                        <div class="subcategory-content" id="content-${safeCategoryId}-${safeSubcategoryId}">
+                            ${createExpenseList(subData.expenses)}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            return html;
+        }
+
+        // Function to create expense list
+        function createExpenseList(expenses) {
+            if (expenses.length === 0) {
+                return `<div class="no-expenses" style="padding: 12px; font-size: 0.8rem;">No expenses</div>`;
+            }
+            
+            // Sort by date (newest first)
+            const sortedExpenses = [...expenses].sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            let html = '<div class="expense-list">';
+            
+            sortedExpenses.forEach(expense => {
+                const date = new Date(expense.date).toLocaleDateString('en-US', {
+                    day: 'numeric',
+                    month: 'short'
+                });
+                
+                const wallet = wallets.find(w => w.id === expense.walletId);
+                const walletName = wallet ? wallet.name : 'Unknown';
+                
+                html += `
+                    <div class="expense-item-detail">
+                        <div class="expense-info">
+                            <div class="expense-description">${expense.description}</div>
+                            <div class="expense-meta">
+                                <span class="expense-date">${date}</span>
+                                <span class="expense-wallet">${walletName}</span>
+                            </div>
+                        </div>
+                        <div class="expense-amount-detail">
+                            ${formatDisplayCurrency(expense.amount)}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+            return html;
+        }
+
+        // Function to toggle category expansion
+        function toggleCategory(categoryId) {
+            const content = document.getElementById(`content-${categoryId}`);
+            const toggle = document.getElementById(`toggle-${categoryId}`);
+            
+            if (!content || !toggle) return;
+            
+            const isExpanded = content.classList.contains('expanded');
+            
+            if (isExpanded) {
+                content.classList.remove('expanded');
+                toggle.innerHTML = '<i class="fas fa-chevron-down"></i>';
+            } else {
+                content.classList.add('expanded');
+                toggle.innerHTML = '<i class="fas fa-chevron-up"></i>';
+            }
+        }
+
+        // Function to toggle subcategory expansion
+        function toggleSubcategory(categoryId, subcategoryId) {
+            const content = document.getElementById(`content-${categoryId}-${subcategoryId}`);
+            const toggle = document.getElementById(`toggle-${categoryId}-${subcategoryId}`);
+            
+            if (!content || !toggle) return;
+            
+            const isExpanded = content.classList.contains('expanded');
+            
+            if (isExpanded) {
+                content.classList.remove('expanded');
+                toggle.innerHTML = '<i class="fas fa-chevron-down"></i>';
+            } else {
+                content.classList.add('expanded');
+                toggle.innerHTML = '<i class="fas fa-chevron-up"></i>';
+            }
         }
 
         async function checkAuthState() {
@@ -1381,13 +1777,13 @@
                     console.error('Category load error:', error);
                     throw error;
                 }
-                categories = data.map(c => ({
+                categoryDefinitions = data.map(c => ({
                     id: c.id,
                     name: c.name,
                     type: c.type || 'main',
                     parentId: c.parent_id
                 }));
-                console.log('Categories loaded:', categories.length);
+                console.log('Categories loaded:', categoryDefinitions.length);
             } catch (error) {
                 console.error('Error loading categories:', error);
             }
@@ -1512,87 +1908,6 @@
             };
         }
 
-        function generateMonthlyExpenseReport() {
-            if (!selectedPeriod) return null;
-            
-            const filteredExpenses = filterDataByWallet(expenses);
-            const periodExpenses = filteredExpenses.filter(expense => 
-                isInPeriod(expense.date, selectedPeriod)
-            );
-            
-            if (periodExpenses.length === 0) return null;
-            
-            const totalExpenses = periodExpenses.reduce((sum, expense) => sum + expense.amount, 0);
-            const categoryData = {};
-            
-            periodExpenses.forEach(expense => {
-                const category = expense.category || 'Uncategorized';
-                const subcategory = expense.subcategory || 'General';
-                
-                if (!categoryData[category]) {
-                    categoryData[category] = { total: 0, subcategories: {} };
-                }
-                
-                categoryData[category].total += expense.amount;
-                
-                if (!categoryData[category].subcategories[subcategory]) {
-                    categoryData[category].subcategories[subcategory] = 0;
-                }
-                categoryData[category].subcategories[subcategory] += expense.amount;
-            });
-            
-            return { totalExpenses, categoryData };
-        }
-
-        function updateMonthlyExpenseReport() {
-            const reportData = generateMonthlyExpenseReport();
-            reportTableBody.innerHTML = '';
-            
-            if (!reportData) {
-                reportTableBody.innerHTML = `<tr><td colspan="3" class="no-data-message">No data for this period</td></tr>`;
-                return;
-            }
-            
-            const { totalExpenses, categoryData } = reportData;
-            
-            Object.keys(categoryData).forEach(category => {
-                const categoryTotal = categoryData[category].total;
-                const percentage = Math.round((categoryTotal / totalExpenses) * 100);
-                
-                const categoryRow = document.createElement('tr');
-                categoryRow.className = 'category-row';
-                categoryRow.innerHTML = `
-                    <td>${category}</td>
-                    <td class="amount-cell">${formatDisplayCurrency(categoryTotal)}</td>
-                    <td class="percentage-cell">${percentage}%</td>
-                `;
-                reportTableBody.appendChild(categoryRow);
-                
-                Object.keys(categoryData[category].subcategories).forEach(subcategory => {
-                    const subcategoryAmount = categoryData[category].subcategories[subcategory];
-                    const subPercentage = Math.round((subcategoryAmount / categoryTotal) * 100);
-                    
-                    const subcategoryRow = document.createElement('tr');
-                    subcategoryRow.className = 'subcategory-row';
-                    subcategoryRow.innerHTML = `
-                        <td>${subcategory}</td>
-                        <td class="amount-cell">${formatDisplayCurrency(subcategoryAmount)}</td>
-                        <td class="percentage-cell">${subPercentage}%</td>
-                    `;
-                    reportTableBody.appendChild(subcategoryRow);
-                });
-            });
-            
-            const totalRow = document.createElement('tr');
-            totalRow.className = 'total-row';
-            totalRow.innerHTML = `
-                <td>Total</td>
-                <td class="amount-cell">${formatDisplayCurrency(totalExpenses)}</td>
-                <td class="percentage-cell">100%</td>
-            `;
-            reportTableBody.appendChild(totalRow);
-        }
-
         function updateAnalytics() {
             if (!selectedPeriod) return;
             
@@ -1606,7 +1921,7 @@
             updateCategoryChart();
             updateTrendChart();
             updateComparisonChart();
-            updateMonthlyExpenseReport();
+            createCategoryBreakdown();
             updateInsights();
         }
 
