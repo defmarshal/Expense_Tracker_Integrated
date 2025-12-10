@@ -890,7 +890,7 @@
                     </select>
                 </div>
                 <div class="month-selector-container">
-                    <label for="monthSelect">Month:</label>
+                    <label for="monthSelect">Period:</label>
                     <select id="monthSelect" class="chart-select"></select>
                 </div>
             </div>
@@ -911,7 +911,7 @@
                         </div>
                     </div>
                     <div class="stat-value balance" id="totalBalance">Rp 0</div>
-                    <div class="stat-label" id="balanceLabel">This month</div>
+                    <div class="stat-label" id="balanceLabel">Select period</div>
                 </div>
                 
                 <div class="card">
@@ -922,7 +922,7 @@
                         </div>
                     </div>
                     <div class="stat-value income" id="totalIncome">Rp 0</div>
-                    <div class="stat-label" id="incomeLabel">This month</div>
+                    <div class="stat-label" id="incomeLabel">Select period</div>
                 </div>
                 
                 <div class="card">
@@ -933,7 +933,7 @@
                         </div>
                     </div>
                     <div class="stat-value expense" id="totalExpenses">Rp 0</div>
-                    <div class="stat-label" id="expenseLabel">This month</div>
+                    <div class="stat-label" id="expenseLabel">Select period</div>
                 </div>
             </div>
 
@@ -963,7 +963,7 @@
 
             <div class="chart-container">
                 <div class="chart-header">
-                    <h3 class="chart-title" id="categoryChartTitle">By Category</h3>
+                    <h3 class="chart-title" id="categoryChartTitle">Categories by Period</h3>
                 </div>
                 <div class="chart-wrapper">
                     <canvas id="categoryChart"></canvas>
@@ -972,11 +972,11 @@
 
             <div class="chart-container">
                 <div class="chart-header">
-                    <h3 class="chart-title" id="trendChartTitle">Trend</h3>
+                    <h3 class="chart-title" id="trendChartTitle">Trend (Last 6 periods)</h3>
                     <select id="trendRange" class="chart-select">
-                        <option value="3">3mo</option>
-                        <option value="6" selected>6mo</option>
-                        <option value="12">12mo</option>
+                        <option value="3">3 periods</option>
+                        <option value="6" selected>6 periods</option>
+                        <option value="12">12 periods</option>
                     </select>
                 </div>
                 <div class="chart-wrapper">
@@ -984,13 +984,14 @@
                 </div>
             </div>
 
-            <div class="chart-container" id="dailyTrendCard"> <div class="chart-header">
+            <div class="chart-container" id="dailyTrendCard"> 
+                <div class="chart-header">
                     <h3 class="chart-title" id="comparisonChartTitle">Daily Trend</h3>
                     <select id="comparisonRange" class="chart-select">
-                        <option value="3">3mo</option>
-                        <option value="6" selected>6mo</option>
-                        <option value="9">9mo</option>
-                        <option value="12">12mo</option>
+                        <option value="3">3 periods</option>
+                        <option value="6" selected>6 periods</option>
+                        <option value="9">9 periods</option>
+                        <option value="12">12 periods</option>
                     </select>
                 </div>
                 <div class="chart-wrapper">
@@ -1032,7 +1033,7 @@
                         <div class="insight-icon" style="background: var(--primary);">
                             <i class="fas fa-chart-line"></i>
                         </div>
-                        <h3 class="insight-title">Avg/Month</h3>
+                        <h3 class="insight-title">Avg/Period</h3>
                     </div>
                     <p class="insight-content">Average spending</p>
                     <div class="insight-value" id="monthlyAverage">Rp 0</div>
@@ -1048,6 +1049,88 @@
     <div id="alertContainer" style="position: fixed; top: 80px; right: 12px; z-index: 3000; max-width: 320px;"></div>
 
     <script>
+        // --- 26th-25th Period System Functions ---
+        
+        // Helper: Get start and end dates for a period
+        function getPeriodDates(periodKey) {
+            const [year, month] = periodKey.split('-').map(Number);
+            
+            // Start: 26th of previous month
+            let startYear = year;
+            let startMonth = month - 1;
+            if (startMonth === 0) {
+                startMonth = 12;
+                startYear = year - 1;
+            }
+            
+            // End: 25th of current month
+            const endDate = new Date(year, month - 1, 25, 23, 59, 59);
+            const startDate = new Date(startYear, startMonth - 1, 26);
+            
+            return { startDate, endDate };
+        }
+        
+        // Helper: Check if date is within period
+        function isInPeriod(dateString, periodKey) {
+            const { startDate, endDate } = getPeriodDates(periodKey);
+            const checkDate = new Date(dateString);
+            return checkDate >= startDate && checkDate <= endDate;
+        }
+        
+        // Helper: Get formatted period label
+        function getPeriodLabel(periodKey) {
+            const [year, month] = periodKey.split('-').map(Number);
+            
+            // Get month names
+            const monthNames = ["January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"];
+            
+            // Calculate previous month for start date
+            let prevMonth = month - 1;
+            let prevYear = year;
+            if (prevMonth === 0) {
+                prevMonth = 12;
+                prevYear = year - 1;
+            }
+            
+            return `${monthNames[prevMonth - 1]} 26th - ${monthNames[month - 1]} 25th`;
+        }
+        
+        // Helper: Get days in period (for daily charts)
+        function getDaysInPeriod(periodKey) {
+            const { startDate, endDate } = getPeriodDates(periodKey);
+            const days = [];
+            const current = new Date(startDate);
+            
+            while (current <= endDate) {
+                days.push(new Date(current));
+                current.setDate(current.getDate() + 1);
+            }
+            
+            return days;
+        }
+        
+        // Helper: Generate period key from date
+        function getPeriodKeyFromDate(dateString) {
+            const date = new Date(dateString);
+            const year = date.getFullYear();
+            const month = date.getMonth() + 1;
+            const day = date.getDate();
+            
+            // If day >= 26, it belongs to NEXT month's period
+            if (day >= 26) {
+                let nextMonth = month + 1;
+                let nextYear = year;
+                if (nextMonth > 12) {
+                    nextMonth = 1;
+                    nextYear = year + 1;
+                }
+                return `${nextYear}-${String(nextMonth).padStart(2, '0')}`;
+            } else {
+                return `${year}-${String(month).padStart(2, '0')}`;
+            }
+        }
+
         const SUPABASE_URL = 'https://slgzgaojmgzjhtuaptod.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNsZ3pnYW9qbWd6amh0dWFwdG9kIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMyNzQyMzMsImV4cCI6MjA3ODg1MDIzM30.aD9cjbekiufRaatuNaAEP2uD2uU7ggpPor6jtSGM-F4';
 
@@ -1073,8 +1156,8 @@
         let wallets = [];
         let categories = [];
         let currentWalletId = 'all';
-        let selectedMonth = null;
-        let availableMonths = [];
+        let selectedPeriod = null;
+        let availablePeriods = [];
         let isReportExpanded = true;
 
         let categoryChart = null;
@@ -1132,8 +1215,8 @@
                     showNoDataMessage();
                 } else {
                     hideNoDataMessage();
-                    generateAvailableMonths();
-                    console.log('About to update analytics, selectedMonth:', selectedMonth);
+                    generateAvailablePeriods();
+                    console.log('About to update analytics, selectedPeriod:', selectedPeriod);
                     updateAnalytics();
                 }
             } catch (error) {
@@ -1142,45 +1225,44 @@
             }
         }
 
-        function generateAvailableMonths() {
+        function generateAvailablePeriods() {
             const allDates = [
                 ...expenses.map(e => e.date),
                 ...incomes.map(i => i.date)
             ];
             
-            const uniqueMonths = [...new Set(allDates.map(date => {
-                const d = new Date(date);
-                return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
-            }))].sort().reverse();
+            // Create period keys based on 26th-25th cycle
+            const periodKeysSet = new Set();
             
-            availableMonths = uniqueMonths;
-            console.log('Available months:', availableMonths);
-            updateMonthSelector();
+            allDates.forEach(dateStr => {
+                const periodKey = getPeriodKeyFromDate(dateStr);
+                periodKeysSet.add(periodKey);
+            });
             
-            if (availableMonths.length > 0 && !selectedMonth) {
-                selectedMonth = availableMonths[0];
-                console.log('Selected month set to:', selectedMonth);
+            availablePeriods = Array.from(periodKeysSet).sort().reverse();
+            console.log('Available periods (26th-25th):', availablePeriods);
+            updatePeriodSelector();
+            
+            if (availablePeriods.length > 0 && !selectedPeriod) {
+                selectedPeriod = availablePeriods[0];
+                console.log('Selected period set to:', selectedPeriod);
             }
         }
 
-        function updateMonthSelector() {
+        function updatePeriodSelector() {
             monthSelect.innerHTML = '';
-            availableMonths.forEach(month => {
+            availablePeriods.forEach(periodKey => {
                 const option = document.createElement('option');
-                option.value = month;
-                const [year, monthNum] = month.split('-');
-                const monthName = new Date(year, monthNum - 1).toLocaleDateString('en-US', { 
-                    month: 'short', 
-                    year: '2-digit' 
-                });
-                option.textContent = monthName;
+                option.value = periodKey;
+                option.textContent = getPeriodLabel(periodKey);
                 monthSelect.appendChild(option);
             });
             
-            if (selectedMonth && availableMonths.includes(selectedMonth)) {
-                monthSelect.value = selectedMonth;
-            } else if (availableMonths.length > 0) {
-                monthSelect.value = availableMonths[0];
+            if (selectedPeriod && availablePeriods.includes(selectedPeriod)) {
+                monthSelect.value = selectedPeriod;
+            } else if (availablePeriods.length > 0) {
+                monthSelect.value = availablePeriods[0];
+                selectedPeriod = availablePeriods[0];
             }
         }
 
@@ -1326,84 +1408,79 @@
             return data.filter(item => item.walletId === currentWalletId);
         }
 
-        function getTrendData(endMonth, period) {
-            const months = availableMonths.sort();
-            let endIndex = months.indexOf(endMonth);
-            if (endIndex === -1) endIndex = months.length - 1;
+        function getTrendData(endPeriodKey, periodCount) {
+            const periods = availablePeriods.sort();
+            let endIndex = periods.indexOf(endPeriodKey);
+            if (endIndex === -1) endIndex = periods.length - 1;
             
-            const startIndex = Math.max(0, endIndex - period + 1);
-            const trendMonths = months.slice(startIndex, endIndex + 1);
+            const startIndex = Math.max(0, endIndex - periodCount + 1);
+            const trendPeriods = periods.slice(startIndex, endIndex + 1);
             
-            const incomeData = trendMonths.map(month => {
-                const [year, monthNum] = month.split('-');
-                const monthlyIncome = filterDataByWallet(incomes).filter(income => {
-                    const incomeDate = new Date(income.date);
-                    return incomeDate.getMonth() + 1 === parseInt(monthNum) && 
-                           incomeDate.getFullYear() === parseInt(year);
-                });
-                return monthlyIncome.reduce((sum, income) => sum + income.amount, 0);
+            const incomeData = trendPeriods.map(periodKey => {
+                const periodIncome = filterDataByWallet(incomes).filter(income => 
+                    isInPeriod(income.date, periodKey)
+                );
+                return periodIncome.reduce((sum, income) => sum + income.amount, 0);
             });
             
-            const expenseData = trendMonths.map(month => {
-                const [year, monthNum] = month.split('-');
-                const monthlyExpenses = filterDataByWallet(expenses).filter(expense => {
-                    const expenseDate = new Date(expense.date);
-                    return expenseDate.getMonth() + 1 === parseInt(monthNum) && 
-                           expenseDate.getFullYear() === parseInt(year);
-                });
-                return monthlyExpenses.reduce((sum, expense) => sum + expense.amount, 0);
+            const expenseData = trendPeriods.map(periodKey => {
+                const periodExpenses = filterDataByWallet(expenses).filter(expense => 
+                    isInPeriod(expense.date, periodKey)
+                );
+                return periodExpenses.reduce((sum, expense) => sum + expense.amount, 0);
             });
             
-            return { months: trendMonths, income: incomeData, expense: expenseData };
+            return { periods: trendPeriods, income: incomeData, expense: expenseData };
         }
 
-        function getDailyExpenseData(month) {
-            const [year, monthNum] = month.split('-');
-            const daysInMonth = new Date(year, monthNum, 0).getDate();
-            const dailyData = Array(daysInMonth).fill(0);
+        function getDailyExpenseData(periodKey) {
+            const { startDate, endDate } = getPeriodDates(periodKey);
+            const daysInPeriod = Math.floor((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1;
+            const dailyData = Array(daysInPeriod).fill(0);
             
-            const monthExpenses = filterDataByWallet(expenses).filter(expense => {
+            const periodExpenses = filterDataByWallet(expenses).filter(expense => 
+                isInPeriod(expense.date, periodKey)
+            );
+            
+            periodExpenses.forEach(expense => {
                 const expenseDate = new Date(expense.date);
-                return expenseDate.getMonth() + 1 === parseInt(monthNum) && 
-                       expenseDate.getFullYear() === parseInt(year);
-            });
-            
-            monthExpenses.forEach(expense => {
-                const day = new Date(expense.date).getDate();
-                dailyData[day - 1] += expense.amount;
+                const dayIndex = Math.floor((expenseDate - startDate) / (1000 * 60 * 60 * 24));
+                if (dayIndex >= 0 && dayIndex < daysInPeriod) {
+                    dailyData[dayIndex] += expense.amount;
+                }
             });
             
             return dailyData;
         }
 
-        function getDailyComparisonData(period) {
-            if (!selectedMonth) return null;
+        function getDailyComparisonData(periodCount) {
+            if (!selectedPeriod) return null;
             
-            const [currentYear, currentMonthNum] = selectedMonth.split('-');
-            const daysInCurrentMonth = new Date(currentYear, currentMonthNum, 0).getDate();
-            const currentMonthDaily = getDailyExpenseData(selectedMonth);
+            const currentPeriodDays = getDaysInPeriod(selectedPeriod);
+            const daysInCurrentPeriod = currentPeriodDays.length;
+            const currentPeriodDaily = getDailyExpenseData(selectedPeriod);
             
-            const months = availableMonths.sort();
-            const currentMonthIndex = months.indexOf(selectedMonth);
-            if (currentMonthIndex === -1) return null;
+            const periods = availablePeriods.sort();
+            const currentIndex = periods.indexOf(selectedPeriod);
+            if (currentIndex === -1) return null;
             
-            const startIndex = Math.max(0, currentMonthIndex - period);
-            const historicalMonths = months.slice(startIndex, currentMonthIndex);
+            const startIndex = Math.max(0, currentIndex - periodCount);
+            const historicalPeriods = periods.slice(startIndex, currentIndex);
             
-            const dailyAverages = Array(daysInCurrentMonth).fill(0);
-            const dayCounts = Array(daysInCurrentMonth).fill(0);
+            const dailyAverages = Array(daysInCurrentPeriod).fill(0);
+            const dayCounts = Array(daysInCurrentPeriod).fill(0);
             
-            historicalMonths.forEach(month => {
-                const [year, monthNum] = month.split('-');
-                const daysInHistoricalMonth = new Date(year, monthNum, 0).getDate();
-                const historicalDailyData = getDailyExpenseData(month);
+            historicalPeriods.forEach(periodKey => {
+                const historicalDailyData = getDailyExpenseData(periodKey);
+                const daysInHistoricalPeriod = historicalDailyData.length;
                 
-                for (let day = 0; day < daysInCurrentMonth; day++) {
-                    if (day < daysInHistoricalMonth) {
+                for (let day = 0; day < daysInCurrentPeriod; day++) {
+                    if (day < daysInHistoricalPeriod) {
                         dailyAverages[day] += historicalDailyData[day];
                         dayCounts[day]++;
                     } else {
-                        dailyAverages[day] += historicalDailyData[daysInHistoricalMonth - 1];
+                        // Use last available day for missing days
+                        dailyAverages[day] += historicalDailyData[daysInHistoricalPeriod - 1] || 0;
                         dayCounts[day]++;
                     }
                 }
@@ -1419,16 +1496,16 @@
             let currentSum = 0;
             let historicalSum = 0;
             
-            for (let i = 0; i < daysInCurrentMonth; i++) {
-                currentSum += currentMonthDaily[i];
+            for (let i = 0; i < daysInCurrentPeriod; i++) {
+                currentSum += currentPeriodDaily[i];
                 historicalSum += historicalAverageDaily[i];
                 currentMonthCumulative.push(currentSum);
                 historicalAverageCumulative.push(historicalSum);
             }
             
             return {
-                days: Array.from({length: daysInCurrentMonth}, (_, i) => i + 1),
-                currentMonthDaily: currentMonthDaily,
+                days: Array.from({length: daysInCurrentPeriod}, (_, i) => i + 1),
+                currentMonthDaily: currentPeriodDaily,
                 currentMonthCumulative: currentMonthCumulative,
                 historicalAverageDaily: historicalAverageDaily,
                 historicalAverageCumulative: historicalAverageCumulative
@@ -1436,23 +1513,19 @@
         }
 
         function generateMonthlyExpenseReport() {
-            if (!selectedMonth) return null;
+            if (!selectedPeriod) return null;
             
             const filteredExpenses = filterDataByWallet(expenses);
-            const [selectedYear, selectedMonthNum] = selectedMonth.split('-');
+            const periodExpenses = filteredExpenses.filter(expense => 
+                isInPeriod(expense.date, selectedPeriod)
+            );
             
-            const monthlyExpenses = filteredExpenses.filter(expense => {
-                const expenseDate = new Date(expense.date);
-                return expenseDate.getMonth() + 1 === parseInt(selectedMonthNum) && 
-                       expenseDate.getFullYear() === parseInt(selectedYear);
-            });
+            if (periodExpenses.length === 0) return null;
             
-            if (monthlyExpenses.length === 0) return null;
-            
-            const totalExpenses = monthlyExpenses.reduce((sum, expense) => sum + expense.amount, 0);
+            const totalExpenses = periodExpenses.reduce((sum, expense) => sum + expense.amount, 0);
             const categoryData = {};
             
-            monthlyExpenses.forEach(expense => {
+            periodExpenses.forEach(expense => {
                 const category = expense.category || 'Uncategorized';
                 const subcategory = expense.subcategory || 'General';
                 
@@ -1476,7 +1549,7 @@
             reportTableBody.innerHTML = '';
             
             if (!reportData) {
-                reportTableBody.innerHTML = `<tr><td colspan="3" class="no-data-message">No data</td></tr>`;
+                reportTableBody.innerHTML = `<tr><td colspan="3" class="no-data-message">No data for this period</td></tr>`;
                 return;
             }
             
@@ -1521,6 +1594,14 @@
         }
 
         function updateAnalytics() {
+            if (!selectedPeriod) return;
+            
+            // Update chart titles with period label
+            const periodLabel = getPeriodLabel(selectedPeriod);
+            document.getElementById('categoryChartTitle').textContent = `Categories (${periodLabel})`;
+            document.getElementById('trendChartTitle').textContent = `Trend (Last ${trendRange.value} periods)`;
+            document.getElementById('comparisonChartTitle').textContent = `Daily Trend (${periodLabel})`;
+            
             updateSummaryCards();
             updateCategoryChart();
             updateTrendChart();
@@ -1530,50 +1611,47 @@
         }
 
         function updateSummaryCards() {
-            if (!selectedMonth) return;
+            if (!selectedPeriod) return;
             
             const filteredExpenses = filterDataByWallet(expenses);
             const filteredIncomes = filterDataByWallet(incomes);
-            const [selectedYear, selectedMonthNum] = selectedMonth.split('-');
             
-            const monthlyExpenses = filteredExpenses.filter(expense => {
-                const expenseDate = new Date(expense.date);
-                return expenseDate.getMonth() + 1 === parseInt(selectedMonthNum) && 
-                       expenseDate.getFullYear() === parseInt(selectedYear);
-            });
+            const periodExpenses = filteredExpenses.filter(expense => 
+                isInPeriod(expense.date, selectedPeriod)
+            );
             
-            const monthlyIncomes = filteredIncomes.filter(income => {
-                const incomeDate = new Date(income.date);
-                return incomeDate.getMonth() + 1 === parseInt(selectedMonthNum) && 
-                       incomeDate.getFullYear() === parseInt(selectedYear);
-            });
+            const periodIncomes = filteredIncomes.filter(income => 
+                isInPeriod(income.date, selectedPeriod)
+            );
             
-            const totalExpensesAmount = monthlyExpenses.reduce((sum, expense) => sum + expense.amount, 0);
-            const totalIncomeAmount = monthlyIncomes.reduce((sum, income) => sum + income.amount, 0);
+            const totalExpensesAmount = periodExpenses.reduce((sum, expense) => sum + expense.amount, 0);
+            const totalIncomeAmount = periodIncomes.reduce((sum, income) => sum + income.amount, 0);
             const totalBalance = totalIncomeAmount - totalExpensesAmount;
             
             document.getElementById('totalBalance').textContent = formatDisplayCurrency(totalBalance);
             document.getElementById('totalIncome').textContent = formatDisplayCurrency(totalIncomeAmount);
             document.getElementById('totalExpenses').textContent = formatDisplayCurrency(totalExpensesAmount);
+            
+            // Update labels to show period
+            const periodLabel = getPeriodLabel(selectedPeriod);
+            document.getElementById('balanceLabel').textContent = periodLabel;
+            document.getElementById('incomeLabel').textContent = periodLabel;
+            document.getElementById('expenseLabel').textContent = periodLabel;
         }
 
         function updateCategoryChart() {
-            if (!selectedMonth) return;
+            if (!selectedPeriod) return;
             
             const ctx = document.getElementById('categoryChart').getContext('2d');
             if (categoryChart) categoryChart.destroy();
             
             const filteredExpenses = filterDataByWallet(expenses);
-            const [selectedYear, selectedMonthNum] = selectedMonth.split('-');
-            
-            const monthFilteredExpenses = filteredExpenses.filter(expense => {
-                const expenseDate = new Date(expense.date);
-                return expenseDate.getMonth() + 1 === parseInt(selectedMonthNum) && 
-                       expenseDate.getFullYear() === parseInt(selectedYear);
-            });
+            const periodExpenses = filteredExpenses.filter(expense => 
+                isInPeriod(expense.date, selectedPeriod)
+            );
             
             const categoryTotals = {};
-            monthFilteredExpenses.forEach(expense => {
+            periodExpenses.forEach(expense => {
                 const category = expense.category || 'Other';
                 categoryTotals[category] = (categoryTotals[category] || 0) + expense.amount;
             });
@@ -1621,17 +1699,17 @@
         }
 
         function updateTrendChart() {
-            if (!selectedMonth) return;
+            if (!selectedPeriod) return;
             
             const ctx = document.getElementById('trendChart').getContext('2d');
             if (trendChart) trendChart.destroy();
             
             const period = parseInt(trendRange.value);
-            const trendData = getTrendData(selectedMonth, period);
+            const trendData = getTrendData(selectedPeriod, period);
             
-            const labels = trendData.months.map(month => {
-                const [year, monthNum] = month.split('-');
-                return new Date(year, monthNum - 1).toLocaleDateString('en-US', { 
+            const labels = trendData.periods.map(periodKey => {
+                const [year, month] = periodKey.split('-');
+                return new Date(year, month - 1).toLocaleDateString('en-US', { 
                     month: 'short', 
                     year: '2-digit' 
                 });
@@ -1780,33 +1858,28 @@
         }
 
         function updateInsights() {
-            if (!selectedMonth) return;
+            if (!selectedPeriod) return;
             
             const filteredExpenses = filterDataByWallet(expenses);
             const filteredIncomes = filterDataByWallet(incomes);
-            const [selectedYear, selectedMonthNum] = selectedMonth.split('-');
             
-            const monthlyExpenses = filteredExpenses.filter(expense => {
-                const expenseDate = new Date(expense.date);
-                return expenseDate.getMonth() + 1 === parseInt(selectedMonthNum) && 
-                       expenseDate.getFullYear() === parseInt(selectedYear);
-            });
+            const periodExpenses = filteredExpenses.filter(expense => 
+                isInPeriod(expense.date, selectedPeriod)
+            );
             
-            const monthlyIncomes = filteredIncomes.filter(income => {
-                const incomeDate = new Date(income.date);
-                return incomeDate.getMonth() + 1 === parseInt(selectedMonthNum) && 
-                       incomeDate.getFullYear() === parseInt(selectedYear);
-            });
+            const periodIncomes = filteredIncomes.filter(income => 
+                isInPeriod(income.date, selectedPeriod)
+            );
             
-            const totalExpensesAmount = monthlyExpenses.reduce((sum, expense) => sum + expense.amount, 0);
-            const totalIncomeAmount = monthlyIncomes.reduce((sum, income) => sum + income.amount, 0);
+            const totalExpensesAmount = periodExpenses.reduce((sum, expense) => sum + expense.amount, 0);
+            const totalIncomeAmount = periodIncomes.reduce((sum, income) => sum + income.amount, 0);
             
             const savingsRate = totalIncomeAmount > 0 ? 
                 Math.round(((totalIncomeAmount - totalExpensesAmount) / totalIncomeAmount) * 100) : 0;
             document.getElementById('savingsRate').textContent = `${savingsRate}%`;
             
             const categoryTotals = {};
-            monthlyExpenses.forEach(expense => {
+            periodExpenses.forEach(expense => {
                 const category = expense.category || 'Other';
                 categoryTotals[category] = (categoryTotals[category] || 0) + expense.amount;
             });
@@ -1823,23 +1896,26 @@
             document.getElementById('topCategory').textContent = topCategory;
             document.getElementById('topCategoryAmount').textContent = formatDisplayCurrency(topCategoryAmount);
             
-            const sixMonthsAgo = new Date(selectedYear, selectedMonthNum - 1 - 6, 1);
-            const lastSixMonthsExpenses = filteredExpenses.filter(expense => {
-                return new Date(expense.date) >= sixMonthsAgo;
+            // Calculate average for last 6 periods
+            const periods = availablePeriods.sort();
+            const currentIndex = periods.indexOf(selectedPeriod);
+            const startIndex = Math.max(0, currentIndex - 6);
+            const lastSixPeriods = periods.slice(startIndex, currentIndex + 1);
+            
+            const periodTotals = {};
+            lastSixPeriods.forEach(periodKey => {
+                const periodExpenses = filteredExpenses.filter(expense => 
+                    isInPeriod(expense.date, periodKey)
+                );
+                periodTotals[periodKey] = periodExpenses.reduce((sum, expense) => sum + expense.amount, 0);
             });
             
-            const monthlyTotals = {};
-            lastSixMonthsExpenses.forEach(expense => {
-                const expenseDate = new Date(expense.date);
-                const monthKey = `${expenseDate.getFullYear()}-${expenseDate.getMonth() + 1}`;
-                monthlyTotals[monthKey] = (monthlyTotals[monthKey] || 0) + expense.amount;
-            });
+            const periodValues = Object.values(periodTotals);
+            const periodAverage = periodValues.length > 0 ? 
+                periodValues.reduce((sum, amount) => sum + amount, 0) / periodValues.length : 0;
             
-            const monthlyValues = Object.values(monthlyTotals);
-            const monthlyAverage = monthlyValues.length > 0 ? 
-                monthlyValues.reduce((sum, amount) => sum + amount, 0) / monthlyValues.length : 0;
-            
-            document.getElementById('monthlyAverage').textContent = formatDisplayCurrency(Math.round(monthlyAverage));
+            document.getElementById('monthlyAverage').textContent = formatDisplayCurrency(Math.round(periodAverage));
+            document.getElementById('monthlyAverage').parentNode.querySelector('.insight-content').textContent = 'Average per period';
         }
 
         function showNoDataMessage() {
@@ -1879,8 +1955,8 @@
         });
 
         monthSelect.addEventListener('change', function() {
-            selectedMonth = this.value;
-            console.log('Month changed to:', selectedMonth);
+            selectedPeriod = this.value;
+            console.log('Period changed to:', selectedPeriod);
             updateAnalytics();
         });
 
